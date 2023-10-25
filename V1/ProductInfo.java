@@ -31,6 +31,10 @@ public class ProductInfo {
     
     //CapacitorInfo
     
+    //InductorCoilAndChokeInfo
+    
+    //NetworkingSolutionInfo
+    
     
     
     public ProductInfo(){
