@@ -22,6 +22,8 @@ public class ProductInfo {
     private String manufacturer; // Secondary Key --> Needed for the PK
     private String mfgPartNumber; //Primary Key --> Necessary to be a product
     private String series;
+    private String description;
+    private String Name;
     private int itemId;
     private int qtyAvailable;
     private double price; // Secondary Key
@@ -229,7 +231,6 @@ public class ProductInfo {
     
     
 }
-
 
 
 //General Product Enums --> 
