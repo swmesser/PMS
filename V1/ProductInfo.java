@@ -14,6 +14,7 @@ package PMS.V1;
 // subcategory
 // categories found in PMS.V2 ProductInfo class
 public class ProductInfo {
+    //Generic Product Information
     private stockOption availability;
     private environmentalOption hazard;
     private mediaOption media;
@@ -28,6 +29,10 @@ public class ProductInfo {
     private int qtyAvailable;
     private double price; // Secondary Key
     
+    //CapacitorInfo
+    
+    
+    
     public ProductInfo(){
         this.availability = stockOption.unknown;
         this.hazard = environmentalOption.unknown;
@@ -37,12 +42,14 @@ public class ProductInfo {
         this.manufacturer = "";
         this.mfgPartNumber = "";
         this.series = "";
+        this.description = "";
+        this.Name = "";
         this.itemId = 0;
         this.qtyAvailable = 0;
         this.price = 0.0;
     }
     
-    public ProductInfo( int itemId, String manufacturer, String mfgPartNumber, String series, double price, int qtyAvailable ){
+    public ProductInfo( int itemId, String manufacturer, String mfgPartNumber, String series, String description, double price, int qtyAvailable ){
         //Creating a basic productInfo constructor
         this();
         
@@ -52,6 +59,8 @@ public class ProductInfo {
         } else if ( mfgPartNumber.length() == 0 ){
             System.out.println("Error: Passed a zero length string!");
         } else if ( series.length() == 0 ){
+            System.out.println("Error: Passed a zero length string!");
+        } else if ( description.length() == 0 ){
             System.out.println("Error: Passed a zero length string!");
         } else if ( price < 0.0 ){
             System.out.println("Error: Passed a price less than zero!");
@@ -72,10 +81,10 @@ public class ProductInfo {
         
     }
     
-    public ProductInfo( int itemId, String manufacturer, String mfgPartNumber, String series, int qtyAvailable, double price,
+    public ProductInfo( int itemId, String manufacturer, String mfgPartNumber, String series, String description, int qtyAvailable, double price,
             stockOption availability, environmentalOption hazard, mediaOption media, productStatus status, packageOption packaging){
         //Calling constructor to create a basic product
-        this( itemId, manufacturer, mfgPartNumber, series, price, qtyAvailable );
+        this( itemId, manufacturer, mfgPartNumber, series, description, price, qtyAvailable );
         
         //Validation of information passed
         //How does one valid enum
@@ -233,7 +242,7 @@ public class ProductInfo {
 }
 
 
-//General Product Enums --> 
+//Generic Product Enums --> 
 //  Used for variables that each type of product will contain
 enum stockOption{
     inStock,
@@ -282,50 +291,3 @@ enum productStatus{
     obsolete,
     unknown
 }
-
-// Capacitor Enums
-
-//Turn these into subclasses extending the capactiorInfo this is bad....
-enum capacitorCat{
-    accessories,
-    aluminumPolymer,
-    aluminumElectrolytic,
-    capacitoryNetworksArrays,
-    ceramicCapacitors,
-    electricDoubleLayerCapacitorsSuperCapacitors,
-    filmCapacitors,
-    micaPTFECapacitors,
-    niobiumOxiodeCapacitors,
-    siliconCapacitors,
-    tantalumPolymerCapacitors,
-    tantalumCapacitors,
-    thinFilmCapacitors,
-    trimmersVariableCapacitors,
-    unknown
-}
-
-// Resistor Enums
-
-//Turn these into subclasses extending the resistorInfo
-enum resistorCat{
-    accessories,
-    chassisMountResistors,
-    chipResistorSurface,
-    precisionTrimmedResistors,
-    resistorNetworksArrays,
-    specializedResistors,
-    throughHoleResistors,
-    unknown
-}
-
-enum circuitType{
-    bussed,
-    decadeResistor,
-    dualTerminator,
-    isolated,
-    r2rLadder,
-    voltageDivider,
-    unknown
-}
-
-
