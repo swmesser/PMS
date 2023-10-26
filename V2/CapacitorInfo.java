@@ -15,7 +15,7 @@ public abstract class CapacitorInfo extends ProductInfo {
 }
 
 
-//Go through this junk
+//Subcategories to the capacitor category
 final class EDLCAndSupercapactiorInfo extends CapacitorInfo{
     
 }
