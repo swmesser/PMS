@@ -12,11 +12,6 @@ public abstract class NetworkingSolutionInfo extends ProductInfo {
 
 }
 
-final class AccessoryInfo extends NetworkingSolutionInfo {
-    private String accessoryType;
-    private String forUseWith;
-}
-
 final class GatewaysAndRouterInfo extends NetworkingSolutionInfo {
     private String function;
     private String modulationOrProtocol;
