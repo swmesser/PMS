@@ -19,13 +19,13 @@ public class ProductInfo {
     private environmentalOption hazard;
     private mediaOption media;
     private productStatus status;
-    private packageOption packaging;
+    private packageOption shippingPackage;
     private String manufacturer; // Secondary Key --> Needed for the PK
     private String mfgPartNumber; //Primary Key --> Necessary to be a product
     private String series;
     private String description;
-    private String Name;
-    private int itemId;
+    private String name;
+    private String itemId;
     private int qtyAvailable;
     private double price; // Secondary Key
     
@@ -42,18 +42,18 @@ public class ProductInfo {
         this.hazard = environmentalOption.unknown;
         this.media = mediaOption.unknown;
         this.status = productStatus.unknown;
-        this.packaging = packageOption.unknown;
+        this.shippingPackage = packageOption.unknown;
         this.manufacturer = "";
         this.mfgPartNumber = "";
         this.series = "";
         this.description = "";
-        this.Name = "";
-        this.itemId = 0;
+        this.name = "";
+        this.itemId = "";
         this.qtyAvailable = 0;
         this.price = 0.0;
     }
     
-    public ProductInfo( int itemId, String manufacturer, String mfgPartNumber, String series, String description, double price, int qtyAvailable ){
+    public ProductInfo( String itemId, String manufacturer, String mfgPartNumber, String series, String description, double price, int qtyAvailable ){
         //Creating a basic productInfo constructor
         this();
         
@@ -70,7 +70,7 @@ public class ProductInfo {
             System.out.println("Error: Passed a price less than zero!");
         } else if ( qtyAvailable < 0 ){
             System.out.println("Error: Invalid quantity available provided!");
-        } else if ( itemId < 0 ){
+        } else if ( itemId.length() == 0 ){
             //ALSO NEEDS TO BE VALIDATED FOR PREEXISTING ID
             System.out.println("Error: Invalid item Id provided!");
         } else {
@@ -85,7 +85,7 @@ public class ProductInfo {
         
     }
     
-    public ProductInfo( int itemId, String manufacturer, String mfgPartNumber, String series, String description, int qtyAvailable, double price,
+    public ProductInfo( String itemId, String manufacturer, String mfgPartNumber, String series, String description, int qtyAvailable, double price,
             stockOption availability, environmentalOption hazard, mediaOption media, productStatus status, packageOption packaging){
         //Calling constructor to create a basic product
         this( itemId, manufacturer, mfgPartNumber, series, description, price, qtyAvailable );
@@ -98,7 +98,7 @@ public class ProductInfo {
         this.hazard = hazard;
         this.media = media;
         this.status = status;
-        this.packaging = packaging;
+        this.shippingPackage = packaging;
     }
     
     /**
@@ -231,14 +231,14 @@ public class ProductInfo {
      * @return the packaging
      */
     public packageOption getPackaging() {
-        return (this.packaging);
+        return (this.shippingPackage);
     }
 
     /**
      * @param packaging the packaging to set
      */
     public void setPackaging(packageOption packaging) {
-        this.packaging = packaging;
+        this.shippingPackage = packaging;
     }
     
     
