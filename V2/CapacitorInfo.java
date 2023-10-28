@@ -10,23 +10,67 @@ package PMS.V2;
  */
 
 public abstract class CapacitorInfo extends ProductInfo {
+    private String Capacitance;
+    private String tolerance;
+    private String voltageRating;
+    private String operationTemp;
+    private String size;
+    private String dielectricMat;
+    private capacitorMountingType mount;
+    private String packageCase;
+    private String seatedHeight;
     
 }
 
 
 //Subcategories to the capacitor category
 final class EDLCAndSupercapactiorInfo extends CapacitorInfo{
-    
+    private String equivalentSeriesResistance;
+    private String lifetimeAtTemp;
+    private String Termination;
+    private String leadSpacing;
 }
 
 final class MicaAndPTFEInfo extends CapacitorInfo{
-
+    private String leadSpacing;
+    private String features;
+    
 }
 
 final class NetworksAndArraysInfo extends CapacitorInfo{
-    
+    private int capacitorCount;
+    private String tempCoefficient;
+    private String supplierDevicePackage;
+    private capacitorRatings rating;
+    private capacitorCircuitType circuit;
 }
 
 final class TrimmerAndVariableInfo extends CapacitorInfo{
-    
+    private String capacitanceRange;
+    private String adjustmentType;
+    private String qAtFreq;
+    private String features;
+}
+
+enum capacitorRatings{
+    AEC_Q200,
+    Unknown
+}
+
+enum capacitorCircuitType{
+    Bussed,
+    Isolated,
+    Unknown
+}
+
+enum capacitorMountingType{
+    ChassisMount,
+    PanelMount,
+    BracketMount,
+    UserDefined,
+    ChassisMountRequiresHolder,
+    ChassisStudMount,
+    SurfaceMount,
+    ThroughHole,
+    Unknown
 }

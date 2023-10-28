@@ -10,16 +10,19 @@ package PMS.V2;
 
 public abstract class InductorCoilAndChokesInfo extends ProductInfo{
     private String tolerance;
-    private String size;
+    private inductorMountingType mount;
+    private String packageCase;
+    private String operationTemp;
+   
     
 }
 
 final class AdjustableInductors extends InductorCoilAndChokesInfo {
     private String inductance;
     private String qFreq;
-    private String packageCase;
     private String height;
-    private AdjustableInductorMountingType mount;
+    private String size;
+
 }
 
 final class ArraysAndSignalTransformerInfo extends InductorCoilAndChokesInfo {
@@ -35,10 +38,9 @@ final class ArraysAndSignalTransformerInfo extends InductorCoilAndChokesInfo {
     private String seriesDCResistance;
     private String operatingTemp;
     private ArrayShielding shielding;
-    private ArrayRatings Rating;
-    private ArrayMountingType mount;
-    private String packageCase;
+    private inductorRating Rating;
     private String height;
+    private String size;
     
     
     
@@ -47,8 +49,7 @@ final class ArraysAndSignalTransformerInfo extends InductorCoilAndChokesInfo {
 final class DelayLinesInfo extends InductorCoilAndChokesInfo {
     private String delayTime;
     private String operatingTemp;
-    private String packageCase;
-    private DelayLineMountingType mount;
+
 }
 
 final class FixedInductorInfo extends InductorCoilAndChokesInfo {
@@ -56,17 +57,15 @@ final class FixedInductorInfo extends InductorCoilAndChokesInfo {
     private double inductance;
     private String currentRating;
     private String currentSaturation;
-    private FixedInductorType type;
+    private String inductorType;
     private fixedInductorShielding shielding;
-    private fixedInductorMount mount;
     private String dcResistance;
     private String qFreq;
     private String selfResonantFreq;
-    private FixedInductorRatings Rating;
+    private inductorRating Rating;
     private String operatingTemp;
     private String inductanceFreqTest;
     private String features;
-    private String packageCase;
     private String supplierDevicePackage;
     private String size;
     private String seatedHeight;
@@ -80,57 +79,12 @@ final class WirelessChargingCoilInfo extends InductorCoilAndChokesInfo {
     private String currentRating;
     private String selfResonantFreq;
     private String operatingTemp;
-    
-}
-
-
-//Arrays, Signal Transformers Enum
-enum AdjustableInductorMountingType{
-    SurfaceMount,
-    ThroughHole,
-    Unknown
+    private String size;
 }
 
 enum ArrayShielding{
     Shielded,
     Unshielded,
-    Unknown
-}
-
-enum ArrayRatings{
-    AEC_Q200,
-    Unknown
-}
-
-enum ArrayMountingType {
-    ChassisMount,
-    SurfaceMount,
-    ThroughHole,
-    Unknown
-}
-
-enum DelayLineMountingType{
-    SurfaceMount,
-    ThroughHole,
-    Unknown
-}
-
-enum FixedInductorType{
-    Ceramic,
-    DrumCore,
-    DrumCoreWirewound,
-    Molded,
-    Multilayer,
-    Planar,
-    ThickFilm,
-    ThinFilm,
-    Toroidal,
-    Wirewound,
-    Unknown
-}
-
-enum FixedInductorRatings{
-    AEC_Q200,
     Unknown
 }
 
@@ -140,7 +94,15 @@ enum fixedInductorShielding{
     Unshielded,
     Unknown
 }
-enum fixedInductorMount {
+
+enum WirelessCoilFunction{
+    Receiver,
+    ReceiverTransmitter,
+    Transmitter,
+    Unknown
+}
+
+enum inductorMountingType{
     ChassisMount,
     FreeHanging,
     SurfaceMount,
@@ -149,9 +111,8 @@ enum fixedInductorMount {
     Unknown
 }
 
-enum WirelessCoilFunction{
-    Receiver,
-    ReceiverTransmitter,
-    Transmitter,
+enum inductorRating{
+    AEC_Q200,
     Unknown
 }
+
