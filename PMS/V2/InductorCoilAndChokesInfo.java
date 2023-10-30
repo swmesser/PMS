@@ -19,7 +19,7 @@ public abstract class InductorCoilAndChokesInfo extends ProductInfo{
 
 final class AdjustableInductors extends InductorCoilAndChokesInfo {
     private String inductance;
-    private String qAtFreq;
+    private String qFreq;
     private String height;
     private String size;
 
@@ -46,6 +46,11 @@ final class ArraysAndSignalTransformerInfo extends InductorCoilAndChokesInfo {
     
 }
 
+final class DelayLinesInfo extends InductorCoilAndChokesInfo {
+    private String delayTime;
+    private String operatingTemp;
+
+}
 
 final class FixedInductorInfo extends InductorCoilAndChokesInfo {
     private String coreMaterial;
@@ -55,7 +60,7 @@ final class FixedInductorInfo extends InductorCoilAndChokesInfo {
     private String inductorType;
     private fixedInductorShielding shielding;
     private String dcResistance;
-    private String qAtFreq;
+    private String qFreq;
     private String selfResonantFreq;
     private inductorRating Rating;
     private String operatingTemp;
@@ -70,7 +75,7 @@ final class WirelessChargingCoilInfo extends InductorCoilAndChokesInfo {
     private String inductance;
     private WirelessCoilFunction function;
     private String type;
-    private String qAtFreq;
+    private String qFreq;
     private String currentRating;
     private String selfResonantFreq;
     private String operatingTemp;
