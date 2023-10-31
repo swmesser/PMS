@@ -1,7 +1,5 @@
 package PMS.V2;
 
-import com.sun.jdi.connect.spi.TransportService;
-
 /* 
  * File: CapacitorInfo
  * Copy: Copyright (c) 2023 Samuel W. Messer
@@ -10,26 +8,57 @@ import com.sun.jdi.connect.spi.TransportService;
  * Desc: Driver for testing concepts
  */
 
-public abstract class CapacitorInfo extends ProductInfo {
-    private String Capacitance;
+public abstract class CapacitorInfo extends ProductInfo implements Exportable {
+    private String capacitance;
     private String tolerance;
     private String voltageRating;
     private String operationTemp;
     private String size;
     private String dielectricMat;
-    private capacitorMountingType mount;
+    private MountingType mount;
     private String packageCase;
     private String seatedHeight;
+
+    @Override
+    public String toCSV() {
+        String output = "";
+ 
+        output += super.toCSV(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        
+        return( output );
+    }
+
+    @Override
+    public String toCustom() {
+        String output = "";
+        
+        output += super.toCustom(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        
+        return( output );
+    }
+
+    @Override
+    public String toXML() {
+        String output = "";
+        
+        output += super.toXML(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        
+        return( output );
+    }
+    
+    
+    
     
 }
 
 
 //Subcategories to the capacitor category
-final class EDLCAndSupercapactiorInfo extends CapacitorInfo{
+final class EDLCAndSupercapactiorInfo extends CapacitorInfo implements Exportable{
     private String equivalentSeriesResistance;
     private String lifetimeAtTemp;
-    private String Termination;
+    private String termination;
     private String leadSpacing;
+    
 }
 
 final class MicaAndPTFEInfo extends CapacitorInfo{
@@ -51,6 +80,12 @@ final class TrimmerAndVariableInfo extends CapacitorInfo{
     private String adjustmentType;
     private String qAtFreq;
     private String features;
+    
+    public TrimmerAndVariableInfo fromCustom( String input ){
+        TrimmerAndVariableInfo trimmerAndVariable = new TrimmerAndVariableInfo();
+        
+        return( trimmerAndVariable );
+    }
 }
 
 enum capacitorRatings{
@@ -64,7 +99,7 @@ enum capacitorCircuitType{
     Unknown
 }
 
-enum capacitorMountingType{
+enum MountingType{
     ChassisMount,
     PanelMount,
     BracketMount,
