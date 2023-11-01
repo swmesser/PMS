@@ -313,7 +313,7 @@ public abstract class ProductInfo implements Exportable {
         output += this.hazards + ",";
         output += this.shippingPackage + ",";
         output += this.qtyAvailable + ",";
-        output += this.price;
+        output += this.price + ",";
         
         
         return( output );
@@ -324,7 +324,7 @@ public abstract class ProductInfo implements Exportable {
         //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
         String output = "";
         
-        output += "<ProductInfo>";
+        output += "<ProductInfo>" + '\n';
         output += "     <itemId>" + this.itemId + "</itemId>\n";
         output += "     <name>" + this.name + "</name>\n";
         output += "     <description>" + this.description + "</description>\n";
@@ -338,7 +338,7 @@ public abstract class ProductInfo implements Exportable {
         output += "     <shippingPackage>" + this.shippingPackage + "</shippingPackage>\n";
         output += "     <qtyAvailable>" + this.qtyAvailable + "</qtyAvailable>\n";
         output += "     <price>" + this.price + "</price>\n";
-        output += "</ProductInfo>";
+        output += "</ProductInfo>\n";
         
         
         return( output );
