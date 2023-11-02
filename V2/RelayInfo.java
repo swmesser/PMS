@@ -18,7 +18,35 @@ public abstract class RelayInfo extends ProductInfo {
     private String terminationStyle;
     private String operationTemp;
     private String coilVoltage;
-    private MountingType mount;
+    private relayMountingType mount;
+
+    public RelayInfo() {
+        super();
+        this.contactCurrentRating = "";
+        this.mustOperateVolt = "";
+        this.mustReleaseVolt = "";
+        this.operateTime = "";
+        this.releaseTime = "";
+        this.features = "";
+        this.terminationStyle = "";
+        this.operationTemp = "";
+        this.coilVoltage = "";
+        this.mount = relayMountingType.Unknown;
+    }
+
+    public RelayInfo(String contactCurrentRating, String mustOperateVolt, String mustReleaseVolt, String operateTime, String releaseTime, String features, String terminationStyle, String operationTemp, String coilVoltage, relayMountingType mount, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+        super(itemId, name, description, mfg, mfgPartNum, series, qty, price);
+        this.contactCurrentRating = contactCurrentRating;
+        this.mustOperateVolt = mustOperateVolt;
+        this.mustReleaseVolt = mustReleaseVolt;
+        this.operateTime = operateTime;
+        this.releaseTime = releaseTime;
+        this.features = features;
+        this.terminationStyle = terminationStyle;
+        this.operationTemp = operationTemp;
+        this.coilVoltage = coilVoltage;
+        this.mount = mount;
+    }
 
     @Override
     public String toCSV() {
@@ -77,23 +105,6 @@ public abstract class RelayInfo extends ProductInfo {
         output += "</RelayInfo>\n";
         
         return(output);
-    }
-    
-    
-            
-    
-    
-    private enum MountingType {
-        ChassisMount,
-        SurfaceMount,
-        PanelMount,
-        ThroughHole,
-        ThroughHoleRightAngle,
-        FreeHanging,
-        Socketable,
-        SocketableThroughHole,
-        DINRail,
-        Unknown
     }
 
     /**
@@ -225,14 +236,14 @@ public abstract class RelayInfo extends ProductInfo {
     /**
      * @return the mount
      */
-    public MountingType getMount() {
+    public relayMountingType getMount() {
         return (this.mount);
     }
 
     /**
      * @param mount the mount to set
      */
-    public void setMount(MountingType mount) {
+    public void setMount(relayMountingType mount) {
         this.mount = mount;
     }
 }
@@ -241,6 +252,18 @@ final class HighFrequencyRelayInfo extends RelayInfo{
     private String contactForm;
     private CoilType coil;
 
+    public HighFrequencyRelayInfo() {
+        this.contactForm = "";
+        this.coil = CoilType.Unknown;
+    }
+
+    public HighFrequencyRelayInfo(String contactForm, CoilType coil, String contactCurrentRating, String mustOperateVolt, String mustReleaseVolt, String operateTime, String releaseTime, String features, String terminationStyle, String operationTemp, String coilVoltage, relayMountingType mount, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+        super(contactCurrentRating, mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, features, terminationStyle, operationTemp, coilVoltage, mount, itemId, name, description, mfg, mfgPartNum, series, qty, price);
+        this.contactForm = contactForm;
+        this.coil = coil;
+    }
+
+    
     @Override
     public String toCSV() {
         String output = "";
@@ -310,6 +333,17 @@ final class HighFrequencyRelayInfo extends RelayInfo{
 final class AutomotiveRelayInfo extends RelayInfo{
     private String coilCurrent;
     private CoilType coil;
+
+    public AutomotiveRelayInfo(String coilCurrent, CoilType coil) {
+        this.coilCurrent = "";
+        this.coil = CoilType.Unknown;
+    }
+
+    public AutomotiveRelayInfo(String coilCurrent, CoilType coil, String contactCurrentRating, String mustOperateVolt, String mustReleaseVolt, String operateTime, String releaseTime, String features, String terminationStyle, String operationTemp, String coilVoltage, relayMountingType mount, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+        super(contactCurrentRating, mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, features, terminationStyle, operationTemp, coilVoltage, mount, itemId, name, description, mfg, mfgPartNum, series, qty, price);
+        this.coilCurrent = coilCurrent;
+        this.coil = coil;
+    }
     
     @Override
     public String toCSV() {
@@ -378,6 +412,18 @@ final class AutomotiveRelayInfo extends RelayInfo{
 final class SafetyRelayInfo extends RelayInfo{
     private String contactForm;
     private String contactMaterial;
+
+    public SafetyRelayInfo(String contactForm, String contactMaterial) {
+        super();
+        this.contactForm = "";
+        this.contactMaterial = "";
+    }
+
+    public SafetyRelayInfo(String contactForm, String contactMaterial, String contactCurrentRating, String mustOperateVolt, String mustReleaseVolt, String operateTime, String releaseTime, String features, String terminationStyle, String operationTemp, String coilVoltage, relayMountingType mount, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+        super(contactCurrentRating, mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, features, terminationStyle, operationTemp, coilVoltage, mount, itemId, name, description, mfg, mfgPartNum, series, qty, price);
+        this.contactForm = contactForm;
+        this.contactMaterial = contactMaterial;
+    }
     
     @Override
     public String toCSV() {
@@ -449,6 +495,25 @@ final class SignalRelayInfo extends RelayInfo{
     private String coilInsulation;
     private String contactMaterial;
     private String relayType;
+
+    public SignalRelayInfo(String contactForm, String sealRating, String coilInsulation, String contactMaterial, String relayType) {
+        super();
+        this.contactForm = "";
+        this.sealRating = "";
+        this.coilInsulation = "";
+        this.contactMaterial = "";
+        this.relayType = "";
+    }
+
+    public SignalRelayInfo(String contactForm, String sealRating, String coilInsulation, String contactMaterial, String relayType, String contactCurrentRating, String mustOperateVolt, String mustReleaseVolt, String operateTime, String releaseTime, String features, String terminationStyle, String operationTemp, String coilVoltage, relayMountingType mount, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+        super(contactCurrentRating, mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, features, terminationStyle, operationTemp, coilVoltage, mount, itemId, name, description, mfg, mfgPartNum, series, qty, price);
+        this.contactForm = contactForm;
+        this.sealRating = sealRating;
+        this.coilInsulation = coilInsulation;
+        this.contactMaterial = contactMaterial;
+        this.relayType = relayType;
+    }
+    
     
     @Override
     public String toCSV() {
@@ -573,6 +638,18 @@ final class PowerRelayInfo extends RelayInfo{
     private String coilInsulation;
     private String contactMaterial;
     private String relayType;
+
+    public PowerRelayInfo(String contactForm, String coilCurrent, CoilType coil, String sealRating, String coilInsulation, String contactMaterial, String relayType) {
+        super();
+        this.contactForm = "";
+        this.coilCurrent = "";
+        this.coil = CoilType.Unknown;
+        this.sealRating = "";
+        this.coilInsulation = "";
+        this.contactMaterial = "";
+        this.relayType = "";
+    }
+    
     
     @Override
     public String toCSV() {
@@ -728,5 +805,18 @@ enum CoilType{
         LatchingDualCoil,
         LatchingSingleCoil,
         NonLatching,
+        Unknown
+    }
+
+enum relayMountingType {
+        ChassisMount,
+        SurfaceMount,
+        PanelMount,
+        ThroughHole,
+        ThroughHoleRightAngle,
+        FreeHanging,
+        Socketable,
+        SocketableThroughHole,
+        DINRail,
         Unknown
     }

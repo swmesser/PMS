@@ -21,6 +21,32 @@ public abstract class CapacitorInfo extends ProductInfo{
     private String packageCase;
     private String seatedHeight;
     
+    public CapacitorInfo(){
+        super();
+        this.capacitance = "";
+        this.tolerance = "";
+        this.voltageRating = "";
+        this.operationTemp = "";
+        this.size = "";
+        this.dielectricMat = "";
+        this.mount = MountingType.Unknown;
+        this.packageCase = "";
+        this.seatedHeight = "";
+    }
+
+    public CapacitorInfo(String capacitance, String tolerance, String voltageRating, String operationTemp, String size, String dielectricMat, MountingType mount, String packageCase, String seatedHeight, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+        super(itemId, name, description, mfg, mfgPartNum, series, qty, price);
+        this.capacitance = capacitance;
+        this.tolerance = tolerance;
+        this.voltageRating = voltageRating;
+        this.operationTemp = operationTemp;
+        this.size = size;
+        this.dielectricMat = dielectricMat;
+        this.mount = mount;
+        this.packageCase = packageCase;
+        this.seatedHeight = seatedHeight;
+    }
+    
     //All of the exporting methods are implemented through the inheritance
     //  added all info specific to class
     @Override
@@ -218,6 +244,22 @@ final class EDLCAndSupercapactiorInfo extends CapacitorInfo{
     private String lifetimeAtTemp;
     private String termination;
     private String leadSpacing;
+
+    public EDLCAndSupercapactiorInfo() {
+        super();
+        this.equivalentSeriesResistance = "";
+        this.lifetimeAtTemp = "";
+        this.termination = "";
+        this.leadSpacing = "";
+    }
+
+    public EDLCAndSupercapactiorInfo(String equivalentSeriesResistance, String lifetimeAtTemp, String termination, String leadSpacing, String capacitance, String tolerance, String voltageRating, String operationTemp, String size, String dielectricMat, MountingType mount, String packageCase, String seatedHeight, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+        super(capacitance, tolerance, voltageRating, operationTemp, size, dielectricMat, mount, packageCase, seatedHeight, itemId, name, description, mfg, mfgPartNum, series, qty, price);
+        this.equivalentSeriesResistance = equivalentSeriesResistance;
+        this.lifetimeAtTemp = lifetimeAtTemp;
+        this.termination = termination;
+        this.leadSpacing = leadSpacing;
+    }
     
     //All of the exporting methods are implemented through the inheritance
     //  added all info specific to class
@@ -322,6 +364,20 @@ final class EDLCAndSupercapactiorInfo extends CapacitorInfo{
 final class MicaAndPTFEInfo extends CapacitorInfo{
     private String leadSpacing;
     private String features;
+
+    public MicaAndPTFEInfo() {
+        super();
+        this.leadSpacing = "";
+        this.features = "";
+    }
+
+    public MicaAndPTFEInfo(String leadSpacing, String features, String capacitance, String tolerance, String voltageRating, String operationTemp, String size, String dielectricMat, MountingType mount, String packageCase, String seatedHeight, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+        super(capacitance, tolerance, voltageRating, operationTemp, size, dielectricMat, mount, packageCase, seatedHeight, itemId, name, description, mfg, mfgPartNum, series, qty, price);
+        this.leadSpacing = leadSpacing;
+        this.features = features;
+    }
+    
+    
     
     //All of the exporting methods are implemented through the inheritance
     //  added all info specific to class
@@ -395,7 +451,25 @@ final class NetworksAndArraysInfo extends CapacitorInfo{
     private String supplierDevicePackage;
     private capacitorRatings rating;
     private capacitorCircuitType circuit;
+
+    public NetworksAndArraysInfo() {
+        super();
+        this.capacitorCount = 0;
+        this.tempCoefficient = "";
+        this.supplierDevicePackage = "";
+        this.rating = capacitorRatings.Unknown;
+        this.circuit = capacitorCircuitType.Unknown;
+    }
     
+    public NetworksAndArraysInfo(int capacitorCount, String tempCoefficient, String supplierDevicePackage, capacitorRatings rating, capacitorCircuitType circuit, String capacitance, String tolerance, String voltageRating, String operationTemp, String size, String dielectricMat, MountingType mount, String packageCase, String seatedHeight, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+        super(capacitance, tolerance, voltageRating, operationTemp, size, dielectricMat, mount, packageCase, seatedHeight, itemId, name, description, mfg, mfgPartNum, series, qty, price);
+        this.capacitorCount = capacitorCount;
+        this.tempCoefficient = tempCoefficient;
+        this.supplierDevicePackage = supplierDevicePackage;
+        this.rating = rating;
+        this.circuit = circuit;
+    }
+        
     //All of the exporting methods are implemented through the inheritance
     //  added all info specific to class
     @Override
@@ -519,6 +593,22 @@ final class TrimmerAndVariableInfo extends CapacitorInfo{
     private String adjustmentType;
     private String qAtFreq;
     private String features;
+
+    public TrimmerAndVariableInfo() {
+        super();
+        this.capacitanceRange = "";
+        this.adjustmentType = "";
+        this.qAtFreq = "";
+        this.features = "";
+    }
+    
+    public TrimmerAndVariableInfo(String capacitanceRange, String adjustmentType, String qAtFreq, String features, String capacitance, String tolerance, String voltageRating, String operationTemp, String size, String dielectricMat, MountingType mount, String packageCase, String seatedHeight, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+        super(capacitance, tolerance, voltageRating, operationTemp, size, dielectricMat, mount, packageCase, seatedHeight, itemId, name, description, mfg, mfgPartNum, series, qty, price);
+        this.capacitanceRange = capacitanceRange;
+        this.adjustmentType = adjustmentType;
+        this.qAtFreq = qAtFreq;
+        this.features = features;
+    }    
     
     //All of the exporting methods are implemented through the inheritance
     //  added all info specific to class

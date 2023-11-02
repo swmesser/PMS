@@ -13,7 +13,23 @@ public abstract class InductorCoilAndChokesInfo extends ProductInfo{
     private inductorMountingType mount;
     private String packageCase;
     private String operationTemp;
-   
+
+    public InductorCoilAndChokesInfo() {
+        super();
+        this.tolerance = "";
+        this.mount = inductorMountingType.Unknown;
+        this.packageCase = "";
+        this.operationTemp = "";
+    }
+
+    public InductorCoilAndChokesInfo(String tolerance, inductorMountingType mount, String packageCase, String operationTemp, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+        super(itemId, name, description, mfg, mfgPartNum, series, qty, price);
+        this.tolerance = tolerance;
+        this.mount = mount;
+        this.packageCase = packageCase;
+        this.operationTemp = operationTemp;
+    }
+    
     @Override
     public String toCSV() {
         String output = "";
@@ -120,6 +136,22 @@ final class AdjustableInductors extends InductorCoilAndChokesInfo {
     private String height;
     private String size;
 
+    public AdjustableInductors() {
+        super();
+        this.inductance = "";
+        this.qAtFreq = "";
+        this.height = "";
+        this.size = "";
+    }
+
+    public AdjustableInductors(String inductance, String qAtFreq, String height, String size, String tolerance, inductorMountingType mount, String packageCase, String operationTemp, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+        super(tolerance, mount, packageCase, operationTemp, itemId, name, description, mfg, mfgPartNum, series, qty, price);
+        this.inductance = inductance;
+        this.qAtFreq = qAtFreq;
+        this.height = height;
+        this.size = size;
+    }
+    
     @Override
     public String toCSV() {
         String output = "";
@@ -235,6 +267,42 @@ final class ArraysAndSignalTransformerInfo extends InductorCoilAndChokesInfo {
     private inductorRating rating;
     private String height;
     private String size;
+
+    public ArraysAndSignalTransformerInfo() {
+        super();
+        this.coilNumber = 0;
+        this.parallelInductance = "";
+        this.seriesInductance = "";
+        this.parallelCurrentRating = "";
+        this.seriesCurrentRating = "";
+        this.parallelCurrentSaturation = "";
+        this.seriesCurrentSaturation = "";
+        this.parallelDCResistance = "";
+        this.seriesDCResistance = "";
+        this.operatingTemp = "";
+        this.size = "";
+        this.height = "";
+        this.shielding = ArrayShielding.Unknown;
+        this.rating = inductorRating.Unknown;
+    }
+
+    public ArraysAndSignalTransformerInfo(int coilNumber, String parallelInductance, String seriesInductance, String parallelCurrentRating, String seriesCurrentRating, String parallelCurrentSaturation, String seriesCurrentSaturation, String parallelDCResistance, String seriesDCResistance, String operatingTemp, ArrayShielding shielding, inductorRating rating, String height, String size, String tolerance, inductorMountingType mount, String packageCase, String operationTemp, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+        super(tolerance, mount, packageCase, operationTemp, itemId, name, description, mfg, mfgPartNum, series, qty, price);
+        this.coilNumber = coilNumber;
+        this.parallelInductance = parallelInductance;
+        this.seriesInductance = seriesInductance;
+        this.parallelCurrentRating = parallelCurrentRating;
+        this.seriesCurrentRating = seriesCurrentRating;
+        this.parallelCurrentSaturation = parallelCurrentSaturation;
+        this.seriesCurrentSaturation = seriesCurrentSaturation;
+        this.parallelDCResistance = parallelDCResistance;
+        this.seriesDCResistance = seriesDCResistance;
+        this.operatingTemp = operatingTemp;
+        this.shielding = shielding;
+        this.rating = rating;
+        this.height = height;
+        this.size = size;
+    }
     
     @Override
     public String toCSV() {
@@ -522,6 +590,46 @@ final class FixedInductorInfo extends InductorCoilAndChokesInfo {
     private String supplierDevicePackage;
     private String size;
     private String seatedHeight;
+
+    public FixedInductorInfo() {
+        super();
+        this.coreMaterial = "";
+        this.inductance = "";
+        this.currentRating = "";
+        this.currentSaturation = "";
+        this.inductorType = "";
+        this.shielding = fixedInductorShielding.Unknown;
+        this.dcResistance = "";
+        this.qAtFreq = "";
+        this.selfResonantFreq = "";
+        this.rating = inductorRating.Unknown;
+        this.operatingTemp = "";
+        this.inductanceFreqTest = "";
+        this.features = "";
+        this.supplierDevicePackage = "";
+        this.size = "";
+        this.seatedHeight = "";
+    }
+
+    public FixedInductorInfo(String coreMaterial, String inductance, String currentRating, String currentSaturation, String inductorType, fixedInductorShielding shielding, String dcResistance, String qAtFreq, String selfResonantFreq, inductorRating rating, String operatingTemp, String inductanceFreqTest, String features, String supplierDevicePackage, String size, String seatedHeight, String tolerance, inductorMountingType mount, String packageCase, String operationTemp, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+        super(tolerance, mount, packageCase, operationTemp, itemId, name, description, mfg, mfgPartNum, series, qty, price);
+        this.coreMaterial = coreMaterial;
+        this.inductance = inductance;
+        this.currentRating = currentRating;
+        this.currentSaturation = currentSaturation;
+        this.inductorType = inductorType;
+        this.shielding = shielding;
+        this.dcResistance = dcResistance;
+        this.qAtFreq = qAtFreq;
+        this.selfResonantFreq = selfResonantFreq;
+        this.rating = rating;
+        this.operatingTemp = operatingTemp;
+        this.inductanceFreqTest = inductanceFreqTest;
+        this.features = features;
+        this.supplierDevicePackage = supplierDevicePackage;
+        this.size = size;
+        this.seatedHeight = seatedHeight;
+    }
     
     @Override
     public String toCSV() {
@@ -834,6 +942,30 @@ final class WirelessChargingCoilInfo extends InductorCoilAndChokesInfo {
     private String selfResonantFreq;
     private String operatingTemp;
     private String size;
+
+    public WirelessChargingCoilInfo() {
+        super();
+        this.inductance = "";
+        this.function = WirelessCoilFunction.Unknown;
+        this.type = "";
+        this.qAtFreq = "";
+        this.currentRating = "";
+        this.selfResonantFreq = "";
+        this.operatingTemp = "";
+        this.size = "";
+    }
+
+    public WirelessChargingCoilInfo(String inductance, WirelessCoilFunction function, String type, String qAtFreq, String currentRating, String selfResonantFreq, String operatingTemp, String size, String tolerance, inductorMountingType mount, String packageCase, String operationTemp, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+        super(tolerance, mount, packageCase, operationTemp, itemId, name, description, mfg, mfgPartNum, series, qty, price);
+        this.inductance = inductance;
+        this.function = function;
+        this.type = type;
+        this.qAtFreq = qAtFreq;
+        this.currentRating = currentRating;
+        this.selfResonantFreq = selfResonantFreq;
+        this.operatingTemp = operatingTemp;
+        this.size = size;
+    } 
     
     @Override
     public String toCSV() {
