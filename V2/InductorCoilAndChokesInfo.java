@@ -54,6 +54,8 @@ public abstract class InductorCoilAndChokesInfo extends ProductInfo{
         
         return(output);
     }
+    
+    
 
     /**
      * @return the tolerance
