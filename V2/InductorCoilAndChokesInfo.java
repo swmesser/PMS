@@ -708,6 +708,66 @@ final class FixedInductorInfo extends InductorCoilAndChokesInfo {
         return(output);
     }
 
+    public static FixedInductorInfo fromCSV( String input ) throws Exception {
+        FixedInductorInfo fixedInductor = new FixedInductorInfo();
+        String[] Chunks;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        stockOption stock;
+        environmentalOption hazard;
+        mediaOption media;
+        packageOption shippingBox;
+        productStatus status;
+        //InductorCoilAndChoke
+        String tolerance = "";
+        inductorMountingType mount;
+        String packageCase = "";
+        String operationTemp = "";
+        
+        
+        //Validate input 
+        if ( input == null ){
+            throw new Exception("Error: Null input for parsing!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string provided!");
+        } else {
+            //Split line based on comma
+            Chunks = input.split(",");
+            if ( Chunks.length == 24 ){
+                //Assign all parameters
+                //ProductInfo Params
+                id = Chunks[ 0 ];
+                name = Chunks[ 1 ];
+                description = Chunks[ 2 ];
+                manufacturer = Chunks[ 3 ];
+                mfgPartNum = Chunks[ 4 ];
+                series = Chunks[ 5 ];
+                stock = stockOption.valueOf( Chunks[ 6 ]);
+                hazard = environmentalOption.valueOf( Chunks[ 7 ]);
+                media = mediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = packageOption.valueOf( Chunks[ 9 ]);
+                status = productStatus.valueOf( Chunks[ 10 ]);
+                qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
+                price = Double.valueOf( Chunks[ 12 ]);
+                //==================
+                //InductorCoilAndChokeInfo Params
+                tolerance = Chunks[ 13 ];
+                mount = inductorMountingType.valueOf( Chunks[ 14 ]);
+                packageCase = Chunks[ 15 ];
+                operationTemp = Chunks[ 16 ];
+                //==================
+                //FixedInductorInfo
+            }
+        }
+        return( fixedInductor );
+    }
     /**
      * @return the coreMaterial
      */
@@ -1017,6 +1077,91 @@ final class WirelessChargingCoilInfo extends InductorCoilAndChokesInfo {
         output += "</WirelessChargingCoilInfo>\n";
         
         return(output);
+    }
+    
+    public static WirelessChargingCoilInfo fromCSV( String input ) throws Exception {
+        WirelessChargingCoilInfo wirelessCoil = new WirelessChargingCoilInfo();
+        String[] Chunks;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        stockOption stock;
+        environmentalOption hazard;
+        mediaOption media;
+        packageOption shippingBox;
+        productStatus status;
+        //InductorCoilAndChoke
+        String tolerance = "";
+        inductorMountingType mount;
+        String packageCase = "";
+        String operationTemp = "";
+        //WirelessChargingCoil
+        String inductance;
+        WirelessCoilFunction function;
+        String type;
+        String qAtFreq;
+        String currentRating;
+        String selfResonantFreq;
+        String operatingTemp;
+        String size;
+        
+        
+        //Validate input 
+        if ( input == null ){
+            throw new Exception("Error: Null input for parsing!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string provided!");
+        } else {
+            //Split line based on comma
+            Chunks = input.split(",");
+            if ( Chunks.length == 24 ){
+                //Assign all parameters
+                //ProductInfo Params
+                id = Chunks[ 0 ];
+                name = Chunks[ 1 ];
+                description = Chunks[ 2 ];
+                manufacturer = Chunks[ 3 ];
+                mfgPartNum = Chunks[ 4 ];
+                series = Chunks[ 5 ];
+                stock = stockOption.valueOf( Chunks[ 6 ]);
+                hazard = environmentalOption.valueOf( Chunks[ 7 ]);
+                media = mediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = packageOption.valueOf( Chunks[ 9 ]);
+                status = productStatus.valueOf( Chunks[ 10 ]);
+                qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
+                price = Double.valueOf( Chunks[ 12 ]);
+                //==================
+                //InductorCoilAndChokeInfo Params
+                tolerance = Chunks[ 13 ];
+                mount = inductorMountingType.valueOf( Chunks[ 14 ]);
+                packageCase = Chunks[ 15 ];
+                operationTemp = Chunks[ 16 ];
+                //==================
+                //WirelessChargingCoilInfo Params
+                inductance = Chunks[ 17 ];
+                function = WirelessCoilFunction.valueOf( Chunks[ 18 ]);
+                type = Chunks[ 19 ];
+                qAtFreq = Chunks[ 20 ];
+                currentRating = Chunks[ 21 ];
+                selfResonantFreq = Chunks[ 22 ];
+                operatingTemp = Chunks[ 23 ];
+                size = Chunks[ 24 ];
+                
+                //Param validation -> constructor
+                wirelessCoil = new WirelessChargingCoilInfo(inductance, function, type, qAtFreq,
+                        currentRating, selfResonantFreq, operatingTemp, size, tolerance, 
+                        mount, packageCase, operationTemp, id, name, description, id, 
+                        mfgPartNum, series, qtyAvailable, price);
+            }
+        }
+        
+        return( wirelessCoil );
     }
 
     /**

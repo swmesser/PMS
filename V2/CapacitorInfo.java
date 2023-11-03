@@ -34,7 +34,8 @@ public abstract class CapacitorInfo extends ProductInfo{
         this.seatedHeight = "";
     }
 
-    public CapacitorInfo(String capacitance, String tolerance, String voltageRating, String operationTemp, String size, String dielectricMat, MountingType mount, String packageCase, String seatedHeight, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+    
+    public CapacitorInfo(String capacitance, String tolerance, String voltageRating, String operationTemp, String size, String dielectricMat, MountingType mount, String packageCase, String seatedHeight,String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(itemId, name, description, mfg, mfgPartNum, series, qty, price);
         this.capacitance = capacitance;
         this.tolerance = tolerance;
@@ -304,6 +305,93 @@ final class EDLCAndSupercapactiorInfo extends CapacitorInfo{
         return(output);
     }
 
+    public static EDLCAndSupercapactiorInfo fromCSV( String input ) throws Exception{
+        EDLCAndSupercapactiorInfo edlcAndSupercapacitor = new EDLCAndSupercapactiorInfo();
+        String[] Chunks;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        stockOption stock;
+        environmentalOption hazard;
+        mediaOption media;
+        packageOption shippingBox;
+        productStatus status;
+        //Capacitor
+        String capacitance = "";
+        String tolerance = "";
+        String voltageRating = "";
+        String operationTemp = "";
+        String size = "";
+        String dielectricMat = "";
+        MountingType mount;
+        String packageCase = "";
+        String seatedHeight = "";
+        //EDLCAndSupercapacitor
+        String equivalentSeriesResistance;
+        String lifetimeAtTemp;
+        String termination;
+        String leadSpacing;
+        
+        
+        //Validate input 
+        if ( input == null ){
+            throw new Exception("Error: Null input for parsing!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string provided!");
+        } else {
+            //Split line based on comma
+            Chunks = input.split(",");
+            if ( Chunks.length == 24 ){
+                //Assign all parameters
+                //ProductInfo Params
+                id = Chunks[ 0 ];
+                name = Chunks[ 1 ];
+                description = Chunks[ 2 ];
+                manufacturer = Chunks[ 3 ];
+                mfgPartNum = Chunks[ 4 ];
+                series = Chunks[ 5 ];
+                stock = stockOption.valueOf( Chunks[ 6 ]);
+                hazard = environmentalOption.valueOf( Chunks[ 7 ]);
+                media = mediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = packageOption.valueOf( Chunks[ 9 ]);
+                status = productStatus.valueOf( Chunks[ 10 ]);
+                qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
+                price = Double.valueOf( Chunks[ 12 ]);
+                //==================
+                //CapacitorInfo
+                capacitance = Chunks[ 13 ];
+                tolerance = Chunks[ 14 ];
+                voltageRating = Chunks[ 15 ];
+                operationTemp = Chunks[ 16 ];
+                size = Chunks[ 17 ];
+                dielectricMat = Chunks[ 18 ];
+                mount = MountingType.valueOf( Chunks[ 19 ]);
+                packageCase = Chunks[ 20 ];
+                seatedHeight = Chunks[ 21 ];
+                //=================
+                //EDLCAndSupercapacitors
+                equivalentSeriesResistance = Chunks[ 22 ];
+                lifetimeAtTemp = Chunks[ 23 ];
+                termination = Chunks[ 24 ];
+                leadSpacing = Chunks[ 25 ];
+                
+                //Param validation -> constructor
+                edlcAndSupercapacitor = new EDLCAndSupercapactiorInfo(equivalentSeriesResistance, lifetimeAtTemp, termination, 
+                        leadSpacing, capacitance, tolerance, voltageRating, operationTemp, size, dielectricMat, mount, packageCase,
+                        seatedHeight, id, name, description, id, mfgPartNum, series, qtyAvailable, price);
+                
+            }
+        }
+        
+        return( edlcAndSupercapacitor );
+    }
+    
     /**
      * @return the equivalentSeriesResistance
      */
@@ -415,6 +503,89 @@ final class MicaAndPTFEInfo extends CapacitorInfo{
         
         return(output);
     }
+    
+    
+    public static MicaAndPTFEInfo fromCSV( String input ) throws Exception{
+        MicaAndPTFEInfo micaAndPTFE = new MicaAndPTFEInfo();
+        String[] Chunks;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        stockOption stock;
+        environmentalOption hazard;
+        mediaOption media;
+        packageOption shippingBox;
+        productStatus status;
+        //Capacitor
+        String capacitance = "";
+        String tolerance = "";
+        String voltageRating = "";
+        String operationTemp = "";
+        String size = "";
+        String dielectricMat = "";
+        MountingType mount;
+        String packageCase = "";
+        String seatedHeight = "";
+        //MicaAndPTFE
+        String leadSpacing;
+        String features;
+        
+        //Validate input 
+        if ( input == null ){
+            throw new Exception("Error: Null input for parsing!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string provided!");
+        } else {
+            //Split line based on comma
+            Chunks = input.split(",");
+            if ( Chunks.length == 24 ){
+                //Assign all parameters
+                //ProductInfo Params
+                id = Chunks[ 0 ];
+                name = Chunks[ 1 ];
+                description = Chunks[ 2 ];
+                manufacturer = Chunks[ 3 ];
+                mfgPartNum = Chunks[ 4 ];
+                series = Chunks[ 5 ];
+                stock = stockOption.valueOf( Chunks[ 6 ]);
+                hazard = environmentalOption.valueOf( Chunks[ 7 ]);
+                media = mediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = packageOption.valueOf( Chunks[ 9 ]);
+                status = productStatus.valueOf( Chunks[ 10 ]);
+                qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
+                price = Double.valueOf( Chunks[ 12 ]);
+                //==================
+                //CapacitorInfo
+                capacitance = Chunks[ 13 ];
+                tolerance = Chunks[ 14 ];
+                voltageRating = Chunks[ 15 ];
+                operationTemp = Chunks[ 16 ];
+                size = Chunks[ 17 ];
+                dielectricMat = Chunks[ 18 ];
+                mount = MountingType.valueOf( Chunks[ 19 ]);
+                packageCase = Chunks[ 20 ];
+                seatedHeight = Chunks[ 21 ];
+                //=================
+                //MicaAndPTFEInfo
+                leadSpacing = Chunks[ 22 ];
+                features = Chunks[ 23 ];
+                
+                //Param Validation -> constructor
+                micaAndPTFE = new MicaAndPTFEInfo(leadSpacing, features, capacitance, tolerance, voltageRating,
+                        operationTemp, size, dielectricMat, mount, packageCase, seatedHeight, 
+                        id, name, description, id, mfgPartNum, series, qtyAvailable, price);
+            }
+            
+        }
+        
+        return( micaAndPTFE );
+    }
 
     /**
      * @return the leadSpacing
@@ -515,6 +686,94 @@ final class NetworksAndArraysInfo extends CapacitorInfo{
         
         
         return(output);
+    }
+    
+    public static NetworksAndArraysInfo fromCSV( String input ) throws Exception{
+        NetworksAndArraysInfo networkAndArray = new NetworksAndArraysInfo();
+        String[] Chunks;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        stockOption stock;
+        environmentalOption hazard;
+        mediaOption media;
+        packageOption shippingBox;
+        productStatus status;
+        //Capacitor
+        String capacitance = "";
+        String tolerance = "";
+        String voltageRating = "";
+        String operationTemp = "";
+        String size = "";
+        String dielectricMat = "";
+        MountingType mount;
+        String packageCase = "";
+        String seatedHeight = "";
+        //NetworkAndArray
+        int capacitorCount;
+        String tempCoefficient;
+        String supplierDevicePackage;
+        capacitorRatings rating;
+        capacitorCircuitType circuit;
+        
+        //Validate input 
+        if ( input == null ){
+            throw new Exception("Error: Null input for parsing!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string provided!");
+        } else {
+            //Split line based on comma
+            Chunks = input.split(",");
+            if ( Chunks.length == 27 ){
+                //Assign all parameters
+                //ProductInfo Params
+                id = Chunks[ 0 ];
+                name = Chunks[ 1 ];
+                description = Chunks[ 2 ];
+                manufacturer = Chunks[ 3 ];
+                mfgPartNum = Chunks[ 4 ];
+                series = Chunks[ 5 ];
+                stock = stockOption.valueOf( Chunks[ 6 ]);
+                hazard = environmentalOption.valueOf( Chunks[ 7 ]);
+                media = mediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = packageOption.valueOf( Chunks[ 9 ]);
+                status = productStatus.valueOf( Chunks[ 10 ]);
+                qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
+                price = Double.valueOf( Chunks[ 12 ]);
+                //==================
+                //CapacitorInfo
+                capacitance = Chunks[ 13 ];
+                tolerance = Chunks[ 14 ];
+                voltageRating = Chunks[ 15 ];
+                operationTemp = Chunks[ 16 ];
+                size = Chunks[ 17 ];
+                dielectricMat = Chunks[ 18 ];
+                mount = MountingType.valueOf( Chunks[ 19 ]);
+                packageCase = Chunks[ 20 ];
+                seatedHeight = Chunks[ 21 ];
+                //=================
+                //NetworkAndArray
+                capacitorCount = Integer.valueOf( Chunks[ 22 ]);
+                tempCoefficient = Chunks[ 23 ];
+                supplierDevicePackage = Chunks[ 24 ];
+                rating = capacitorRatings.valueOf( Chunks[ 25 ]);
+                circuit = capacitorCircuitType.valueOf( Chunks[ 26 ]);
+                
+                //Param Validation -> constructor
+                networkAndArray = new NetworksAndArraysInfo(capacitorCount, tempCoefficient, supplierDevicePackage,
+                        rating, circuit, capacitance, tolerance, voltageRating, operationTemp, size, dielectricMat,
+                        mount, packageCase, seatedHeight, id, name, description, id, mfgPartNum, series,
+                        qtyAvailable, price);
+            }
+        }
+        
+        return( networkAndArray );
     }
 
     /**
@@ -651,6 +910,93 @@ final class TrimmerAndVariableInfo extends CapacitorInfo{
         output += "</TrimmerAndVariableInfo>\n";
         
         return(output);
+    }
+    
+    public static TrimmerAndVariableInfo fromCSV( String input ) throws Exception{
+        TrimmerAndVariableInfo trimmerAndVariableInfo = new TrimmerAndVariableInfo();
+        String[] Chunks;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        stockOption stock;
+        environmentalOption hazard;
+        mediaOption media;
+        packageOption shippingBox;
+        productStatus status;
+        //Capacitor
+        String capacitance = "";
+        String tolerance = "";
+        String voltageRating = "";
+        String operationTemp = "";
+        String size = "";
+        String dielectricMat = "";
+        MountingType mount;
+        String packageCase = "";
+        String seatedHeight = "";
+        //TrimmerAndVariable
+        String capacitanceRange = "";
+        String adjustmentType = "";
+        String qAtFreq = "";
+        String features = "";
+        
+        //Validate input 
+        if ( input == null ){
+            throw new Exception("Error: Null input for parsing!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string provided!");
+        } else {
+            //Split line based on comma
+            Chunks = input.split(",");
+            if ( Chunks.length == 26 ){
+                //Assign all parameters
+                //ProductInfo Params
+                id = Chunks[ 0 ];
+                name = Chunks[ 1 ];
+                description = Chunks[ 2 ];
+                manufacturer = Chunks[ 3 ];
+                mfgPartNum = Chunks[ 4 ];
+                series = Chunks[ 5 ];
+                stock = stockOption.valueOf( Chunks[ 6 ]);
+                hazard = environmentalOption.valueOf( Chunks[ 7 ]);
+                media = mediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = packageOption.valueOf( Chunks[ 9 ]);
+                status = productStatus.valueOf( Chunks[ 10 ]);
+                qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
+                price = Double.valueOf( Chunks[ 12 ]);
+                //==================
+                //CapacitorInfo
+                capacitance = Chunks[ 13 ];
+                tolerance = Chunks[ 14 ];
+                voltageRating = Chunks[ 15 ];
+                operationTemp = Chunks[ 16 ];
+                size = Chunks[ 17 ];
+                dielectricMat = Chunks[ 18 ];
+                mount = MountingType.valueOf( Chunks[ 19 ]);
+                packageCase = Chunks[ 20 ];
+                seatedHeight = Chunks[ 21 ];
+                //=================
+                //TrimmerAndVariableInfo
+                capacitanceRange = Chunks[ 22 ];
+                adjustmentType = Chunks[ 23 ];
+                qAtFreq = Chunks[ 24 ];
+                features = Chunks[ 25 ];
+                
+                //Param Validation -> construct.
+                trimmerAndVariableInfo = new TrimmerAndVariableInfo(capacitanceRange, adjustmentType, qAtFreq,
+                        features, capacitance, tolerance, voltageRating, operationTemp, 
+                        size, dielectricMat, mount, packageCase, seatedHeight, id, name, 
+                        description, id, mfgPartNum, series, qtyAvailable, price);
+                
+            }
+        }
+        
+        return( trimmerAndVariableInfo );
     }
     
     public TrimmerAndVariableInfo fromCustom( String input ){

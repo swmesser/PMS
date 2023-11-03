@@ -252,11 +252,13 @@ final class HighFrequencyRelayInfo extends RelayInfo{
     private String contactForm;
     private CoilType coil;
 
+    //parameterless constructor
     public HighFrequencyRelayInfo() {
         this.contactForm = "";
         this.coil = CoilType.Unknown;
     }
 
+    //complete constructor
     public HighFrequencyRelayInfo(String contactForm, CoilType coil, String contactCurrentRating, String mustOperateVolt, String mustReleaseVolt, String operateTime, String releaseTime, String features, String terminationStyle, String operationTemp, String coilVoltage, relayMountingType mount, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(contactCurrentRating, mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, features, terminationStyle, operationTemp, coilVoltage, mount, itemId, name, description, mfg, mfgPartNum, series, qty, price);
         this.contactForm = contactForm;
@@ -298,6 +300,90 @@ final class HighFrequencyRelayInfo extends RelayInfo{
         
         return(output);
     }
+    
+    public static HighFrequencyRelayInfo fromCSV( String input ) throws Exception {
+        HighFrequencyRelayInfo highFreqRelay = new HighFrequencyRelayInfo();
+        String[] Chunks;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        stockOption stock;
+        environmentalOption hazard;
+        mediaOption media;
+        packageOption shippingBox;
+        productStatus status;
+        //Relay
+        String contactCurrentRating;
+        String mustOperateVolt;
+        String mustReleaseVolt;
+        String operateTime;
+        String releaseTime;
+        String features;
+        String terminationStyle;
+        String operationTemp;
+        String coilVoltage;
+        relayMountingType mount;
+        //HighFrequencyRelay
+        String contactForm;
+        CoilType coil;
+        
+        
+        //Validate input 
+        if ( input == null ){
+            throw new Exception("Error: Null input for parsing!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string provided!");
+        } else {
+            //Split line based on comma
+            Chunks = input.split(",");
+            if ( Chunks.length == 30 ){
+                //Assign all parameters
+                //ProductInfo Params
+                id = Chunks[ 0 ];
+                name = Chunks[ 1 ];
+                description = Chunks[ 2 ];
+                manufacturer = Chunks[ 3 ];
+                mfgPartNum = Chunks[ 4 ];
+                series = Chunks[ 5 ];
+                stock = stockOption.valueOf( Chunks[ 6 ]);
+                hazard = environmentalOption.valueOf( Chunks[ 7 ]);
+                media = mediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = packageOption.valueOf( Chunks[ 9 ]);
+                status = productStatus.valueOf( Chunks[ 10 ]);
+                qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
+                price = Double.valueOf( Chunks[ 12 ]);
+                //==================
+                //RelayInfo Params
+                contactCurrentRating = Chunks[ 13 ];
+                mustOperateVolt = Chunks[ 14 ];
+                mustReleaseVolt = Chunks[ 15 ];
+                operateTime = Chunks[ 16 ];
+                releaseTime =  Chunks[ 17 ];
+                features = Chunks[ 18 ];
+                terminationStyle = Chunks[ 19 ];
+                operationTemp = Chunks[ 20 ];
+                coilVoltage = Chunks[ 21 ];
+                mount = relayMountingType.valueOf( Chunks[ 22 ] );
+                //=================
+                //HighFrequencyRelayInfo
+                contactForm = Chunks[ 23 ];
+                coil = CoilType.valueOf( Chunks[ 24 ]);
+                
+                //Param validation is in constructors
+                highFreqRelay = new HighFrequencyRelayInfo(contactForm, coil, contactCurrentRating,
+                        mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, 
+                        features, terminationStyle, operationTemp, coilVoltage, mount,
+                        id, name, description, id, mfgPartNum, series, qtyAvailable, price);
+            }
+        }
+        return( highFreqRelay );
+    }
 
     /**
      * @return the contactForm
@@ -334,11 +420,13 @@ final class AutomotiveRelayInfo extends RelayInfo{
     private String coilCurrent;
     private CoilType coil;
 
-    public AutomotiveRelayInfo(String coilCurrent, CoilType coil) {
+    //parameterless constructor
+    public AutomotiveRelayInfo() {
         this.coilCurrent = "";
         this.coil = CoilType.Unknown;
     }
 
+    //complete constructor
     public AutomotiveRelayInfo(String coilCurrent, CoilType coil, String contactCurrentRating, String mustOperateVolt, String mustReleaseVolt, String operateTime, String releaseTime, String features, String terminationStyle, String operationTemp, String coilVoltage, relayMountingType mount, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(contactCurrentRating, mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, features, terminationStyle, operationTemp, coilVoltage, mount, itemId, name, description, mfg, mfgPartNum, series, qty, price);
         this.coilCurrent = coilCurrent;
@@ -379,6 +467,90 @@ final class AutomotiveRelayInfo extends RelayInfo{
         
         return(output);
     }
+    
+    public static AutomotiveRelayInfo fromCSV( String input ) throws Exception{
+        AutomotiveRelayInfo automotiveRelay = new AutomotiveRelayInfo();
+        String[] Chunks;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        stockOption stock;
+        environmentalOption hazard;
+        mediaOption media;
+        packageOption shippingBox;
+        productStatus status;
+        //Relay
+        String contactCurrentRating;
+        String mustOperateVolt;
+        String mustReleaseVolt;
+        String operateTime;
+        String releaseTime;
+        String features;
+        String terminationStyle;
+        String operationTemp;
+        String coilVoltage;
+        relayMountingType mount;
+        //AutomotiveRelay
+        String coilCurrent;
+        CoilType coil;
+        
+        
+        //Validate input 
+        if ( input == null ){
+            throw new Exception("Error: Null input for parsing!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string provided!");
+        } else {
+            //Split line based on comma
+            Chunks = input.split(",");
+            if ( Chunks.length == 25 ){
+                //Assign all parameters
+                //ProductInfo Params
+                id = Chunks[ 0 ];
+                name = Chunks[ 1 ];
+                description = Chunks[ 2 ];
+                manufacturer = Chunks[ 3 ];
+                mfgPartNum = Chunks[ 4 ];
+                series = Chunks[ 5 ];
+                stock = stockOption.valueOf( Chunks[ 6 ]);
+                hazard = environmentalOption.valueOf( Chunks[ 7 ]);
+                media = mediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = packageOption.valueOf( Chunks[ 9 ]);
+                status = productStatus.valueOf( Chunks[ 10 ]);
+                qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
+                price = Double.valueOf( Chunks[ 12 ]);
+                //==================
+                //RelayInfo Params
+                contactCurrentRating = Chunks[ 13 ];
+                mustOperateVolt = Chunks[ 14 ];
+                mustReleaseVolt = Chunks[ 15 ];
+                operateTime = Chunks[ 16 ];
+                releaseTime =  Chunks[ 17 ];
+                features = Chunks[ 18 ];
+                terminationStyle = Chunks[ 19 ];
+                operationTemp = Chunks[ 20 ];
+                coilVoltage = Chunks[ 21 ];
+                mount = relayMountingType.valueOf( Chunks[ 22 ] );
+                //==================
+                //AutomotiveRelayInfo
+                coilCurrent = Chunks[ 23 ];
+                coil = CoilType.valueOf( Chunks[ 24 ]);
+                
+                //Param validation is in constructor
+                automotiveRelay = new AutomotiveRelayInfo(coilCurrent, coil, contactCurrentRating,
+                        mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, features,
+                        terminationStyle, operationTemp, coilVoltage, mount, id, name,
+                        description, id, mfgPartNum, series, qtyAvailable, price);
+            }
+        }
+        return( automotiveRelay );
+    }
 
     /**
      * @return the coilCurrent
@@ -413,12 +585,14 @@ final class SafetyRelayInfo extends RelayInfo{
     private String contactForm;
     private String contactMaterial;
 
-    public SafetyRelayInfo(String contactForm, String contactMaterial) {
+    //parameterless constructor
+    public SafetyRelayInfo() {
         super();
         this.contactForm = "";
         this.contactMaterial = "";
     }
 
+    //complete constructor
     public SafetyRelayInfo(String contactForm, String contactMaterial, String contactCurrentRating, String mustOperateVolt, String mustReleaseVolt, String operateTime, String releaseTime, String features, String terminationStyle, String operationTemp, String coilVoltage, relayMountingType mount, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(contactCurrentRating, mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, features, terminationStyle, operationTemp, coilVoltage, mount, itemId, name, description, mfg, mfgPartNum, series, qty, price);
         this.contactForm = contactForm;
@@ -460,6 +634,89 @@ final class SafetyRelayInfo extends RelayInfo{
         return(output);
     }
 
+    public static SafetyRelayInfo fromCSV( String input ) throws Exception{
+        SafetyRelayInfo safetyRelay = new SafetyRelayInfo();
+        String[] Chunks;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        stockOption stock;
+        environmentalOption hazard;
+        mediaOption media;
+        packageOption shippingBox;
+        productStatus status;
+        //Relay
+        String contactCurrentRating;
+        String mustOperateVolt;
+        String mustReleaseVolt;
+        String operateTime;
+        String releaseTime;
+        String features;
+        String terminationStyle;
+        String operationTemp;
+        String coilVoltage;
+        relayMountingType mount;
+        //SafetyRelay
+        String contactForm;
+        String contactMaterial;
+        
+        //Validate input 
+        if ( input == null ){
+            throw new Exception("Error: Null input for parsing!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string provided!");
+        } else {
+            //Split line based on comma
+            Chunks = input.split(",");
+            if ( Chunks.length == 25 ){
+                //Assign all parameters
+                //ProductInfo Params
+                id = Chunks[ 0 ];
+                name = Chunks[ 1 ];
+                description = Chunks[ 2 ];
+                manufacturer = Chunks[ 3 ];
+                mfgPartNum = Chunks[ 4 ];
+                series = Chunks[ 5 ];
+                stock = stockOption.valueOf( Chunks[ 6 ]);
+                hazard = environmentalOption.valueOf( Chunks[ 7 ]);
+                media = mediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = packageOption.valueOf( Chunks[ 9 ]);
+                status = productStatus.valueOf( Chunks[ 10 ]);
+                qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
+                price = Double.valueOf( Chunks[ 12 ]);
+                //==================
+                //RelayInfo Params
+                contactCurrentRating = Chunks[ 13 ];
+                mustOperateVolt = Chunks[ 14 ];
+                mustReleaseVolt = Chunks[ 15 ];
+                operateTime = Chunks[ 16 ];
+                releaseTime =  Chunks[ 17 ];
+                features = Chunks[ 18 ];
+                terminationStyle = Chunks[ 19 ];
+                operationTemp = Chunks[ 20 ];
+                coilVoltage = Chunks[ 21 ];
+                mount = relayMountingType.valueOf( Chunks[ 22 ] );
+                //==================
+                //SafetyRelayInfo
+                contactForm = Chunks[ 23 ];
+                contactMaterial = Chunks[ 24 ];
+                
+                //Param validation is in constructors
+                safetyRelay = new SafetyRelayInfo(contactForm, contactMaterial, contactCurrentRating,
+                        mustOperateVolt, mustReleaseVolt, operateTime, releaseTime,
+                        features, terminationStyle, operationTemp, coilVoltage, mount,
+                        id, name, description, id, mfgPartNum, series, qtyAvailable, price);
+            }
+        }
+        return( safetyRelay );
+    }
+    
     /**
      * @return the contactForm
      */
@@ -496,7 +753,8 @@ final class SignalRelayInfo extends RelayInfo{
     private String contactMaterial;
     private String relayType;
 
-    public SignalRelayInfo(String contactForm, String sealRating, String coilInsulation, String contactMaterial, String relayType) {
+    //init constructor
+    public SignalRelayInfo() {
         super();
         this.contactForm = "";
         this.sealRating = "";
@@ -505,6 +763,7 @@ final class SignalRelayInfo extends RelayInfo{
         this.relayType = "";
     }
 
+    //complete constructor
     public SignalRelayInfo(String contactForm, String sealRating, String coilInsulation, String contactMaterial, String relayType, String contactCurrentRating, String mustOperateVolt, String mustReleaseVolt, String operateTime, String releaseTime, String features, String terminationStyle, String operationTemp, String coilVoltage, relayMountingType mount, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(contactCurrentRating, mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, features, terminationStyle, operationTemp, coilVoltage, mount, itemId, name, description, mfg, mfgPartNum, series, qty, price);
         this.contactForm = contactForm;
@@ -559,6 +818,98 @@ final class SignalRelayInfo extends RelayInfo{
         return(output);
     }
 
+    public static SignalRelayInfo fromCSV( String input ) throws Exception {
+        SignalRelayInfo signalRelay = new SignalRelayInfo();
+        String[] Chunks;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        stockOption stock;
+        environmentalOption hazard;
+        mediaOption media;
+        packageOption shippingBox;
+        productStatus status;
+        //Relay
+        String contactCurrentRating;
+        String mustOperateVolt;
+        String mustReleaseVolt;
+        String operateTime;
+        String releaseTime;
+        String features;
+        String terminationStyle;
+        String operationTemp;
+        String coilVoltage;
+        relayMountingType mount;
+        //SignalRelay
+        String contactForm;
+        String sealRating;
+        String coilInsulation;
+        String contactMaterial;
+        String relayType;
+
+        //Validate input 
+        if ( input == null ){
+            throw new Exception("Error: Null input for parsing!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string provided!");
+        } else {
+            //Split line based on comma
+            Chunks = input.split(",");
+            if ( Chunks.length == 28 ){
+                //Assign all parameters
+                //ProductInfo Params
+                id = Chunks[ 0 ];
+                name = Chunks[ 1 ];
+                description = Chunks[ 2 ];
+                manufacturer = Chunks[ 3 ];
+                mfgPartNum = Chunks[ 4 ];
+                series = Chunks[ 5 ];
+                stock = stockOption.valueOf( Chunks[ 6 ]);
+                hazard = environmentalOption.valueOf( Chunks[ 7 ]);
+                media = mediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = packageOption.valueOf( Chunks[ 9 ]);
+                status = productStatus.valueOf( Chunks[ 10 ]);
+                qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
+                price = Double.valueOf( Chunks[ 12 ]);
+                //==================
+                //RelayInfo Params
+                contactCurrentRating = Chunks[ 13 ];
+                mustOperateVolt = Chunks[ 14 ];
+                mustReleaseVolt = Chunks[ 15 ];
+                operateTime = Chunks[ 16 ];
+                releaseTime =  Chunks[ 17 ];
+                features = Chunks[ 18 ];
+                terminationStyle = Chunks[ 19 ];
+                operationTemp = Chunks[ 20 ];
+                coilVoltage = Chunks[ 21 ];
+                mount = relayMountingType.valueOf( Chunks[ 22 ] );
+                //=================
+                //SignalRelayInfo
+                contactForm = Chunks[ 23 ];
+                sealRating = Chunks[ 24 ];
+                coilInsulation = Chunks[ 25 ];
+                contactMaterial = Chunks[ 26 ];
+                relayType = Chunks[ 27 ];
+                
+                //Parameter validation is in constructors
+                signalRelay = new SignalRelayInfo(contactForm, sealRating, coilInsulation, 
+                        contactMaterial, relayType, contactCurrentRating, mustOperateVolt, 
+                        mustReleaseVolt, operateTime, releaseTime, features, terminationStyle, 
+                        operationTemp, coilVoltage, mount, id, name, description, id, 
+                        mfgPartNum, series, qtyAvailable, price);
+                
+            }
+        }
+        
+        return( signalRelay );
+    }
+    
     /**
      * @return the contactForm
      */
@@ -639,7 +990,8 @@ final class PowerRelayInfo extends RelayInfo{
     private String contactMaterial;
     private String relayType;
 
-    public PowerRelayInfo(String contactForm, String coilCurrent, CoilType coil, String sealRating, String coilInsulation, String contactMaterial, String relayType) {
+    //init constructor
+    public PowerRelayInfo() {
         super();
         this.contactForm = "";
         this.coilCurrent = "";
@@ -649,6 +1001,22 @@ final class PowerRelayInfo extends RelayInfo{
         this.contactMaterial = "";
         this.relayType = "";
     }
+
+    //Complete constructor
+    public PowerRelayInfo(String contactForm, String coilCurrent, CoilType coil, String sealRating, String coilInsulation, String contactMaterial, String relayType, String contactCurrentRating, String mustOperateVolt, String mustReleaseVolt, String operateTime, String releaseTime, String features, String terminationStyle, String operationTemp, String coilVoltage, relayMountingType mount, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+        super(contactCurrentRating, mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, features, terminationStyle, operationTemp, coilVoltage, mount, itemId, name, description, mfg, mfgPartNum, series, qty, price);
+        
+        
+        //Add validation for parameters
+        this.contactForm = contactForm;
+        this.coilCurrent = coilCurrent;
+        this.coil = coil;
+        this.sealRating = sealRating;
+        this.coilInsulation = coilInsulation;
+        this.contactMaterial = contactMaterial;
+        this.relayType = relayType;
+    }
+    
     
     
     @Override
@@ -699,6 +1067,103 @@ final class PowerRelayInfo extends RelayInfo{
         output += "</PowerRelayInfo>\n";
         
         return(output);
+    }
+    
+    //fromCSV
+    public static PowerRelayInfo fromCSV(String input) throws Exception {
+        PowerRelayInfo powerRelay = new PowerRelayInfo();
+        String[] Chunks;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        stockOption stock;
+        environmentalOption hazard;
+        mediaOption media;
+        packageOption shippingBox;
+        productStatus status;
+        //Relay
+        String contactCurrentRating;
+        String mustOperateVolt;
+        String mustReleaseVolt;
+        String operateTime;
+        String releaseTime;
+        String features;
+        String terminationStyle;
+        String operationTemp;
+        String coilVoltage;
+        relayMountingType mount;
+        //PowerRelay
+        String contactForm;
+        String coilCurrent;
+        CoilType coil;
+        String sealRating;
+        String coilInsulation;
+        String contactMaterial;
+        String relayType;
+        
+        //Validate input 
+        if ( input == null ){
+            throw new Exception("Error: Null input for parsing!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string provided!");
+        } else {
+            //Split line based on comma
+            Chunks = input.split(",");
+            if ( Chunks.length == 30 ){
+                //Assign all parameters
+                //ProductInfo Params
+                id = Chunks[ 0 ];
+                name = Chunks[ 1 ];
+                description = Chunks[ 2 ];
+                manufacturer = Chunks[ 3 ];
+                mfgPartNum = Chunks[ 4 ];
+                series = Chunks[ 5 ];
+                stock = stockOption.valueOf( Chunks[ 6 ]);
+                hazard = environmentalOption.valueOf( Chunks[ 7 ]);
+                media = mediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = packageOption.valueOf( Chunks[ 9 ]);
+                status = productStatus.valueOf( Chunks[ 10 ]);
+                qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
+                price = Double.valueOf( Chunks[ 12 ]);
+                //==================
+                //RelayInfo Params
+                contactCurrentRating = Chunks[ 13 ];
+                mustOperateVolt = Chunks[ 14 ];
+                mustReleaseVolt = Chunks[ 15 ];
+                operateTime = Chunks[ 16 ];
+                releaseTime =  Chunks[ 17 ];
+                features = Chunks[ 18 ];
+                terminationStyle = Chunks[ 19 ];
+                operationTemp = Chunks[ 20 ];
+                coilVoltage = Chunks[ 21 ];
+                mount = relayMountingType.valueOf( Chunks[ 22 ] );
+                //=================
+                //PowerRelayInfo params
+                contactForm = Chunks[ 23 ];
+                coilCurrent = Chunks[ 24 ];
+                coil =  CoilType.valueOf( Chunks[ 25 ] );
+                sealRating =  Chunks[ 26 ];
+                coilInsulation = Chunks[ 27 ];
+                contactMaterial = Chunks[ 28 ];
+                relayType =  Chunks[ 29 ];
+                
+                //Parameter Validation is inside constructors 
+                //Call constructor
+                powerRelay = new PowerRelayInfo(contactForm, coilCurrent, coil, sealRating, 
+                        coilInsulation, contactMaterial, relayType, contactCurrentRating, mustOperateVolt, 
+                        mustReleaseVolt, operateTime, releaseTime, features, terminationStyle, operationTemp, 
+                        coilVoltage, mount, id, name, description, id, mfgPartNum, series, qtyAvailable, price);
+                
+            }
+        }
+        
+        return(powerRelay);
     }
 
     /**

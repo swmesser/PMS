@@ -1,5 +1,7 @@
 package PMS.V2;
 
+import java.util.UUID;
+
 /* 
  * File: ProductInfo
  * Copy: Copyright (c) 2023 Samuel W. Messer
@@ -40,6 +42,7 @@ public abstract class ProductInfo implements Exportable {
     private productStatus status;
     private packageOption shippingPackage;
     
+    
     public ProductInfo(){
         this.itemId = "";
         this.name = "";
@@ -54,23 +57,18 @@ public abstract class ProductInfo implements Exportable {
         this.media = mediaOption.unknown;
         this.status = productStatus.unknown;
         this.shippingPackage = packageOption.unknown;
+        
     }
     
     public ProductInfo( String itemId, String name, String description, int qty, double price) throws Exception{
         this();
         
         if (( name == null ) || ( name.length() == 0 )){
-            System.out.println("Error: Passed invalid name!");
-          
+            throw new Exception("Error: Passed invalid name!");
         } else if (( description == null) || ( description.length() == 0 )){
-            System.out.println("Error: Passed invalid description!");
-        } else if ( qty < 0 ){
-            System.out.println("Error: Passed invalid quantity!");
-        } else if ( price < 0.0 ){
-            System.out.println("Error: Passed invalid price!");
-        } else if ( itemId.length() == 0 ){
-            //Add validation for pre-existing Ids
-            System.out.println("Error: Passed invalid item id!");
+            throw new Exception("Error: Passed invalid description!");
+        } else if (( itemId.length() == 0 ) || ( itemId == null)){
+            throw new Exception("Error: Invalid itemId passed!");
         } else {
             this.itemId = itemId;
             this.name = name;
@@ -87,11 +85,15 @@ public abstract class ProductInfo implements Exportable {
         this(itemId, name, description, qty, price);
         
         if (( mfg == null ) || ( mfg.length() == 0 )){
-            System.out.println("Error: Passed invalid manufacturer name!");
+            throw new Exception("Error: Passed invalid manufacturer name!");
         } else if (( mfgPartNum == null ) || ( mfgPartNum.length() == 0 )){
-            System.out.println("Error: Passed invalid manufacturer part number!");
+            throw new Exception("Error: Passed invalid manufacturer part number!");
         } else if (( series == null ) || ( series.length() == 0 )){
-            System.out.println("Error: Passed invalid series!");
+            throw new Exception("Error: Passed invalid series!");
+        } else if ( qty < 0 ){
+            throw new Exception("Error: Passed invalid quantity!");
+        } else if ( price < 0.0 ){
+            throw new Exception("Error: Passed invalid price!");
         } else {
             this.manufacturer = mfg;
             this.mfgPartNumber = mfgPartNum;
@@ -342,57 +344,51 @@ public abstract class ProductInfo implements Exportable {
         
         
         return( output );
-    }
+    }    
     
-    //Generic Product Enums --> 
-    //  Used for variables that each type of product will contain
-    private enum stockOption{
-        inStock,
-        normallyStocking,
-        newProduct,
-        outOfStock,
-        unknown
-    }
+}
 
-    private enum environmentalOption{
-        RoHSCompliant,
-        NonRoHSCompliant,
-        unknown
-    }
+//Generic Product Enums --> 
+//  Used for variables that each type of product will contain
+enum stockOption{
+    inStock,
+    normallyStocking,
+    newProduct,
+    outOfStock,
+    unknown
+}
 
-    private enum mediaOption{
-        datasheet,
-        photo,
-        eda_cadModels,
-        unknown
-    }
+enum environmentalOption{
+    RoHSCompliant,
+    NonRoHSCompliant,
+    unknown
+}
 
-    private enum marketplaceOption{
-        exclude,
-        unknown
-    }
+enum mediaOption{
+    datasheet,
+    photo,
+    eda_cadModels,
+    unknown
+}
 
-    private enum packageOption{
-        Bag,
-        Box,
-        Bulk,
-        CutTape,
-        DigiReel,
-        Strip,
-        TapeAndBox,
-        TapeAndReel,
-        Tray,
-        unknown
-    }
+enum packageOption{
+    Bag,
+    Box,
+    Bulk,
+    CutTape,
+    DigiReel,
+    Strip,
+    TapeAndBox,
+    TapeAndReel,
+    Tray,
+    unknown
+}
 
-    private enum productStatus{
-        active,
-        discontinued,
-        lastTimeBuy,
-        notForNewDesigns,
-        obsolete,
-        unknown
-    }
-    
-    
+enum productStatus{
+    active,
+    discontinued,
+    lastTimeBuy,
+    notForNewDesigns,
+    obsolete,
+    unknown
 }
