@@ -22,9 +22,16 @@ public abstract class InductorCoilAndChokesInfo extends ProductInfo{
 
     public InductorCoilAndChokesInfo(String tolerance, inductorMountingType mount, String packageCase, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(itemId, name, description, mfg, mfgPartNum, series, qty, price);
-        this.tolerance = tolerance;
-        this.mount = mount;
-        this.packageCase = packageCase;
+        
+        if ((tolerance.length() == 0) || (tolerance == null)){
+            throw new Exception("Error: Invalid tolerance passed!");
+        } else if ((packageCase.length() == 0) || (packageCase == null)){
+            throw new Exception("Error: Invalid packageCase passed!");
+        } else {
+            this.tolerance = tolerance;
+            this.mount = mount;
+            this.packageCase = packageCase;
+        }
     }
     
     @Override
@@ -269,20 +276,45 @@ final class ArraysAndSignalTransformerInfo extends InductorCoilAndChokesInfo {
 
     public ArraysAndSignalTransformerInfo(int coilNumber, String parallelInductance, String seriesInductance, String parallelCurrentRating, String seriesCurrentRating, String parallelCurrentSaturation, String seriesCurrentSaturation, String parallelDCResistance, String seriesDCResistance, String operatingTemp, ArrayShielding shielding, inductorRating rating, String height, String size, String tolerance, inductorMountingType mount, String packageCase, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(tolerance, mount, packageCase, itemId, name, description, mfg, mfgPartNum, series, qty, price);
-        this.coilNumber = coilNumber;
-        this.parallelInductance = parallelInductance;
-        this.seriesInductance = seriesInductance;
-        this.parallelCurrentRating = parallelCurrentRating;
-        this.seriesCurrentRating = seriesCurrentRating;
-        this.parallelCurrentSaturation = parallelCurrentSaturation;
-        this.seriesCurrentSaturation = seriesCurrentSaturation;
-        this.parallelDCResistance = parallelDCResistance;
-        this.seriesDCResistance = seriesDCResistance;
-        this.operatingTemp = operatingTemp;
-        this.shielding = shielding;
-        this.rating = rating;
-        this.height = height;
-        this.size = size;
+        
+        if ( coilNumber < 0 ){
+            throw new Exception("Error: Invalid coil number passed!");
+        } else if ((parallelInductance.length() == 0) || (parallelInductance == null)){
+            throw new Exception("Error: Invalid parallel inductance passed!");
+        } else if ((seriesInductance.length() == 0) || (seriesInductance == null)){
+            throw new Exception("Error: Invalid series inductance passed!");
+        } else if ((parallelCurrentRating.length() == 0) || (parallelCurrentRating == null)){
+            throw new Exception("Error: Invalid parallel current rating passed!");
+        } else if ((seriesCurrentRating.length() == 0) || (seriesCurrentRating == null)){
+            throw new Exception("Error: Invalid series current rating passed!");
+        } else if ((parallelCurrentSaturation.length() == 0) || (parallelCurrentSaturation == null)){
+            throw new Exception("Error: Invalid parallel current saturation passed!");
+        } else if ((seriesCurrentSaturation.length() == 0) || (seriesCurrentSaturation == null)){
+            throw new Exception("Error: Invalid series current saturation passed!");
+        } else if ((parallelDCResistance.length() == 0) || (parallelDCResistance == null)){
+            throw new Exception("Error: Invalid parallel DC resistance passed!");
+        } else if ((operatingTemp.length() == 0) || (operatingTemp == null)){
+            throw new Exception("Error:Invalid parallel DC resistance passed!");
+        } else if (( height.length() == 0) || (height == null)){
+            throw new Exception("Error: Invalid height passed!");
+        } else if ((size.length() == 0) || (size == null)){
+            throw new Exception("Error: Invalid size passed!");
+        } else {
+            this.coilNumber = coilNumber;
+            this.parallelInductance = parallelInductance;
+            this.seriesInductance = seriesInductance;
+            this.parallelCurrentRating = parallelCurrentRating;
+            this.seriesCurrentRating = seriesCurrentRating;
+            this.parallelCurrentSaturation = parallelCurrentSaturation;
+            this.seriesCurrentSaturation = seriesCurrentSaturation;
+            this.parallelDCResistance = parallelDCResistance;
+            this.seriesDCResistance = seriesDCResistance;
+            this.operatingTemp = operatingTemp;
+            this.shielding = shielding;
+            this.rating = rating;
+            this.height = height;
+            this.size = size;
+        }
     }
     
     @Override
@@ -594,22 +626,53 @@ final class FixedInductorInfo extends InductorCoilAndChokesInfo {
 
     public FixedInductorInfo(String coreMaterial, String inductance, String currentRating, String currentSaturation, String inductorType, fixedInductorShielding shielding, String dcResistance, String qAtFreq, String selfResonantFreq, inductorRating rating, String operatingTemp, String inductanceFreqTest, String features, String supplierDevicePackage, String size, String seatedHeight, String tolerance, inductorMountingType mount, String packageCase, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(tolerance, mount, packageCase, itemId, name, description, mfg, mfgPartNum, series, qty, price);
-        this.coreMaterial = coreMaterial;
-        this.inductance = inductance;
-        this.currentRating = currentRating;
-        this.currentSaturation = currentSaturation;
-        this.inductorType = inductorType;
-        this.shielding = shielding;
-        this.dcResistance = dcResistance;
-        this.qAtFreq = qAtFreq;
-        this.selfResonantFreq = selfResonantFreq;
-        this.rating = rating;
-        this.operatingTemp = operatingTemp;
-        this.inductanceFreqTest = inductanceFreqTest;
-        this.features = features;
-        this.supplierDevicePackage = supplierDevicePackage;
-        this.size = size;
-        this.seatedHeight = seatedHeight;
+        
+        if ((coreMaterial.length() == 0) || (coreMaterial == null)){
+            throw new Exception("Error: Invalid core material passed!");
+        } else if ((inductance.length() == 0) || (inductance == null)){
+            throw new Exception("Error: Invalid inductance passed!");
+        } else if ((currentRating.length() == 0) || (currentRating == null)){
+            throw new Exception("Error: Invalid current rating passed!");
+        } else if ((currentSaturation.length() == 0) || (currentSaturation == null)){
+            throw new Exception("Error: Invalid current saturation passed!");
+        } else if ((inductorType.length() == 0) || (inductorType == null)){
+            throw new Exception("Error: Invalid inductor type passed!");
+        } else if ((dcResistance.length() == 0) || (dcResistance == null)){
+            throw new Exception("Error: Invalid DC resistance passed!");
+        } else if ((qAtFreq.length() == 0) || (qAtFreq == null)){
+            throw new Exception("Error: Invalid q at frequency passed!");
+        } else if ((selfResonantFreq.length() == 0) || (selfResonantFreq == null)){
+            throw new Exception("Error: Invalid self resonant frequency passed!");
+        } else if ((operatingTemp.length() == 0) || (operatingTemp == null)){
+            throw new Exception("Error: Invalid operating temperature passed!");
+        } else if ((inductanceFreqTest.length() == 0) || (inductanceFreqTest == null)){
+            throw new Exception("Error: Invalid inductance frequency test passed!");
+        } else if ((features.length() == 0) || (features == null)){
+            throw new Exception("Error: Invalid features passed!");
+        } else if ((supplierDevicePackage.length() == 0) || (supplierDevicePackage == null)){
+            throw new Exception("Error: Invalid supplier device package passed!");
+        } else if ((size.length() == 0) || (size == null)){
+            throw new Exception("Error: Invalid size passed!");
+        } else if ((seatedHeight.length() == 0) || (seatedHeight == null)){
+            throw new Exception("Error: Invalid seated height passed!");
+        } else {
+            this.coreMaterial = coreMaterial;
+            this.inductance = inductance;
+            this.currentRating = currentRating;
+            this.currentSaturation = currentSaturation;
+            this.inductorType = inductorType;
+            this.shielding = shielding;
+            this.dcResistance = dcResistance;
+            this.qAtFreq = qAtFreq;
+            this.selfResonantFreq = selfResonantFreq;
+            this.rating = rating;
+            this.operatingTemp = operatingTemp;
+            this.inductanceFreqTest = inductanceFreqTest;
+            this.features = features;
+            this.supplierDevicePackage = supplierDevicePackage;
+            this.size = size;
+            this.seatedHeight = seatedHeight;
+        }
     }
     
     @Override
@@ -998,14 +1061,29 @@ final class WirelessChargingCoilInfo extends InductorCoilAndChokesInfo {
 
     public WirelessChargingCoilInfo(String inductance, WirelessCoilFunction function, String type, String qAtFreq, String currentRating, String selfResonantFreq, String operatingTemp, String size, String tolerance, inductorMountingType mount, String packageCase, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(tolerance, mount, packageCase, itemId, name, description, mfg, mfgPartNum, series, qty, price);
-        this.inductance = inductance;
-        this.function = function;
-        this.type = type;
-        this.qAtFreq = qAtFreq;
-        this.currentRating = currentRating;
-        this.selfResonantFreq = selfResonantFreq;
-        this.operatingTemp = operatingTemp;
-        this.size = size;
+        
+        if ((inductance.length() == 0) || (inductance == null)){
+            throw new Exception("Error: Invalid inductance passed!");
+        } else if ((type.length() == 0) || (type == null)){
+            throw new Exception("Error: Invalid type passed!");
+        } else if ((qAtFreq.length() == 0) || (qAtFreq == null)){
+            throw new Exception("Error: Invalid q at frequency passed!");
+        } else if ((selfResonantFreq.length() == 0) || (selfResonantFreq == null)){
+            throw new Exception("Error: Invalid self resonant frequency passed!");
+        } else if ((operatingTemp.length() == 0) || (operatingTemp == null)){
+            throw new Exception("Error: Invalid operating temperature passed!");
+        } else if ((size.length() == 0) || (size == null)){
+            throw new Exception("Error: Invalid size passed!");
+        } else {
+            this.inductance = inductance;
+            this.function = function;
+            this.type = type;
+            this.qAtFreq = qAtFreq;
+            this.currentRating = currentRating;
+            this.selfResonantFreq = selfResonantFreq;
+            this.operatingTemp = operatingTemp;
+            this.size = size;
+        }
     } 
     
     @Override
