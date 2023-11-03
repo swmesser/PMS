@@ -12,22 +12,19 @@ public abstract class InductorCoilAndChokesInfo extends ProductInfo{
     private String tolerance;
     private inductorMountingType mount;
     private String packageCase;
-    private String operationTemp;
 
     public InductorCoilAndChokesInfo() {
         super();
         this.tolerance = "";
         this.mount = inductorMountingType.Unknown;
         this.packageCase = "";
-        this.operationTemp = "";
     }
 
-    public InductorCoilAndChokesInfo(String tolerance, inductorMountingType mount, String packageCase, String operationTemp, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+    public InductorCoilAndChokesInfo(String tolerance, inductorMountingType mount, String packageCase, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(itemId, name, description, mfg, mfgPartNum, series, qty, price);
         this.tolerance = tolerance;
         this.mount = mount;
         this.packageCase = packageCase;
-        this.operationTemp = operationTemp;
     }
     
     @Override
@@ -38,7 +35,6 @@ public abstract class InductorCoilAndChokesInfo extends ProductInfo{
         output += this.getTolerance() + ",";
         output += this.getMount() + ",";
         output += this.getPackageCase() + ",";
-        output += this.getOperationTemp() + ",";
         
         return(output);
     }
@@ -51,7 +47,6 @@ public abstract class InductorCoilAndChokesInfo extends ProductInfo{
         output += "Tolerance: " + this.getTolerance() + "\n";
         output += "Mount: " + this.getMount() + "\n";
         output += "Package Case: " + this.getPackageCase() + "\n";
-        output += "Operation Temp: " + this.getOperationTemp() + "\n";
         
         return(output);
     }
@@ -65,7 +60,6 @@ public abstract class InductorCoilAndChokesInfo extends ProductInfo{
         output += "     <tolerance>" + this.getTolerance() + "</tolerance>\n";
         output += "     <mount>" + this.getMount() + "</mount>\n";
         output += "     <packageCase>" + this.getPackageCase() + "</packageCase>\n";
-        output += "     <operationTemp>" + this.getOperationTemp() + "</operationTemp>\n";
         output += "</InductorCoilAndChokesInfo>\n";
         
         return(output);
@@ -115,19 +109,6 @@ public abstract class InductorCoilAndChokesInfo extends ProductInfo{
         this.packageCase = packageCase;
     }
 
-    /**
-     * @return the operationTemp
-     */
-    public String getOperationTemp() {
-        return (this.operationTemp);
-    }
-
-    /**
-     * @param operationTemp the operationTemp to set
-     */
-    public void setOperationTemp(String operationTemp) {
-        this.operationTemp = operationTemp;
-    }
 }
 
 final class AdjustableInductors extends InductorCoilAndChokesInfo {
@@ -144,8 +125,8 @@ final class AdjustableInductors extends InductorCoilAndChokesInfo {
         this.size = "";
     }
 
-    public AdjustableInductors(String inductance, String qAtFreq, String height, String size, String tolerance, inductorMountingType mount, String packageCase, String operationTemp, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
-        super(tolerance, mount, packageCase, operationTemp, itemId, name, description, mfg, mfgPartNum, series, qty, price);
+    public AdjustableInductors(String inductance, String qAtFreq, String height, String size, String tolerance, inductorMountingType mount, String packageCase, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+        super(tolerance, mount, packageCase, itemId, name, description, mfg, mfgPartNum, series, qty, price);
         this.inductance = inductance;
         this.qAtFreq = qAtFreq;
         this.height = height;
@@ -286,8 +267,8 @@ final class ArraysAndSignalTransformerInfo extends InductorCoilAndChokesInfo {
         this.rating = inductorRating.Unknown;
     }
 
-    public ArraysAndSignalTransformerInfo(int coilNumber, String parallelInductance, String seriesInductance, String parallelCurrentRating, String seriesCurrentRating, String parallelCurrentSaturation, String seriesCurrentSaturation, String parallelDCResistance, String seriesDCResistance, String operatingTemp, ArrayShielding shielding, inductorRating rating, String height, String size, String tolerance, inductorMountingType mount, String packageCase, String operationTemp, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
-        super(tolerance, mount, packageCase, operationTemp, itemId, name, description, mfg, mfgPartNum, series, qty, price);
+    public ArraysAndSignalTransformerInfo(int coilNumber, String parallelInductance, String seriesInductance, String parallelCurrentRating, String seriesCurrentRating, String parallelCurrentSaturation, String seriesCurrentSaturation, String parallelDCResistance, String seriesDCResistance, String operatingTemp, ArrayShielding shielding, inductorRating rating, String height, String size, String tolerance, inductorMountingType mount, String packageCase, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+        super(tolerance, mount, packageCase, itemId, name, description, mfg, mfgPartNum, series, qty, price);
         this.coilNumber = coilNumber;
         this.parallelInductance = parallelInductance;
         this.seriesInductance = seriesInductance;
@@ -611,8 +592,8 @@ final class FixedInductorInfo extends InductorCoilAndChokesInfo {
         this.seatedHeight = "";
     }
 
-    public FixedInductorInfo(String coreMaterial, String inductance, String currentRating, String currentSaturation, String inductorType, fixedInductorShielding shielding, String dcResistance, String qAtFreq, String selfResonantFreq, inductorRating rating, String operatingTemp, String inductanceFreqTest, String features, String supplierDevicePackage, String size, String seatedHeight, String tolerance, inductorMountingType mount, String packageCase, String operationTemp, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
-        super(tolerance, mount, packageCase, operationTemp, itemId, name, description, mfg, mfgPartNum, series, qty, price);
+    public FixedInductorInfo(String coreMaterial, String inductance, String currentRating, String currentSaturation, String inductorType, fixedInductorShielding shielding, String dcResistance, String qAtFreq, String selfResonantFreq, inductorRating rating, String operatingTemp, String inductanceFreqTest, String features, String supplierDevicePackage, String size, String seatedHeight, String tolerance, inductorMountingType mount, String packageCase, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+        super(tolerance, mount, packageCase, itemId, name, description, mfg, mfgPartNum, series, qty, price);
         this.coreMaterial = coreMaterial;
         this.inductance = inductance;
         this.currentRating = currentRating;
@@ -1015,8 +996,8 @@ final class WirelessChargingCoilInfo extends InductorCoilAndChokesInfo {
         this.size = "";
     }
 
-    public WirelessChargingCoilInfo(String inductance, WirelessCoilFunction function, String type, String qAtFreq, String currentRating, String selfResonantFreq, String operatingTemp, String size, String tolerance, inductorMountingType mount, String packageCase, String operationTemp, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
-        super(tolerance, mount, packageCase, operationTemp, itemId, name, description, mfg, mfgPartNum, series, qty, price);
+    public WirelessChargingCoilInfo(String inductance, WirelessCoilFunction function, String type, String qAtFreq, String currentRating, String selfResonantFreq, String operatingTemp, String size, String tolerance, inductorMountingType mount, String packageCase, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+        super(tolerance, mount, packageCase, itemId, name, description, mfg, mfgPartNum, series, qty, price);
         this.inductance = inductance;
         this.function = function;
         this.type = type;
@@ -1156,7 +1137,7 @@ final class WirelessChargingCoilInfo extends InductorCoilAndChokesInfo {
                 //Param validation -> constructor
                 wirelessCoil = new WirelessChargingCoilInfo(inductance, function, type, qAtFreq,
                         currentRating, selfResonantFreq, operatingTemp, size, tolerance, 
-                        mount, packageCase, operationTemp, id, name, description, id, 
+                        mount, packageCase, id, name, description, id, 
                         mfgPartNum, series, qtyAvailable, price);
             }
         }
