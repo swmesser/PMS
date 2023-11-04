@@ -10,17 +10,17 @@ package PMS.V2;
 
 public abstract class InductorCoilAndChokesInfo extends ProductInfo{
     private String tolerance;
-    private inductorMountingType mount;
+    private InductorMountingType mount;
     private String packageCase;
 
     public InductorCoilAndChokesInfo() {
         super();
         this.tolerance = "";
-        this.mount = inductorMountingType.Unknown;
+        this.mount = InductorMountingType.Unknown;
         this.packageCase = "";
     }
 
-    public InductorCoilAndChokesInfo(String tolerance, inductorMountingType mount, String packageCase, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+    public InductorCoilAndChokesInfo(String tolerance, InductorMountingType mount, String packageCase, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(itemId, name, description, mfg, mfgPartNum, series, qty, price);
         
         if ((tolerance.length() == 0) || (tolerance == null)){
@@ -91,14 +91,14 @@ public abstract class InductorCoilAndChokesInfo extends ProductInfo{
     /**
      * @return the mount
      */
-    public inductorMountingType getMount() {
+    public InductorMountingType getMount() {
         return (this.mount);
     }
 
     /**
      * @param mount the mount to set
      */
-    public void setMount(inductorMountingType mount) {
+    public void setMount(InductorMountingType mount) {
         this.mount = mount;
     }
 
@@ -132,7 +132,7 @@ final class AdjustableInductors extends InductorCoilAndChokesInfo {
         this.size = "";
     }
 
-    public AdjustableInductors(String inductance, String qAtFreq, String height, String size, String tolerance, inductorMountingType mount, String packageCase, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+    public AdjustableInductors(String inductance, String qAtFreq, String height, String size, String tolerance, InductorMountingType mount, String packageCase, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(tolerance, mount, packageCase, itemId, name, description, mfg, mfgPartNum, series, qty, price);
         this.inductance = inductance;
         this.qAtFreq = qAtFreq;
@@ -251,8 +251,8 @@ final class ArraysAndSignalTransformerInfo extends InductorCoilAndChokesInfo {
     private String parallelDCResistance;
     private String seriesDCResistance;
     private String operatingTemp;
-    private ArrayShielding shielding;
-    private inductorRating rating;
+    private ArrayInductorShielding shielding;
+    private InductorRating rating;
     private String height;
     private String size;
 
@@ -270,11 +270,11 @@ final class ArraysAndSignalTransformerInfo extends InductorCoilAndChokesInfo {
         this.operatingTemp = "";
         this.size = "";
         this.height = "";
-        this.shielding = ArrayShielding.Unknown;
-        this.rating = inductorRating.Unknown;
+        this.shielding = ArrayInductorShielding.Unknown;
+        this.rating = InductorRating.Unknown;
     }
 
-    public ArraysAndSignalTransformerInfo(int coilNumber, String parallelInductance, String seriesInductance, String parallelCurrentRating, String seriesCurrentRating, String parallelCurrentSaturation, String seriesCurrentSaturation, String parallelDCResistance, String seriesDCResistance, String operatingTemp, ArrayShielding shielding, inductorRating rating, String height, String size, String tolerance, inductorMountingType mount, String packageCase, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+    public ArraysAndSignalTransformerInfo(int coilNumber, String parallelInductance, String seriesInductance, String parallelCurrentRating, String seriesCurrentRating, String parallelCurrentSaturation, String seriesCurrentSaturation, String parallelDCResistance, String seriesDCResistance, String operatingTemp, ArrayInductorShielding shielding, InductorRating rating, String height, String size, String tolerance, InductorMountingType mount, String packageCase, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(tolerance, mount, packageCase, itemId, name, description, mfg, mfgPartNum, series, qty, price);
         
         if ( coilNumber < 0 ){
@@ -531,28 +531,28 @@ final class ArraysAndSignalTransformerInfo extends InductorCoilAndChokesInfo {
     /**
      * @return the shielding
      */
-    public ArrayShielding getShielding() {
+    public ArrayInductorShielding getShielding() {
         return (this.shielding);
     }
 
     /**
      * @param shielding the shielding to set
      */
-    public void setShielding(ArrayShielding shielding) {
+    public void setShielding(ArrayInductorShielding shielding) {
         this.shielding = shielding;
     }
 
     /**
      * @return the rating
      */
-    public inductorRating getRating() {
+    public InductorRating getRating() {
         return (this.rating);
     }
 
     /**
      * @param rating the rating to set
      */
-    public void setRating(inductorRating rating) {
+    public void setRating(InductorRating rating) {
         this.rating = rating;
     }
 
@@ -592,11 +592,11 @@ final class FixedInductorInfo extends InductorCoilAndChokesInfo {
     private String currentRating;
     private String currentSaturation;
     private String inductorType;
-    private fixedInductorShielding shielding;
+    private FixedInductorShielding shielding;
     private String dcResistance;
     private String qAtFreq;
     private String selfResonantFreq;
-    private inductorRating rating;
+    private InductorRating rating;
     private String operatingTemp;
     private String inductanceFreqTest;
     private String features;
@@ -611,11 +611,11 @@ final class FixedInductorInfo extends InductorCoilAndChokesInfo {
         this.currentRating = "";
         this.currentSaturation = "";
         this.inductorType = "";
-        this.shielding = fixedInductorShielding.Unknown;
+        this.shielding = FixedInductorShielding.Unknown;
         this.dcResistance = "";
         this.qAtFreq = "";
         this.selfResonantFreq = "";
-        this.rating = inductorRating.Unknown;
+        this.rating = InductorRating.Unknown;
         this.operatingTemp = "";
         this.inductanceFreqTest = "";
         this.features = "";
@@ -624,7 +624,7 @@ final class FixedInductorInfo extends InductorCoilAndChokesInfo {
         this.seatedHeight = "";
     }
 
-    public FixedInductorInfo(String coreMaterial, String inductance, String currentRating, String currentSaturation, String inductorType, fixedInductorShielding shielding, String dcResistance, String qAtFreq, String selfResonantFreq, inductorRating rating, String operatingTemp, String inductanceFreqTest, String features, String supplierDevicePackage, String size, String seatedHeight, String tolerance, inductorMountingType mount, String packageCase, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+    public FixedInductorInfo(String coreMaterial, String inductance, String currentRating, String currentSaturation, String inductorType, FixedInductorShielding shielding, String dcResistance, String qAtFreq, String selfResonantFreq, InductorRating rating, String operatingTemp, String inductanceFreqTest, String features, String supplierDevicePackage, String size, String seatedHeight, String tolerance, InductorMountingType mount, String packageCase, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(tolerance, mount, packageCase, itemId, name, description, mfg, mfgPartNum, series, qty, price);
         
         if ((coreMaterial.length() == 0) || (coreMaterial == null)){
@@ -764,16 +764,33 @@ final class FixedInductorInfo extends InductorCoilAndChokesInfo {
         String mfgPartNum = "";
         int qtyAvailable = 0;
         double price = 0.0;
-        stockOption stock;
-        environmentalOption hazard;
-        mediaOption media;
-        packageOption shippingBox;
-        productStatus status;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
         //InductorCoilAndChoke
         String tolerance = "";
-        inductorMountingType mount;
+        InductorMountingType mount;
         String packageCase = "";
         String operationTemp = "";
+        //FixedInductor
+        String coreMaterial;
+        String inductance;
+        String currentRating;
+        String currentSaturation;
+        String inductorType;
+        FixedInductorShielding shielding;
+        String dcResistance;
+        String qAtFreq;
+        String selfResonantFreq;
+        InductorRating rating;
+        String operatingTemp;
+        String inductanceFreqTest;
+        String features;
+        String supplierDevicePackage;
+        String size;
+        String seatedHeight;
         
         
         //Validate input 
@@ -784,7 +801,7 @@ final class FixedInductorInfo extends InductorCoilAndChokesInfo {
         } else {
             //Split line based on comma
             Chunks = input.split(",");
-            if ( Chunks.length == 24 ){
+            if ( Chunks.length == 33 ){
                 //Assign all parameters
                 //ProductInfo Params
                 id = Chunks[ 0 ];
@@ -793,25 +810,188 @@ final class FixedInductorInfo extends InductorCoilAndChokesInfo {
                 manufacturer = Chunks[ 3 ];
                 mfgPartNum = Chunks[ 4 ];
                 series = Chunks[ 5 ];
-                stock = stockOption.valueOf( Chunks[ 6 ]);
-                hazard = environmentalOption.valueOf( Chunks[ 7 ]);
-                media = mediaOption.valueOf( Chunks[ 8 ]);
-                shippingBox = packageOption.valueOf( Chunks[ 9 ]);
-                status = productStatus.valueOf( Chunks[ 10 ]);
+                stock = StockOption.valueOf( Chunks[ 6 ]);
+                hazard = EnvironmentalOption.valueOf( Chunks[ 7 ]);
+                media = MediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = PackageOption.valueOf( Chunks[ 9 ]);
+                status = ProductStatus.valueOf( Chunks[ 10 ]);
                 qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
                 price = Double.valueOf( Chunks[ 12 ]);
                 //==================
                 //InductorCoilAndChokeInfo Params
                 tolerance = Chunks[ 13 ];
-                mount = inductorMountingType.valueOf( Chunks[ 14 ]);
+                mount = InductorMountingType.valueOf( Chunks[ 14 ]);
                 packageCase = Chunks[ 15 ];
                 operationTemp = Chunks[ 16 ];
                 //==================
                 //FixedInductorInfo
+                coreMaterial = Chunks[ 17 ];
+                inductance = Chunks[ 18 ];
+                currentRating = Chunks[ 19 ];
+                currentSaturation = Chunks[ 20 ];
+                inductorType = Chunks[ 21 ];
+                shielding =FixedInductorShielding.valueOf( Chunks[ 22 ]);
+                dcResistance = Chunks[ 23 ];
+                qAtFreq = Chunks[ 24 ];
+                selfResonantFreq = Chunks[ 25 ];
+                rating = InductorRating.valueOf( Chunks[ 26 ]);
+                operatingTemp = Chunks[ 27 ];
+                inductanceFreqTest = Chunks[ 28 ];
+                features = Chunks[ 29 ];
+                supplierDevicePackage = Chunks[ 30 ];
+                size = Chunks[ 31 ];
+                seatedHeight = Chunks[ 32 ];
+                
+                fixedInductor = new FixedInductorInfo(coreMaterial, inductance, currentRating,
+                        currentSaturation, inductorType, shielding, dcResistance, qAtFreq, 
+                        selfResonantFreq, rating, operatingTemp, inductanceFreqTest, features,
+                        supplierDevicePackage, size, seatedHeight, tolerance, mount,
+                        packageCase, id, name, description, id, mfgPartNum, series, qtyAvailable, price);
             }
         }
         return( fixedInductor );
     }
+    
+    public static FixedInductorInfo fromCustom( String input ) throws Exception{
+        FixedInductorInfo fixedInductor = new FixedInductorInfo();
+        String[] Chunks;
+        String[] Lines;
+        String chunk;
+        String line;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //InductorCoilAndChoke
+        String tolerance = "";
+        InductorMountingType mount = InductorMountingType.Unknown;
+        String packageCase = "";
+        String operationTemp = "";
+        //FixedInductor
+        String coreMaterial = "";
+        String inductance = "";
+        String currentRating = "";
+        String currentSaturation = "";
+        String inductorType = "";
+        FixedInductorShielding shielding = FixedInductorShielding.Unknown;
+        String dcResistance = "";
+        String qAtFreq = "";
+        String selfResonantFreq = "";
+        InductorRating rating = InductorRating.Unknown;
+        String operatingTemp = "";
+        String inductanceFreqTest = "";
+        String features = "";
+        String supplierDevicePackage = "";
+        String size = "";
+        String seatedHeight = "";
+        
+        
+        if ( input == null ){
+            throw new Exception("Error: Null input passed!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string passed!");
+        } else {
+            //Splitting the input into line segments
+            Lines = input.split("\\n");
+            for ( int index = 0; index < Lines.length; index++ ){
+                //Getting a singlular line segment
+                line = Lines[ index ];
+                //Getting the parts of each segment
+                Chunks = line.split(": ");
+                if ( Chunks[ 1 ].length() == 0 ){
+                    System.out.println("Error: Zero length value was provided!");
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Item Id") == true ){
+                    id = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Name") == true ){
+                    name = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Description") == true ){
+                    description = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer") == true ){
+                    manufacturer = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer Part Number") == true ){
+                    mfgPartNum = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Series") == true ){
+                    series = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Availability") == true ){
+                    stock = StockOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Product Status") == true ){
+                    status = ProductStatus.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Media") == true ){
+                    media = MediaOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Environmental Options") == true ){
+                    hazard = EnvironmentalOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Packaging") == true ){
+                    packageCase = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Quantity") == true ){
+                    qtyAvailable = Integer.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Price") == true ){
+                    price = Double.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Tolerance") == true ){
+                    tolerance = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Mount") == true ){
+                    mount = InductorMountingType.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Package Case") == true ){
+                    packageCase = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Core Material") == true ){
+                    coreMaterial = Chunks[1];
+                }  else if ( Chunks[ 0 ].equalsIgnoreCase("Inductance") == true ){
+                    inductance = Chunks[1];
+                }  else if ( Chunks[ 0 ].equalsIgnoreCase("Current Rating") == true ){
+                    currentRating = Chunks[1];
+                }  else if ( Chunks[ 0 ].equalsIgnoreCase("Current Saturation") == true ){
+                    currentSaturation = Chunks[1];
+                }  else if ( Chunks[ 0 ].equalsIgnoreCase("Inductor Type") == true ){
+                    inductorType = Chunks[1];
+                }  else if ( Chunks[ 0 ].equalsIgnoreCase("Shielding") == true ){
+                    shielding = FixedInductorShielding.valueOf( Chunks[1] );
+                }  else if ( Chunks[ 0 ].equalsIgnoreCase("DC Resistance") == true ){
+                    dcResistance = Chunks[1];
+                }  else if ( Chunks[ 0 ].equalsIgnoreCase("Q At Freq") == true ){
+                    qAtFreq = Chunks[1];
+                }  else if ( Chunks[ 0 ].equalsIgnoreCase("Self Resonant Freq") == true ){
+                    selfResonantFreq = Chunks[1];
+                }  else if ( Chunks[ 0 ].equalsIgnoreCase("Rating") == true ){
+                    rating = InductorRating.valueOf( Chunks[1] );
+                }  else if ( Chunks[ 0 ].equalsIgnoreCase("Operating Temp") == true ){
+                    operatingTemp = Chunks[1];
+                }  else if ( Chunks[ 0 ].equalsIgnoreCase("Inductance Freq Test") == true ){
+                    inductanceFreqTest = Chunks[1];
+                }  else if ( Chunks[ 0 ].equalsIgnoreCase("Features") == true ){
+                    features = Chunks[1];
+                }  else if ( Chunks[ 0 ].equalsIgnoreCase("Supplier Device Package") == true ){
+                    supplierDevicePackage = Chunks[1];
+                }  else if ( Chunks[ 0 ].equalsIgnoreCase("Size") == true ){
+                    size = Chunks[1];
+                }  else if ( Chunks[ 0 ].equalsIgnoreCase("Seated Height") == true ){
+                    seatedHeight = Chunks[1];
+                } else {
+                    System.out.println("Error: Invalid field provided!");
+                }
+                
+                if ((id.length() != 0) && (name.length() > 0) && (description.length() > 0) &&
+                        (qtyAvailable > 0) && (price > 0)){
+                    fixedInductor = new FixedInductorInfo(coreMaterial, inductance, currentRating,
+                            currentSaturation, inductorType, shielding, dcResistance, qAtFreq, 
+                            selfResonantFreq, rating, operatingTemp, inductanceFreqTest, features,
+                            supplierDevicePackage, size, seatedHeight, tolerance, mount,
+                            packageCase, id, name, description, id, mfgPartNum, series, index, price);
+                }
+            }
+        }
+        
+        return( fixedInductor );
+    }
+    
     /**
      * @return the coreMaterial
      */
@@ -885,14 +1065,14 @@ final class FixedInductorInfo extends InductorCoilAndChokesInfo {
     /**
      * @return the shielding
      */
-    public fixedInductorShielding getShielding() {
+    public FixedInductorShielding getShielding() {
         return (this.shielding);
     }
 
     /**
      * @param shielding the shielding to set
      */
-    public void setShielding(fixedInductorShielding shielding) {
+    public void setShielding(FixedInductorShielding shielding) {
         this.shielding = shielding;
     }
 
@@ -941,14 +1121,14 @@ final class FixedInductorInfo extends InductorCoilAndChokesInfo {
     /**
      * @return the rating
      */
-    public inductorRating getRating() {
+    public InductorRating getRating() {
         return (this.rating);
     }
 
     /**
      * @param rating the rating to set
      */
-    public void setRating(inductorRating rating) {
+    public void setRating(InductorRating rating) {
         this.rating = rating;
     }
 
@@ -1059,7 +1239,7 @@ final class WirelessChargingCoilInfo extends InductorCoilAndChokesInfo {
         this.size = "";
     }
 
-    public WirelessChargingCoilInfo(String inductance, WirelessCoilFunction function, String type, String qAtFreq, String currentRating, String selfResonantFreq, String operatingTemp, String size, String tolerance, inductorMountingType mount, String packageCase, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+    public WirelessChargingCoilInfo(String inductance, WirelessCoilFunction function, String type, String qAtFreq, String currentRating, String selfResonantFreq, String operatingTemp, String size, String tolerance, InductorMountingType mount, String packageCase, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(tolerance, mount, packageCase, itemId, name, description, mfg, mfgPartNum, series, qty, price);
         
         if ((inductance.length() == 0) || (inductance == null)){
@@ -1150,14 +1330,14 @@ final class WirelessChargingCoilInfo extends InductorCoilAndChokesInfo {
         String mfgPartNum = "";
         int qtyAvailable = 0;
         double price = 0.0;
-        stockOption stock;
-        environmentalOption hazard;
-        mediaOption media;
-        packageOption shippingBox;
-        productStatus status;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
         //InductorCoilAndChoke
         String tolerance = "";
-        inductorMountingType mount;
+        InductorMountingType mount;
         String packageCase = "";
         String operationTemp = "";
         //WirelessChargingCoil
@@ -1188,17 +1368,17 @@ final class WirelessChargingCoilInfo extends InductorCoilAndChokesInfo {
                 manufacturer = Chunks[ 3 ];
                 mfgPartNum = Chunks[ 4 ];
                 series = Chunks[ 5 ];
-                stock = stockOption.valueOf( Chunks[ 6 ]);
-                hazard = environmentalOption.valueOf( Chunks[ 7 ]);
-                media = mediaOption.valueOf( Chunks[ 8 ]);
-                shippingBox = packageOption.valueOf( Chunks[ 9 ]);
-                status = productStatus.valueOf( Chunks[ 10 ]);
+                stock = StockOption.valueOf( Chunks[ 6 ]);
+                hazard = EnvironmentalOption.valueOf( Chunks[ 7 ]);
+                media = MediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = PackageOption.valueOf( Chunks[ 9 ]);
+                status = ProductStatus.valueOf( Chunks[ 10 ]);
                 qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
                 price = Double.valueOf( Chunks[ 12 ]);
                 //==================
                 //InductorCoilAndChokeInfo Params
                 tolerance = Chunks[ 13 ];
-                mount = inductorMountingType.valueOf( Chunks[ 14 ]);
+                mount = InductorMountingType.valueOf( Chunks[ 14 ]);
                 packageCase = Chunks[ 15 ];
                 operationTemp = Chunks[ 16 ];
                 //==================
@@ -1221,6 +1401,112 @@ final class WirelessChargingCoilInfo extends InductorCoilAndChokesInfo {
         }
         
         return( wirelessCoil );
+    }
+    
+    public static WirelessChargingCoilInfo fromCustom( String input ) throws Exception {
+        WirelessChargingCoilInfo wirelessCoil = new WirelessChargingCoilInfo();
+        String[] Chunks;
+        String[] Lines;
+        String chunk;
+        String line;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //InductorCoilAndChoke
+        String tolerance = "";
+        InductorMountingType mount;
+        String packageCase = "";
+        String operationTemp = "";
+        //WirelessChargingCoil
+        String inductance;
+        WirelessCoilFunction function;
+        String type;
+        String qAtFreq;
+        String currentRating;
+        String selfResonantFreq;
+        String operatingTemp;
+        String size;
+        
+        if ( input == null ){
+            throw new Exception("Error: Null input passed!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string passed!");
+        } else {
+            //Splitting the input into line segments
+            Lines = input.split("\\n");
+            for ( int index = 0; index < Lines.length; index++ ){
+                //Getting a singlular line segment
+                line = Lines[ index ];
+                //Getting the parts of each segment
+                Chunks = line.split(": ");
+                if ( Chunks[ 1 ].length() == 0 ){
+                    System.out.println("Error: Zero length value was provided!");
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Item Id") == true ){
+                    id = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Name") == true ){
+                    name = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Description") == true ){
+                    description = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer") == true ){
+                    manufacturer = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer Part Number") == true ){
+                    mfgPartNum = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Series") == true ){
+                    series = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Availability") == true ){
+                    stock = StockOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Product Status") == true ){
+                    status = ProductStatus.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Media") == true ){
+                    media = MediaOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Environmental Options") == true ){
+                    hazard = EnvironmentalOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Packaging") == true ){
+                    packageCase = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Quantity") == true ){
+                    qtyAvailable = Integer.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Price") == true ){
+                    price = Double.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Tolerance") == true ){
+                    tolerance = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Mount") == true ){
+                    mount = InductorMountingType.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Package Case") == true ){
+                    packageCase = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Inductance") == true ){
+                    inductance = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Function") == true ){
+                    function = WirelessCoilFunction.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Type") == true ){
+                    type = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Q At Freq") == true ){
+                    qAtFreq = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Current Rating") == true ){
+                    currentRating = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Self Resonant Freq") == true ){
+                    selfResonantFreq = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Operating Temp") == true ){
+                    operatingTemp = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Size") == true ){
+                    size = Chunks[1];
+                }
+                    
+                
+            }
+        }
+        
+        return(wirelessCoil);
     }
 
     /**
@@ -1336,13 +1622,13 @@ final class WirelessChargingCoilInfo extends InductorCoilAndChokesInfo {
     }
 }
 
-enum ArrayShielding{
+enum ArrayInductorShielding{
     Shielded,
     Unshielded,
     Unknown
 }
 
-enum fixedInductorShielding{
+enum FixedInductorShielding{
     Shielded,
     Semi_Shielding,
     Unshielded,
@@ -1356,7 +1642,7 @@ enum WirelessCoilFunction{
     Unknown
 }
 
-enum inductorMountingType{
+enum InductorMountingType{
     ChassisMount,
     FreeHanging,
     SurfaceMount,
@@ -1365,7 +1651,7 @@ enum inductorMountingType{
     Unknown
 }
 
-enum inductorRating{
+enum InductorRating{
     AEC_Q200,
     Unknown
 }
