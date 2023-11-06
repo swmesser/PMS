@@ -181,6 +181,76 @@ final class AdjustableInductors extends InductorCoilAndChokesInfo {
         return(output);
     }
 
+    public static AdjustableInductors fromCSV( String input ) throws Exception{
+        AdjustableInductors adjustableInductor = new AdjustableInductors();
+        String[] Chunks;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        stockOption stock;
+        environmentalOption hazard;
+        mediaOption media;
+        packageOption shippingBox;
+        productStatus status;
+        //InductorCoilAndChoke
+        String tolerance = "";
+        inductorMountingType mount;
+        String packageCase = "";
+        //AdjustableInductor
+        String inductance;
+        String qAtFreq;
+        String height;
+        String size;
+        
+        //Validate input 
+        if ( input == null ){
+            throw new Exception("Error: Null input for parsing!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string provided!");
+        } else {
+            //Split line based on comma
+            Chunks = input.split(",");
+            if ( Chunks.length == 32 ){
+                //Assign all parameters
+                //ProductInfo Params
+                id = Chunks[ 0 ];
+                name = Chunks[ 1 ];
+                description = Chunks[ 2 ];
+                manufacturer = Chunks[ 3 ];
+                mfgPartNum = Chunks[ 4 ];
+                series = Chunks[ 5 ];
+                stock = stockOption.valueOf( Chunks[ 6 ]);
+                hazard = environmentalOption.valueOf( Chunks[ 7 ]);
+                media = mediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = packageOption.valueOf( Chunks[ 9 ]);
+                status = productStatus.valueOf( Chunks[ 10 ]);
+                qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
+                price = Double.valueOf( Chunks[ 12 ]);
+                //==================
+                //InductorCoilAndChokeInfo Params
+                tolerance = Chunks[ 13 ];
+                mount = inductorMountingType.valueOf( Chunks[ 14 ]);
+                packageCase = Chunks[ 15 ];
+                //==================
+                //AdjustableInductorInfo Params
+                inductance = Chunks[ 16 ];
+                qAtFreq = Chunks[ 17 ];
+                height = Chunks[ 18 ];
+                size = Chunks[ 19 ];
+                
+                adjustableInductor = new AdjustableInductors(inductance, qAtFreq, height, size, tolerance,
+                        mount, packageCase, id, name, description, id, mfgPartNum, series, qtyAvailable, price);
+            }
+        }
+        return( adjustableInductor );
+    }
+    
     /**
      * @return the inductance
      */
@@ -386,6 +456,101 @@ final class ArraysAndSignalTransformerInfo extends InductorCoilAndChokesInfo {
         output += "</ArraysAndSignalTransformerInfo>\n";
         
         return(output);
+    }
+    
+    public static ArraysAndSignalTransformerInfo fromCSV( String input ) throws Exception {
+        ArraysAndSignalTransformerInfo arraysAndSignalTransformer = new ArraysAndSignalTransformerInfo();
+        String[] Chunks;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        stockOption stock;
+        environmentalOption hazard;
+        mediaOption media;
+        packageOption shippingBox;
+        productStatus status;
+        //InductorCoilAndChoke
+        String tolerance = "";
+        inductorMountingType mount;
+        String packageCase = "";
+        //ArraysAndSignalTransformer
+        int coilNumber;
+        String parallelInductance;
+        String seriesInductance;
+        String parallelCurrentRating;
+        String seriesCurrentRating;
+        String parallelCurrentSaturation;
+        String seriesCurrentSaturation;
+        String parallelDCResistance;
+        String seriesDCResistance;
+        String operatingTemp;
+        ArrayShielding shielding;
+        inductorRating rating;
+        String height;
+        String size;
+        
+        
+        //Validate input 
+        if ( input == null ){
+            throw new Exception("Error: Null input for parsing!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string provided!");
+        } else {
+            //Split line based on comma
+            Chunks = input.split(",");
+            if ( Chunks.length == 32 ){
+                //Assign all parameters
+                //ProductInfo Params
+                id = Chunks[ 0 ];
+                name = Chunks[ 1 ];
+                description = Chunks[ 2 ];
+                manufacturer = Chunks[ 3 ];
+                mfgPartNum = Chunks[ 4 ];
+                series = Chunks[ 5 ];
+                stock = stockOption.valueOf( Chunks[ 6 ]);
+                hazard = environmentalOption.valueOf( Chunks[ 7 ]);
+                media = mediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = packageOption.valueOf( Chunks[ 9 ]);
+                status = productStatus.valueOf( Chunks[ 10 ]);
+                qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
+                price = Double.valueOf( Chunks[ 12 ]);
+                //==================
+                //InductorCoilAndChokeInfo Params
+                tolerance = Chunks[ 13 ];
+                mount = inductorMountingType.valueOf( Chunks[ 14 ]);
+                packageCase = Chunks[ 15 ];
+                //==================
+                //ArraysAndSignalTransformerInfo Params
+                coilNumber = Integer.valueOf( Chunks[ 16 ]);
+                parallelInductance = Chunks[ 17 ];
+                seriesInductance = Chunks[ 18 ];
+                parallelCurrentRating = Chunks[ 19 ];
+                seriesCurrentRating = Chunks[ 20 ];
+                parallelCurrentSaturation = Chunks[ 21 ];
+                seriesCurrentSaturation = Chunks[ 22 ];
+                parallelDCResistance = Chunks[ 23 ];
+                seriesDCResistance = Chunks[ 24 ];
+                operatingTemp = Chunks[ 25 ];
+                shielding = ArrayShielding.valueOf( Chunks[ 26 ]);
+                rating = inductorRating.valueOf( Chunks[ 27 ]);
+                height = Chunks[ 28 ];
+                size = Chunks[ 29 ];
+             
+                arraysAndSignalTransformer = new ArraysAndSignalTransformerInfo(coilNumber, parallelInductance, seriesInductance,
+                        parallelCurrentRating, seriesCurrentRating, parallelCurrentSaturation, 
+                        seriesCurrentSaturation, parallelDCResistance, seriesDCResistance, operatingTemp, 
+                        shielding, rating, height, size, tolerance, mount, packageCase, id, name, 
+                        description, id, mfgPartNum, series, qtyAvailable, price);
+            }
+        }
+        
+        return ( arraysAndSignalTransformer );
     }
 
     /**
@@ -773,7 +938,23 @@ final class FixedInductorInfo extends InductorCoilAndChokesInfo {
         String tolerance = "";
         inductorMountingType mount;
         String packageCase = "";
-        String operationTemp = "";
+        //FixedInductor
+        String coreMaterial;
+        String inductance;
+        String currentRating;
+        String currentSaturation;
+        String inductorType;
+        fixedInductorShielding shielding;
+        String dcResistance;
+        String qAtFreq;
+        String selfResonantFreq;
+        inductorRating rating;
+        String operatingTemp;
+        String inductanceFreqTest;
+        String features;
+        String supplierDevicePackage;
+        String size;
+        String seatedHeight;
         
         
         //Validate input 
@@ -784,7 +965,7 @@ final class FixedInductorInfo extends InductorCoilAndChokesInfo {
         } else {
             //Split line based on comma
             Chunks = input.split(",");
-            if ( Chunks.length == 24 ){
+            if ( Chunks.length == 32 ){
                 //Assign all parameters
                 //ProductInfo Params
                 id = Chunks[ 0 ];
@@ -805,9 +986,31 @@ final class FixedInductorInfo extends InductorCoilAndChokesInfo {
                 tolerance = Chunks[ 13 ];
                 mount = inductorMountingType.valueOf( Chunks[ 14 ]);
                 packageCase = Chunks[ 15 ];
-                operationTemp = Chunks[ 16 ];
                 //==================
                 //FixedInductorInfo
+                coreMaterial = Chunks[ 16 ];
+                inductance = Chunks[ 17 ];
+                currentRating = Chunks[ 18 ];
+                currentSaturation = Chunks[ 19 ];
+                inductorType = Chunks[ 20 ];
+                shielding = fixedInductorShielding.valueOf( Chunks[ 21 ]);
+                dcResistance = Chunks[ 22 ];
+                qAtFreq = Chunks[ 23 ];
+                selfResonantFreq = Chunks[ 24 ];
+                rating = inductorRating.valueOf( Chunks[ 25 ]);
+                operatingTemp = Chunks[ 26 ];
+                inductanceFreqTest = Chunks[ 27 ];
+                features = Chunks[ 28 ];
+                supplierDevicePackage = Chunks[ 29 ];
+                size = Chunks[ 30 ];
+                seatedHeight = Chunks[ 31 ];
+                
+                fixedInductor = new FixedInductorInfo(coreMaterial, inductance, currentRating,
+                        currentSaturation, inductorType, shielding, dcResistance, qAtFreq,
+                        selfResonantFreq, rating, operatingTemp, inductanceFreqTest,
+                        features, supplierDevicePackage, size, seatedHeight, tolerance,
+                        mount, packageCase, id, name, description, id, mfgPartNum, series, qtyAvailable, price);
+                
             }
         }
         return( fixedInductor );
@@ -1159,7 +1362,6 @@ final class WirelessChargingCoilInfo extends InductorCoilAndChokesInfo {
         String tolerance = "";
         inductorMountingType mount;
         String packageCase = "";
-        String operationTemp = "";
         //WirelessChargingCoil
         String inductance;
         WirelessCoilFunction function;
@@ -1200,17 +1402,16 @@ final class WirelessChargingCoilInfo extends InductorCoilAndChokesInfo {
                 tolerance = Chunks[ 13 ];
                 mount = inductorMountingType.valueOf( Chunks[ 14 ]);
                 packageCase = Chunks[ 15 ];
-                operationTemp = Chunks[ 16 ];
                 //==================
                 //WirelessChargingCoilInfo Params
-                inductance = Chunks[ 17 ];
-                function = WirelessCoilFunction.valueOf( Chunks[ 18 ]);
-                type = Chunks[ 19 ];
-                qAtFreq = Chunks[ 20 ];
-                currentRating = Chunks[ 21 ];
-                selfResonantFreq = Chunks[ 22 ];
-                operatingTemp = Chunks[ 23 ];
-                size = Chunks[ 24 ];
+                inductance = Chunks[ 16 ];
+                function = WirelessCoilFunction.valueOf( Chunks[ 17 ]);
+                type = Chunks[ 18 ];
+                qAtFreq = Chunks[ 19 ];
+                currentRating = Chunks[ 20 ];
+                selfResonantFreq = Chunks[ 21 ];
+                operatingTemp = Chunks[ 22 ];
+                size = Chunks[ 23 ];
                 
                 //Param validation -> constructor
                 wirelessCoil = new WirelessChargingCoilInfo(inductance, function, type, qAtFreq,
