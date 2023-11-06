@@ -18,7 +18,7 @@ public abstract class RelayInfo extends ProductInfo {
     private String terminationStyle;
     private String operationTemp;
     private String coilVoltage;
-    private relayMountingType mount;
+    private RelayMountingType mount;
 
     public RelayInfo() {
         super();
@@ -31,10 +31,10 @@ public abstract class RelayInfo extends ProductInfo {
         this.terminationStyle = "";
         this.operationTemp = "";
         this.coilVoltage = "";
-        this.mount = relayMountingType.Unknown;
+        this.mount = RelayMountingType.Unknown;
     }
 
-    public RelayInfo(String contactCurrentRating, String mustOperateVolt, String mustReleaseVolt, String operateTime, String releaseTime, String features, String terminationStyle, String operationTemp, String coilVoltage, relayMountingType mount, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+    public RelayInfo(String contactCurrentRating, String mustOperateVolt, String mustReleaseVolt, String operateTime, String releaseTime, String features, String terminationStyle, String operationTemp, String coilVoltage, RelayMountingType mount, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(itemId, name, description, mfg, mfgPartNum, series, qty, price);
         this.contactCurrentRating = contactCurrentRating;
         this.mustOperateVolt = mustOperateVolt;
@@ -236,30 +236,30 @@ public abstract class RelayInfo extends ProductInfo {
     /**
      * @return the mount
      */
-    public relayMountingType getMount() {
+    public RelayMountingType getMount() {
         return (this.mount);
     }
 
     /**
      * @param mount the mount to set
      */
-    public void setMount(relayMountingType mount) {
+    public void setMount(RelayMountingType mount) {
         this.mount = mount;
     }
 }
 
 final class HighFrequencyRelayInfo extends RelayInfo{
     private String contactForm;
-    private CoilType coil;
+    private RelayCoilType coil;
 
     //parameterless constructor
     public HighFrequencyRelayInfo() {
         this.contactForm = "";
-        this.coil = CoilType.Unknown;
+        this.coil = RelayCoilType.Unknown;
     }
 
     //complete constructor
-    public HighFrequencyRelayInfo(String contactForm, CoilType coil, String contactCurrentRating, String mustOperateVolt, String mustReleaseVolt, String operateTime, String releaseTime, String features, String terminationStyle, String operationTemp, String coilVoltage, relayMountingType mount, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+    public HighFrequencyRelayInfo(String contactForm, RelayCoilType coil, String contactCurrentRating, String mustOperateVolt, String mustReleaseVolt, String operateTime, String releaseTime, String features, String terminationStyle, String operationTemp, String coilVoltage, RelayMountingType mount, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(contactCurrentRating, mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, features, terminationStyle, operationTemp, coilVoltage, mount, itemId, name, description, mfg, mfgPartNum, series, qty, price);
         this.contactForm = contactForm;
         this.coil = coil;
@@ -313,11 +313,11 @@ final class HighFrequencyRelayInfo extends RelayInfo{
         String mfgPartNum = "";
         int qtyAvailable = 0;
         double price = 0.0;
-        stockOption stock;
-        environmentalOption hazard;
-        mediaOption media;
-        packageOption shippingBox;
-        productStatus status;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
         //Relay
         String contactCurrentRating;
         String mustOperateVolt;
@@ -328,10 +328,10 @@ final class HighFrequencyRelayInfo extends RelayInfo{
         String terminationStyle;
         String operationTemp;
         String coilVoltage;
-        relayMountingType mount;
+        RelayMountingType mount;
         //HighFrequencyRelay
         String contactForm;
-        CoilType coil;
+        RelayCoilType coil;
         
         
         //Validate input 
@@ -351,11 +351,11 @@ final class HighFrequencyRelayInfo extends RelayInfo{
                 manufacturer = Chunks[ 3 ];
                 mfgPartNum = Chunks[ 4 ];
                 series = Chunks[ 5 ];
-                stock = stockOption.valueOf( Chunks[ 6 ]);
-                hazard = environmentalOption.valueOf( Chunks[ 7 ]);
-                media = mediaOption.valueOf( Chunks[ 8 ]);
-                shippingBox = packageOption.valueOf( Chunks[ 9 ]);
-                status = productStatus.valueOf( Chunks[ 10 ]);
+                stock = StockOption.valueOf( Chunks[ 6 ]);
+                hazard = EnvironmentalOption.valueOf( Chunks[ 7 ]);
+                media = MediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = PackageOption.valueOf( Chunks[ 9 ]);
+                status = ProductStatus.valueOf( Chunks[ 10 ]);
                 qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
                 price = Double.valueOf( Chunks[ 12 ]);
                 //==================
@@ -369,11 +369,11 @@ final class HighFrequencyRelayInfo extends RelayInfo{
                 terminationStyle = Chunks[ 19 ];
                 operationTemp = Chunks[ 20 ];
                 coilVoltage = Chunks[ 21 ];
-                mount = relayMountingType.valueOf( Chunks[ 22 ] );
+                mount = RelayMountingType.valueOf( Chunks[ 22 ] );
                 //=================
                 //HighFrequencyRelayInfo
                 contactForm = Chunks[ 23 ];
-                coil = CoilType.valueOf( Chunks[ 24 ]);
+                coil = RelayCoilType.valueOf( Chunks[ 24 ]);
                 
                 //Param validation is in constructors
                 highFreqRelay = new HighFrequencyRelayInfo(contactForm, coil, contactCurrentRating,
@@ -402,14 +402,14 @@ final class HighFrequencyRelayInfo extends RelayInfo{
     /**
      * @return the coil
      */
-    public CoilType getCoil() {
+    public RelayCoilType getCoil() {
         return (this.coil);
     }
 
     /**
      * @param coil the coil to set
      */
-    public void setCoil(CoilType coil) {
+    public void setCoil(RelayCoilType coil) {
         this.coil = coil;
     }
     
@@ -418,16 +418,16 @@ final class HighFrequencyRelayInfo extends RelayInfo{
 
 final class AutomotiveRelayInfo extends RelayInfo{
     private String coilCurrent;
-    private CoilType coil;
+    private RelayCoilType coil;
 
     //parameterless constructor
     public AutomotiveRelayInfo() {
         this.coilCurrent = "";
-        this.coil = CoilType.Unknown;
+        this.coil = RelayCoilType.Unknown;
     }
 
     //complete constructor
-    public AutomotiveRelayInfo(String coilCurrent, CoilType coil, String contactCurrentRating, String mustOperateVolt, String mustReleaseVolt, String operateTime, String releaseTime, String features, String terminationStyle, String operationTemp, String coilVoltage, relayMountingType mount, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+    public AutomotiveRelayInfo(String coilCurrent, RelayCoilType coil, String contactCurrentRating, String mustOperateVolt, String mustReleaseVolt, String operateTime, String releaseTime, String features, String terminationStyle, String operationTemp, String coilVoltage, RelayMountingType mount, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(contactCurrentRating, mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, features, terminationStyle, operationTemp, coilVoltage, mount, itemId, name, description, mfg, mfgPartNum, series, qty, price);
         this.coilCurrent = coilCurrent;
         this.coil = coil;
@@ -480,11 +480,11 @@ final class AutomotiveRelayInfo extends RelayInfo{
         String mfgPartNum = "";
         int qtyAvailable = 0;
         double price = 0.0;
-        stockOption stock;
-        environmentalOption hazard;
-        mediaOption media;
-        packageOption shippingBox;
-        productStatus status;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
         //Relay
         String contactCurrentRating;
         String mustOperateVolt;
@@ -495,10 +495,10 @@ final class AutomotiveRelayInfo extends RelayInfo{
         String terminationStyle;
         String operationTemp;
         String coilVoltage;
-        relayMountingType mount;
+        RelayMountingType mount;
         //AutomotiveRelay
         String coilCurrent;
-        CoilType coil;
+        RelayCoilType coil;
         
         
         //Validate input 
@@ -518,11 +518,11 @@ final class AutomotiveRelayInfo extends RelayInfo{
                 manufacturer = Chunks[ 3 ];
                 mfgPartNum = Chunks[ 4 ];
                 series = Chunks[ 5 ];
-                stock = stockOption.valueOf( Chunks[ 6 ]);
-                hazard = environmentalOption.valueOf( Chunks[ 7 ]);
-                media = mediaOption.valueOf( Chunks[ 8 ]);
-                shippingBox = packageOption.valueOf( Chunks[ 9 ]);
-                status = productStatus.valueOf( Chunks[ 10 ]);
+                stock = StockOption.valueOf( Chunks[ 6 ]);
+                hazard = EnvironmentalOption.valueOf( Chunks[ 7 ]);
+                media = MediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = PackageOption.valueOf( Chunks[ 9 ]);
+                status = ProductStatus.valueOf( Chunks[ 10 ]);
                 qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
                 price = Double.valueOf( Chunks[ 12 ]);
                 //==================
@@ -536,11 +536,11 @@ final class AutomotiveRelayInfo extends RelayInfo{
                 terminationStyle = Chunks[ 19 ];
                 operationTemp = Chunks[ 20 ];
                 coilVoltage = Chunks[ 21 ];
-                mount = relayMountingType.valueOf( Chunks[ 22 ] );
+                mount = RelayMountingType.valueOf( Chunks[ 22 ] );
                 //==================
                 //AutomotiveRelayInfo
                 coilCurrent = Chunks[ 23 ];
-                coil = CoilType.valueOf( Chunks[ 24 ]);
+                coil = RelayCoilType.valueOf( Chunks[ 24 ]);
                 
                 //Param validation is in constructor
                 automotiveRelay = new AutomotiveRelayInfo(coilCurrent, coil, contactCurrentRating,
@@ -569,14 +569,14 @@ final class AutomotiveRelayInfo extends RelayInfo{
     /**
      * @return the coil
      */
-    public CoilType getCoil() {
+    public RelayCoilType getCoil() {
         return (this.coil);
     }
 
     /**
      * @param coil the coil to set
      */
-    public void setCoil(CoilType coil) {
+    public void setCoil(RelayCoilType coil) {
         this.coil = coil;
     }
 }
@@ -593,7 +593,7 @@ final class SafetyRelayInfo extends RelayInfo{
     }
 
     //complete constructor
-    public SafetyRelayInfo(String contactForm, String contactMaterial, String contactCurrentRating, String mustOperateVolt, String mustReleaseVolt, String operateTime, String releaseTime, String features, String terminationStyle, String operationTemp, String coilVoltage, relayMountingType mount, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+    public SafetyRelayInfo(String contactForm, String contactMaterial, String contactCurrentRating, String mustOperateVolt, String mustReleaseVolt, String operateTime, String releaseTime, String features, String terminationStyle, String operationTemp, String coilVoltage, RelayMountingType mount, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(contactCurrentRating, mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, features, terminationStyle, operationTemp, coilVoltage, mount, itemId, name, description, mfg, mfgPartNum, series, qty, price);
         this.contactForm = contactForm;
         this.contactMaterial = contactMaterial;
@@ -646,11 +646,11 @@ final class SafetyRelayInfo extends RelayInfo{
         String mfgPartNum = "";
         int qtyAvailable = 0;
         double price = 0.0;
-        stockOption stock;
-        environmentalOption hazard;
-        mediaOption media;
-        packageOption shippingBox;
-        productStatus status;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
         //Relay
         String contactCurrentRating;
         String mustOperateVolt;
@@ -661,7 +661,7 @@ final class SafetyRelayInfo extends RelayInfo{
         String terminationStyle;
         String operationTemp;
         String coilVoltage;
-        relayMountingType mount;
+        RelayMountingType mount;
         //SafetyRelay
         String contactForm;
         String contactMaterial;
@@ -683,11 +683,11 @@ final class SafetyRelayInfo extends RelayInfo{
                 manufacturer = Chunks[ 3 ];
                 mfgPartNum = Chunks[ 4 ];
                 series = Chunks[ 5 ];
-                stock = stockOption.valueOf( Chunks[ 6 ]);
-                hazard = environmentalOption.valueOf( Chunks[ 7 ]);
-                media = mediaOption.valueOf( Chunks[ 8 ]);
-                shippingBox = packageOption.valueOf( Chunks[ 9 ]);
-                status = productStatus.valueOf( Chunks[ 10 ]);
+                stock = StockOption.valueOf( Chunks[ 6 ]);
+                hazard = EnvironmentalOption.valueOf( Chunks[ 7 ]);
+                media = MediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = PackageOption.valueOf( Chunks[ 9 ]);
+                status = ProductStatus.valueOf( Chunks[ 10 ]);
                 qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
                 price = Double.valueOf( Chunks[ 12 ]);
                 //==================
@@ -701,7 +701,7 @@ final class SafetyRelayInfo extends RelayInfo{
                 terminationStyle = Chunks[ 19 ];
                 operationTemp = Chunks[ 20 ];
                 coilVoltage = Chunks[ 21 ];
-                mount = relayMountingType.valueOf( Chunks[ 22 ] );
+                mount = RelayMountingType.valueOf( Chunks[ 22 ] );
                 //==================
                 //SafetyRelayInfo
                 contactForm = Chunks[ 23 ];
@@ -764,7 +764,7 @@ final class SignalRelayInfo extends RelayInfo{
     }
 
     //complete constructor
-    public SignalRelayInfo(String contactForm, String sealRating, String coilInsulation, String contactMaterial, String relayType, String contactCurrentRating, String mustOperateVolt, String mustReleaseVolt, String operateTime, String releaseTime, String features, String terminationStyle, String operationTemp, String coilVoltage, relayMountingType mount, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+    public SignalRelayInfo(String contactForm, String sealRating, String coilInsulation, String contactMaterial, String relayType, String contactCurrentRating, String mustOperateVolt, String mustReleaseVolt, String operateTime, String releaseTime, String features, String terminationStyle, String operationTemp, String coilVoltage, RelayMountingType mount, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(contactCurrentRating, mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, features, terminationStyle, operationTemp, coilVoltage, mount, itemId, name, description, mfg, mfgPartNum, series, qty, price);
         this.contactForm = contactForm;
         this.sealRating = sealRating;
@@ -830,11 +830,11 @@ final class SignalRelayInfo extends RelayInfo{
         String mfgPartNum = "";
         int qtyAvailable = 0;
         double price = 0.0;
-        stockOption stock;
-        environmentalOption hazard;
-        mediaOption media;
-        packageOption shippingBox;
-        productStatus status;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
         //Relay
         String contactCurrentRating;
         String mustOperateVolt;
@@ -845,7 +845,7 @@ final class SignalRelayInfo extends RelayInfo{
         String terminationStyle;
         String operationTemp;
         String coilVoltage;
-        relayMountingType mount;
+        RelayMountingType mount;
         //SignalRelay
         String contactForm;
         String sealRating;
@@ -870,11 +870,11 @@ final class SignalRelayInfo extends RelayInfo{
                 manufacturer = Chunks[ 3 ];
                 mfgPartNum = Chunks[ 4 ];
                 series = Chunks[ 5 ];
-                stock = stockOption.valueOf( Chunks[ 6 ]);
-                hazard = environmentalOption.valueOf( Chunks[ 7 ]);
-                media = mediaOption.valueOf( Chunks[ 8 ]);
-                shippingBox = packageOption.valueOf( Chunks[ 9 ]);
-                status = productStatus.valueOf( Chunks[ 10 ]);
+                stock = StockOption.valueOf( Chunks[ 6 ]);
+                hazard = EnvironmentalOption.valueOf( Chunks[ 7 ]);
+                media = MediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = PackageOption.valueOf( Chunks[ 9 ]);
+                status = ProductStatus.valueOf( Chunks[ 10 ]);
                 qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
                 price = Double.valueOf( Chunks[ 12 ]);
                 //==================
@@ -888,7 +888,7 @@ final class SignalRelayInfo extends RelayInfo{
                 terminationStyle = Chunks[ 19 ];
                 operationTemp = Chunks[ 20 ];
                 coilVoltage = Chunks[ 21 ];
-                mount = relayMountingType.valueOf( Chunks[ 22 ] );
+                mount = RelayMountingType.valueOf( Chunks[ 22 ] );
                 //=================
                 //SignalRelayInfo
                 contactForm = Chunks[ 23 ];
@@ -984,7 +984,7 @@ final class SignalRelayInfo extends RelayInfo{
 final class PowerRelayInfo extends RelayInfo{
     private String contactForm;
     private String coilCurrent;
-    private CoilType coil;
+    private RelayCoilType coil;
     private String sealRating;
     private String coilInsulation;
     private String contactMaterial;
@@ -995,7 +995,7 @@ final class PowerRelayInfo extends RelayInfo{
         super();
         this.contactForm = "";
         this.coilCurrent = "";
-        this.coil = CoilType.Unknown;
+        this.coil = RelayCoilType.Unknown;
         this.sealRating = "";
         this.coilInsulation = "";
         this.contactMaterial = "";
@@ -1003,7 +1003,7 @@ final class PowerRelayInfo extends RelayInfo{
     }
 
     //Complete constructor
-    public PowerRelayInfo(String contactForm, String coilCurrent, CoilType coil, String sealRating, String coilInsulation, String contactMaterial, String relayType, String contactCurrentRating, String mustOperateVolt, String mustReleaseVolt, String operateTime, String releaseTime, String features, String terminationStyle, String operationTemp, String coilVoltage, relayMountingType mount, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+    public PowerRelayInfo(String contactForm, String coilCurrent, RelayCoilType coil, String sealRating, String coilInsulation, String contactMaterial, String relayType, String contactCurrentRating, String mustOperateVolt, String mustReleaseVolt, String operateTime, String releaseTime, String features, String terminationStyle, String operationTemp, String coilVoltage, RelayMountingType mount, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(contactCurrentRating, mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, features, terminationStyle, operationTemp, coilVoltage, mount, itemId, name, description, mfg, mfgPartNum, series, qty, price);
         
         
@@ -1082,11 +1082,11 @@ final class PowerRelayInfo extends RelayInfo{
         String mfgPartNum = "";
         int qtyAvailable = 0;
         double price = 0.0;
-        stockOption stock;
-        environmentalOption hazard;
-        mediaOption media;
-        packageOption shippingBox;
-        productStatus status;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
         //Relay
         String contactCurrentRating;
         String mustOperateVolt;
@@ -1097,11 +1097,11 @@ final class PowerRelayInfo extends RelayInfo{
         String terminationStyle;
         String operationTemp;
         String coilVoltage;
-        relayMountingType mount;
+        RelayMountingType mount;
         //PowerRelay
         String contactForm;
         String coilCurrent;
-        CoilType coil;
+        RelayCoilType coil;
         String sealRating;
         String coilInsulation;
         String contactMaterial;
@@ -1124,11 +1124,11 @@ final class PowerRelayInfo extends RelayInfo{
                 manufacturer = Chunks[ 3 ];
                 mfgPartNum = Chunks[ 4 ];
                 series = Chunks[ 5 ];
-                stock = stockOption.valueOf( Chunks[ 6 ]);
-                hazard = environmentalOption.valueOf( Chunks[ 7 ]);
-                media = mediaOption.valueOf( Chunks[ 8 ]);
-                shippingBox = packageOption.valueOf( Chunks[ 9 ]);
-                status = productStatus.valueOf( Chunks[ 10 ]);
+                stock = StockOption.valueOf( Chunks[ 6 ]);
+                hazard = EnvironmentalOption.valueOf( Chunks[ 7 ]);
+                media = MediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = PackageOption.valueOf( Chunks[ 9 ]);
+                status = ProductStatus.valueOf( Chunks[ 10 ]);
                 qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
                 price = Double.valueOf( Chunks[ 12 ]);
                 //==================
@@ -1142,12 +1142,12 @@ final class PowerRelayInfo extends RelayInfo{
                 terminationStyle = Chunks[ 19 ];
                 operationTemp = Chunks[ 20 ];
                 coilVoltage = Chunks[ 21 ];
-                mount = relayMountingType.valueOf( Chunks[ 22 ] );
+                mount = RelayMountingType.valueOf( Chunks[ 22 ] );
                 //=================
                 //PowerRelayInfo params
                 contactForm = Chunks[ 23 ];
                 coilCurrent = Chunks[ 24 ];
-                coil =  CoilType.valueOf( Chunks[ 25 ] );
+                coil =  RelayCoilType.valueOf( Chunks[ 25 ] );
                 sealRating =  Chunks[ 26 ];
                 coilInsulation = Chunks[ 27 ];
                 contactMaterial = Chunks[ 28 ];
@@ -1197,14 +1197,14 @@ final class PowerRelayInfo extends RelayInfo{
     /**
      * @return the coil
      */
-    public CoilType getCoil() {
+    public RelayCoilType getCoil() {
         return (this.coil);
     }
 
     /**
      * @param coil the coil to set
      */
-    public void setCoil(CoilType coil) {
+    public void setCoil(RelayCoilType coil) {
         this.coil = coil;
     }
 
@@ -1266,14 +1266,14 @@ final class PowerRelayInfo extends RelayInfo{
     
 }
 
-enum CoilType{
+enum RelayCoilType{
         LatchingDualCoil,
         LatchingSingleCoil,
         NonLatching,
         Unknown
     }
 
-enum relayMountingType {
+enum RelayMountingType {
         ChassisMount,
         SurfaceMount,
         PanelMount,

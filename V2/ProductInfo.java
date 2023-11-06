@@ -36,11 +36,11 @@ public abstract class ProductInfo implements Exportable {
     private String mfgPartNumber;
     private int qtyAvailable;
     private double price;
-    private stockOption availability;
-    private environmentalOption hazards;
-    private mediaOption media;
-    private productStatus status;
-    private packageOption shippingPackage;
+    private StockOption availability;
+    private EnvironmentalOption hazards;
+    private MediaOption media;
+    private ProductStatus status;
+    private PackageOption shippingPackage;
     
     
     public ProductInfo(){
@@ -52,11 +52,11 @@ public abstract class ProductInfo implements Exportable {
         this.mfgPartNumber = "";
         this.qtyAvailable = 0;
         this.price = 0.0;
-        this.availability = stockOption.unknown;
-        this.hazards = environmentalOption.unknown;
-        this.media = mediaOption.unknown;
-        this.status = productStatus.unknown;
-        this.shippingPackage = packageOption.unknown;
+        this.availability = StockOption.unknown;
+        this.hazards = EnvironmentalOption.unknown;
+        this.media = MediaOption.unknown;
+        this.status = ProductStatus.unknown;
+        this.shippingPackage = PackageOption.unknown;
         
     }
     
@@ -75,8 +75,8 @@ public abstract class ProductInfo implements Exportable {
             this.description = description;
             this.qtyAvailable = qty;
             this.price = price;
-            this.availability = stockOption.newProduct;
-            this.status = productStatus.active;
+            this.availability = StockOption.newProduct;
+            this.status = ProductStatus.active;
         }
     }
     
@@ -209,70 +209,70 @@ public abstract class ProductInfo implements Exportable {
     /**
      * @return the availability
      */
-    public stockOption getAvailability() {
+    public StockOption getAvailability() {
         return (this.availability);
     }
 
     /**
      * @param availability the availability to set
      */
-    public void setAvailability(stockOption availability) {
+    public void setAvailability(StockOption availability) {
         this.availability = availability;
     }
 
     /**
      * @return the hazards
      */
-    public environmentalOption getHazards() {
+    public EnvironmentalOption getHazards() {
         return (this.hazards);
     }
 
     /**
      * @param hazards the hazards to set
      */
-    public void setHazards(environmentalOption hazards) {
+    public void setHazards(EnvironmentalOption hazards) {
         this.hazards = hazards;
     }
 
     /**
      * @return the media
      */
-    public mediaOption getMedia() {
+    public MediaOption getMedia() {
         return (this.media);
     }
 
     /**
      * @param media the media to set
      */
-    public void setMedia(mediaOption media) {
+    public void setMedia(MediaOption media) {
         this.media = media;
     }
 
     /**
      * @return the status
      */
-    public productStatus getStatus() {
+    public ProductStatus getStatus() {
         return (this.status);
     }
 
     /**
      * @param status the status to set
      */
-    public void setStatus(productStatus status) {
+    public void setStatus(ProductStatus status) {
         this.status = status;
     }
 
     /**
      * @return the shippingPackage
      */
-    public packageOption getShippingPackage() {
+    public PackageOption getShippingPackage() {
         return (this.shippingPackage);
     }
 
     /**
      * @param shippingPackage the shippingPackage to set
      */
-    public void setShippingPackage(packageOption shippingPackage) {
+    public void setShippingPackage(PackageOption shippingPackage) {
         this.shippingPackage = shippingPackage;
     }
 
@@ -281,7 +281,7 @@ public abstract class ProductInfo implements Exportable {
         //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
         String output = "";
         
-        output += "Item ID: " + this.itemId + '\n';
+        output += "Item Id: " + this.itemId + '\n';
         output += "Name: " + this.name + '\n';
         output += "Description: " + this.description + '\n';
         output += "Manufacturer: " + this.manufacturer + '\n';
@@ -350,7 +350,7 @@ public abstract class ProductInfo implements Exportable {
 
 //Generic Product Enums --> 
 //  Used for variables that each type of product will contain
-enum stockOption{
+enum StockOption{
     inStock,
     normallyStocking,
     newProduct,
@@ -358,20 +358,20 @@ enum stockOption{
     unknown
 }
 
-enum environmentalOption{
+enum EnvironmentalOption{
     RoHSCompliant,
     NonRoHSCompliant,
     unknown
 }
 
-enum mediaOption{
+enum MediaOption{
     datasheet,
     photo,
     eda_cadModels,
     unknown
 }
 
-enum packageOption{
+enum PackageOption{
     Bag,
     Box,
     Bulk,
@@ -384,7 +384,7 @@ enum packageOption{
     unknown
 }
 
-enum productStatus{
+enum ProductStatus{
     active,
     discontinued,
     lastTimeBuy,

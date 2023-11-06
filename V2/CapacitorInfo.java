@@ -17,7 +17,7 @@ public abstract class CapacitorInfo extends ProductInfo{
     private String operationTemp;
     private String size;
     private String dielectricMat;
-    private MountingType mount;
+    private CapacitorMountingType mount;
     private String packageCase;
     private String seatedHeight;
     
@@ -29,23 +29,42 @@ public abstract class CapacitorInfo extends ProductInfo{
         this.operationTemp = "";
         this.size = "";
         this.dielectricMat = "";
-        this.mount = MountingType.Unknown;
+        this.mount = CapacitorMountingType.Unknown;
         this.packageCase = "";
         this.seatedHeight = "";
     }
 
     
-    public CapacitorInfo(String capacitance, String tolerance, String voltageRating, String operationTemp, String size, String dielectricMat, MountingType mount, String packageCase, String seatedHeight,String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+    public CapacitorInfo(String capacitance, String tolerance, String voltageRating, String operationTemp, String size, String dielectricMat, CapacitorMountingType mount, String packageCase, String seatedHeight,String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(itemId, name, description, mfg, mfgPartNum, series, qty, price);
-        this.capacitance = capacitance;
-        this.tolerance = tolerance;
-        this.voltageRating = voltageRating;
-        this.operationTemp = operationTemp;
-        this.size = size;
-        this.dielectricMat = dielectricMat;
-        this.mount = mount;
-        this.packageCase = packageCase;
-        this.seatedHeight = seatedHeight;
+        
+        if ((capacitance.length() == 0) || (capacitance == null)){
+            throw new Exception("Error: Invalid capacitance passed!");
+        } else if ((tolerance.length() == 0) || (tolerance == null)){
+            throw new Exception("Error: Invalid tolerance passed!");
+        } else if ((voltageRating.length() == 0) || (voltageRating == null)){
+            throw new Exception("Error: Invalid voltage rating passed!");
+        } else if ((operationTemp.length() == 0) || (operationTemp == null)){
+            throw new Exception("Error: Invalid operation temperature passed!");
+        } else if ((size.length() == 0) || (size == null)){
+            throw new Exception("Error: Invalid size passed!");
+        } else if ((dielectricMat.length() == 0) || (dielectricMat == null)){
+            throw new Exception("Error: Invalid dielectric material passed!");
+        } else if ((packageCase.length() == 0) || (packageCase == null)){
+            throw new Exception("Error: Invalid package case passed!");
+        } else if ((seatedHeight.length() == 0) || (seatedHeight == null)){
+            throw new Exception("Error: Invalid seated height passed!");
+        } else {
+            this.capacitance = capacitance;
+            this.tolerance = tolerance;
+            this.voltageRating = voltageRating;
+            this.operationTemp = operationTemp;
+            this.size = size;
+            this.dielectricMat = dielectricMat;
+            this.mount = mount;
+            this.packageCase = packageCase;
+            this.seatedHeight = seatedHeight;
+        }
     }
     
     //All of the exporting methods are implemented through the inheritance
@@ -194,14 +213,14 @@ public abstract class CapacitorInfo extends ProductInfo{
     /**
      * @return the mount
      */
-    public MountingType getMount() {
+    public CapacitorMountingType getMount() {
         return (this.mount);
     }
 
     /**
      * @param mount the mount to set
      */
-    public void setMount(MountingType mount) {
+    public void setMount(CapacitorMountingType mount) {
         this.mount = mount;
     }
 
@@ -254,12 +273,23 @@ final class EDLCAndSupercapactiorInfo extends CapacitorInfo{
         this.leadSpacing = "";
     }
 
-    public EDLCAndSupercapactiorInfo(String equivalentSeriesResistance, String lifetimeAtTemp, String termination, String leadSpacing, String capacitance, String tolerance, String voltageRating, String operationTemp, String size, String dielectricMat, MountingType mount, String packageCase, String seatedHeight, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+    public EDLCAndSupercapactiorInfo(String equivalentSeriesResistance, String lifetimeAtTemp, String termination, String leadSpacing, String capacitance, String tolerance, String voltageRating, String operationTemp, String size, String dielectricMat, CapacitorMountingType mount, String packageCase, String seatedHeight, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(capacitance, tolerance, voltageRating, operationTemp, size, dielectricMat, mount, packageCase, seatedHeight, itemId, name, description, mfg, mfgPartNum, series, qty, price);
-        this.equivalentSeriesResistance = equivalentSeriesResistance;
-        this.lifetimeAtTemp = lifetimeAtTemp;
-        this.termination = termination;
-        this.leadSpacing = leadSpacing;
+        
+        if ((equivalentSeriesResistance.length() == 0) || (equivalentSeriesResistance == null)){
+            throw new Exception("Error: Invalid equivalent series resistance passed!");
+        } else if ((lifetimeAtTemp.length() == 0) || (lifetimeAtTemp == null)){
+            throw new Exception("Error: Invalid lifetime at temperature passed!");
+        } else if ((termination.length() == 0) || (termination == null)){
+            throw new Exception("Error: Invalid termination passed!");
+        } else if ((leadSpacing.length() == 0) || (leadSpacing == null)){
+            throw new Exception("Error: Invalid lead spacing passed!");
+        } else {
+            this.equivalentSeriesResistance = equivalentSeriesResistance;
+            this.lifetimeAtTemp = lifetimeAtTemp;
+            this.termination = termination;
+            this.leadSpacing = leadSpacing;
+        }
     }
     
     //All of the exporting methods are implemented through the inheritance
@@ -317,11 +347,11 @@ final class EDLCAndSupercapactiorInfo extends CapacitorInfo{
         String mfgPartNum = "";
         int qtyAvailable = 0;
         double price = 0.0;
-        stockOption stock;
-        environmentalOption hazard;
-        mediaOption media;
-        packageOption shippingBox;
-        productStatus status;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
         //Capacitor
         String capacitance = "";
         String tolerance = "";
@@ -329,7 +359,7 @@ final class EDLCAndSupercapactiorInfo extends CapacitorInfo{
         String operationTemp = "";
         String size = "";
         String dielectricMat = "";
-        MountingType mount;
+        CapacitorMountingType mount;
         String packageCase = "";
         String seatedHeight = "";
         //EDLCAndSupercapacitor
@@ -356,11 +386,11 @@ final class EDLCAndSupercapactiorInfo extends CapacitorInfo{
                 manufacturer = Chunks[ 3 ];
                 mfgPartNum = Chunks[ 4 ];
                 series = Chunks[ 5 ];
-                stock = stockOption.valueOf( Chunks[ 6 ]);
-                hazard = environmentalOption.valueOf( Chunks[ 7 ]);
-                media = mediaOption.valueOf( Chunks[ 8 ]);
-                shippingBox = packageOption.valueOf( Chunks[ 9 ]);
-                status = productStatus.valueOf( Chunks[ 10 ]);
+                stock = StockOption.valueOf( Chunks[ 6 ]);
+                hazard = EnvironmentalOption.valueOf( Chunks[ 7 ]);
+                media = MediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = PackageOption.valueOf( Chunks[ 9 ]);
+                status = ProductStatus.valueOf( Chunks[ 10 ]);
                 qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
                 price = Double.valueOf( Chunks[ 12 ]);
                 //==================
@@ -371,7 +401,7 @@ final class EDLCAndSupercapactiorInfo extends CapacitorInfo{
                 operationTemp = Chunks[ 16 ];
                 size = Chunks[ 17 ];
                 dielectricMat = Chunks[ 18 ];
-                mount = MountingType.valueOf( Chunks[ 19 ]);
+                mount = CapacitorMountingType.valueOf( Chunks[ 19 ]);
                 packageCase = Chunks[ 20 ];
                 seatedHeight = Chunks[ 21 ];
                 //=================
@@ -459,10 +489,17 @@ final class MicaAndPTFEInfo extends CapacitorInfo{
         this.features = "";
     }
 
-    public MicaAndPTFEInfo(String leadSpacing, String features, String capacitance, String tolerance, String voltageRating, String operationTemp, String size, String dielectricMat, MountingType mount, String packageCase, String seatedHeight, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+    public MicaAndPTFEInfo(String leadSpacing, String features, String capacitance, String tolerance, String voltageRating, String operationTemp, String size, String dielectricMat, CapacitorMountingType mount, String packageCase, String seatedHeight, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(capacitance, tolerance, voltageRating, operationTemp, size, dielectricMat, mount, packageCase, seatedHeight, itemId, name, description, mfg, mfgPartNum, series, qty, price);
-        this.leadSpacing = leadSpacing;
-        this.features = features;
+        
+        if ((leadSpacing.length() == 0) || (leadSpacing == null)){
+            throw new Exception("Error: Invalid lead spacing passed!");
+        } else if ((features.length() == 0) || (features == null)){
+            throw new Exception("Error: Invalid features passed!");
+        } else {
+            this.leadSpacing = leadSpacing;
+            this.leadSpacing = leadSpacing;
+        }
     }
     
     
@@ -517,11 +554,11 @@ final class MicaAndPTFEInfo extends CapacitorInfo{
         String mfgPartNum = "";
         int qtyAvailable = 0;
         double price = 0.0;
-        stockOption stock;
-        environmentalOption hazard;
-        mediaOption media;
-        packageOption shippingBox;
-        productStatus status;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
         //Capacitor
         String capacitance = "";
         String tolerance = "";
@@ -529,7 +566,7 @@ final class MicaAndPTFEInfo extends CapacitorInfo{
         String operationTemp = "";
         String size = "";
         String dielectricMat = "";
-        MountingType mount;
+        CapacitorMountingType mount;
         String packageCase = "";
         String seatedHeight = "";
         //MicaAndPTFE
@@ -553,11 +590,11 @@ final class MicaAndPTFEInfo extends CapacitorInfo{
                 manufacturer = Chunks[ 3 ];
                 mfgPartNum = Chunks[ 4 ];
                 series = Chunks[ 5 ];
-                stock = stockOption.valueOf( Chunks[ 6 ]);
-                hazard = environmentalOption.valueOf( Chunks[ 7 ]);
-                media = mediaOption.valueOf( Chunks[ 8 ]);
-                shippingBox = packageOption.valueOf( Chunks[ 9 ]);
-                status = productStatus.valueOf( Chunks[ 10 ]);
+                stock = StockOption.valueOf( Chunks[ 6 ]);
+                hazard = EnvironmentalOption.valueOf( Chunks[ 7 ]);
+                media = MediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = PackageOption.valueOf( Chunks[ 9 ]);
+                status = ProductStatus.valueOf( Chunks[ 10 ]);
                 qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
                 price = Double.valueOf( Chunks[ 12 ]);
                 //==================
@@ -568,7 +605,7 @@ final class MicaAndPTFEInfo extends CapacitorInfo{
                 operationTemp = Chunks[ 16 ];
                 size = Chunks[ 17 ];
                 dielectricMat = Chunks[ 18 ];
-                mount = MountingType.valueOf( Chunks[ 19 ]);
+                mount = CapacitorMountingType.valueOf( Chunks[ 19 ]);
                 packageCase = Chunks[ 20 ];
                 seatedHeight = Chunks[ 21 ];
                 //=================
@@ -620,25 +657,34 @@ final class NetworksAndArraysInfo extends CapacitorInfo{
     private int capacitorCount;
     private String tempCoefficient;
     private String supplierDevicePackage;
-    private capacitorRatings rating;
-    private capacitorCircuitType circuit;
+    private CapacitorRatings rating;
+    private CapacitorCircuitType circuit;
 
     public NetworksAndArraysInfo() {
         super();
         this.capacitorCount = 0;
         this.tempCoefficient = "";
         this.supplierDevicePackage = "";
-        this.rating = capacitorRatings.Unknown;
-        this.circuit = capacitorCircuitType.Unknown;
+        this.rating = CapacitorRatings.Unknown;
+        this.circuit = CapacitorCircuitType.Unknown;
     }
     
-    public NetworksAndArraysInfo(int capacitorCount, String tempCoefficient, String supplierDevicePackage, capacitorRatings rating, capacitorCircuitType circuit, String capacitance, String tolerance, String voltageRating, String operationTemp, String size, String dielectricMat, MountingType mount, String packageCase, String seatedHeight, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+    public NetworksAndArraysInfo(int capacitorCount, String tempCoefficient, String supplierDevicePackage, CapacitorRatings rating, CapacitorCircuitType circuit, String capacitance, String tolerance, String voltageRating, String operationTemp, String size, String dielectricMat, CapacitorMountingType mount, String packageCase, String seatedHeight, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(capacitance, tolerance, voltageRating, operationTemp, size, dielectricMat, mount, packageCase, seatedHeight, itemId, name, description, mfg, mfgPartNum, series, qty, price);
-        this.capacitorCount = capacitorCount;
-        this.tempCoefficient = tempCoefficient;
-        this.supplierDevicePackage = supplierDevicePackage;
-        this.rating = rating;
-        this.circuit = circuit;
+        
+        if ( capacitorCount < 0 ){
+            throw new Exception("Error: Invalid capacitor count passed!");
+        } else if ((tempCoefficient.length() == 0) || (tempCoefficient == null)){
+            throw new Exception("Error: Invalid temperature coefficient passed!");
+        } else if ((supplierDevicePackage.length() == 0) || (supplierDevicePackage == null)){
+            throw new Exception("Error: Invalid supplier device package passed!");
+        } else {
+            this.capacitorCount = capacitorCount;
+            this.tempCoefficient = tempCoefficient;
+            this.supplierDevicePackage = supplierDevicePackage;
+            this.rating = rating;
+            this.circuit = circuit;
+        }
     }
         
     //All of the exporting methods are implemented through the inheritance
@@ -700,11 +746,11 @@ final class NetworksAndArraysInfo extends CapacitorInfo{
         String mfgPartNum = "";
         int qtyAvailable = 0;
         double price = 0.0;
-        stockOption stock;
-        environmentalOption hazard;
-        mediaOption media;
-        packageOption shippingBox;
-        productStatus status;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
         //Capacitor
         String capacitance = "";
         String tolerance = "";
@@ -712,15 +758,15 @@ final class NetworksAndArraysInfo extends CapacitorInfo{
         String operationTemp = "";
         String size = "";
         String dielectricMat = "";
-        MountingType mount;
+        CapacitorMountingType mount;
         String packageCase = "";
         String seatedHeight = "";
         //NetworkAndArray
         int capacitorCount;
         String tempCoefficient;
         String supplierDevicePackage;
-        capacitorRatings rating;
-        capacitorCircuitType circuit;
+        CapacitorRatings rating;
+        CapacitorCircuitType circuit;
         
         //Validate input 
         if ( input == null ){
@@ -739,11 +785,11 @@ final class NetworksAndArraysInfo extends CapacitorInfo{
                 manufacturer = Chunks[ 3 ];
                 mfgPartNum = Chunks[ 4 ];
                 series = Chunks[ 5 ];
-                stock = stockOption.valueOf( Chunks[ 6 ]);
-                hazard = environmentalOption.valueOf( Chunks[ 7 ]);
-                media = mediaOption.valueOf( Chunks[ 8 ]);
-                shippingBox = packageOption.valueOf( Chunks[ 9 ]);
-                status = productStatus.valueOf( Chunks[ 10 ]);
+                stock = StockOption.valueOf( Chunks[ 6 ]);
+                hazard = EnvironmentalOption.valueOf( Chunks[ 7 ]);
+                media = MediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = PackageOption.valueOf( Chunks[ 9 ]);
+                status = ProductStatus.valueOf( Chunks[ 10 ]);
                 qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
                 price = Double.valueOf( Chunks[ 12 ]);
                 //==================
@@ -754,7 +800,7 @@ final class NetworksAndArraysInfo extends CapacitorInfo{
                 operationTemp = Chunks[ 16 ];
                 size = Chunks[ 17 ];
                 dielectricMat = Chunks[ 18 ];
-                mount = MountingType.valueOf( Chunks[ 19 ]);
+                mount = CapacitorMountingType.valueOf( Chunks[ 19 ]);
                 packageCase = Chunks[ 20 ];
                 seatedHeight = Chunks[ 21 ];
                 //=================
@@ -762,8 +808,8 @@ final class NetworksAndArraysInfo extends CapacitorInfo{
                 capacitorCount = Integer.valueOf( Chunks[ 22 ]);
                 tempCoefficient = Chunks[ 23 ];
                 supplierDevicePackage = Chunks[ 24 ];
-                rating = capacitorRatings.valueOf( Chunks[ 25 ]);
-                circuit = capacitorCircuitType.valueOf( Chunks[ 26 ]);
+                rating = CapacitorRatings.valueOf( Chunks[ 25 ]);
+                circuit = CapacitorCircuitType.valueOf( Chunks[ 26 ]);
                 
                 //Param Validation -> constructor
                 networkAndArray = new NetworksAndArraysInfo(capacitorCount, tempCoefficient, supplierDevicePackage,
@@ -821,28 +867,28 @@ final class NetworksAndArraysInfo extends CapacitorInfo{
     /**
      * @return the rating
      */
-    public capacitorRatings getRating() {
+    public CapacitorRatings getRating() {
         return (this.rating);
     }
 
     /**
      * @param rating the rating to set
      */
-    public void setRating(capacitorRatings rating) {
+    public void setRating(CapacitorRatings rating) {
         this.rating = rating;
     }
 
     /**
      * @return the circuit
      */
-    public capacitorCircuitType getCircuit() {
+    public CapacitorCircuitType getCircuit() {
         return (this.circuit);
     }
 
     /**
      * @param circuit the circuit to set
      */
-    public void setCircuit(capacitorCircuitType circuit) {
+    public void setCircuit(CapacitorCircuitType circuit) {
         this.circuit = circuit;
     }
 }
@@ -861,12 +907,23 @@ final class TrimmerAndVariableInfo extends CapacitorInfo{
         this.features = "";
     }
     
-    public TrimmerAndVariableInfo(String capacitanceRange, String adjustmentType, String qAtFreq, String features, String capacitance, String tolerance, String voltageRating, String operationTemp, String size, String dielectricMat, MountingType mount, String packageCase, String seatedHeight, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
+    public TrimmerAndVariableInfo(String capacitanceRange, String adjustmentType, String qAtFreq, String features, String capacitance, String tolerance, String voltageRating, String operationTemp, String size, String dielectricMat, CapacitorMountingType mount, String packageCase, String seatedHeight, String itemId, String name, String description, String mfg, String mfgPartNum, String series, int qty, double price) throws Exception {
         super(capacitance, tolerance, voltageRating, operationTemp, size, dielectricMat, mount, packageCase, seatedHeight, itemId, name, description, mfg, mfgPartNum, series, qty, price);
-        this.capacitanceRange = capacitanceRange;
-        this.adjustmentType = adjustmentType;
-        this.qAtFreq = qAtFreq;
-        this.features = features;
+        
+        if ((capacitanceRange.length() == 0) || (capacitanceRange == null)){
+            throw new Exception("Error: Invalid capacitance range passed!");
+        } else if ((adjustmentType.length() == 0) || (adjustmentType == null)){
+            throw new Exception("Error: Invalid adjustment type passed!");
+        } else if ((qAtFreq.length() == 0) || (qAtFreq == null)){
+            throw new Exception("Error: Invalid q at frequency passed!");
+        } else if ((features.length() == 0) || (features == null)){
+            throw new Exception("Error: Invalid features passed!");
+        } else {
+            this.capacitanceRange = capacitanceRange;
+            this.adjustmentType = adjustmentType;
+            this.qAtFreq = qAtFreq;
+            this.features = features;
+        }
     }    
     
     //All of the exporting methods are implemented through the inheritance
@@ -924,11 +981,11 @@ final class TrimmerAndVariableInfo extends CapacitorInfo{
         String mfgPartNum = "";
         int qtyAvailable = 0;
         double price = 0.0;
-        stockOption stock;
-        environmentalOption hazard;
-        mediaOption media;
-        packageOption shippingBox;
-        productStatus status;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
         //Capacitor
         String capacitance = "";
         String tolerance = "";
@@ -936,7 +993,7 @@ final class TrimmerAndVariableInfo extends CapacitorInfo{
         String operationTemp = "";
         String size = "";
         String dielectricMat = "";
-        MountingType mount;
+        CapacitorMountingType mount;
         String packageCase = "";
         String seatedHeight = "";
         //TrimmerAndVariable
@@ -962,11 +1019,11 @@ final class TrimmerAndVariableInfo extends CapacitorInfo{
                 manufacturer = Chunks[ 3 ];
                 mfgPartNum = Chunks[ 4 ];
                 series = Chunks[ 5 ];
-                stock = stockOption.valueOf( Chunks[ 6 ]);
-                hazard = environmentalOption.valueOf( Chunks[ 7 ]);
-                media = mediaOption.valueOf( Chunks[ 8 ]);
-                shippingBox = packageOption.valueOf( Chunks[ 9 ]);
-                status = productStatus.valueOf( Chunks[ 10 ]);
+                stock = StockOption.valueOf( Chunks[ 6 ]);
+                hazard = EnvironmentalOption.valueOf( Chunks[ 7 ]);
+                media = MediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = PackageOption.valueOf( Chunks[ 9 ]);
+                status = ProductStatus.valueOf( Chunks[ 10 ]);
                 qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
                 price = Double.valueOf( Chunks[ 12 ]);
                 //==================
@@ -977,7 +1034,7 @@ final class TrimmerAndVariableInfo extends CapacitorInfo{
                 operationTemp = Chunks[ 16 ];
                 size = Chunks[ 17 ];
                 dielectricMat = Chunks[ 18 ];
-                mount = MountingType.valueOf( Chunks[ 19 ]);
+                mount = CapacitorMountingType.valueOf( Chunks[ 19 ]);
                 packageCase = Chunks[ 20 ];
                 seatedHeight = Chunks[ 21 ];
                 //=================
@@ -1062,18 +1119,18 @@ final class TrimmerAndVariableInfo extends CapacitorInfo{
     }
 }
 
-enum capacitorRatings{
+enum CapacitorRatings{
     AEC_Q200,
     Unknown
 }
 
-enum capacitorCircuitType{
+enum CapacitorCircuitType{
     Bussed,
     Isolated,
     Unknown
 }
 
-enum MountingType{
+enum CapacitorMountingType{
     ChassisMount,
     PanelMount,
     BracketMount,
