@@ -388,6 +388,223 @@ final class ArraysAndSignalTransformerInfo extends InductorCoilAndChokesInfo {
         return(output);
     }
 
+    public static ArraysAndSignalTransformerInfo fromCSV( String input ) throws Exception {
+        ArraysAndSignalTransformerInfo arraysAndSignalTransformer = new ArraysAndSignalTransformerInfo();
+        String[] Chunks;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //InductorCoilAndChoke
+        String tolerance = "";
+        InductorMountingType mount;
+        String packageCase = "";
+        //ArraysAndSignalTransformer
+        int coilNumber;
+        String parallelInductance;
+        String seriesInductance;
+        String parallelCurrentRating;
+        String seriesCurrentRating;
+        String parallelCurrentSaturation;
+        String seriesCurrentSaturation;
+        String parallelDCResistance;
+        String seriesDCResistance;
+        String operatingTemp;
+        ArrayInductorShielding shielding;
+        InductorRating rating;
+        String height;
+        String size;
+        
+        //Validate input 
+        if ( input == null ){
+            throw new Exception("Error: Null input for parsing!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string provided!");
+        } else {
+            //Split line based on comma
+            Chunks = input.split(",");
+            if ( Chunks.length == 30 ){
+                //Assign all parameters
+                //ProductInfo Params
+                id = Chunks[ 0 ];
+                name = Chunks[ 1 ];
+                description = Chunks[ 2 ];
+                manufacturer = Chunks[ 3 ];
+                mfgPartNum = Chunks[ 4 ];
+                series = Chunks[ 5 ];
+                stock = StockOption.valueOf( Chunks[ 6 ]);
+                hazard = EnvironmentalOption.valueOf( Chunks[ 7 ]);
+                media = MediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = PackageOption.valueOf( Chunks[ 9 ]);
+                status = ProductStatus.valueOf( Chunks[ 10 ]);
+                qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
+                price = Double.valueOf( Chunks[ 12 ]);
+                //==================
+                //InductorCoilAndChokeInfo Params
+                tolerance = Chunks[ 13 ];
+                mount = InductorMountingType.valueOf( Chunks[ 14 ]);
+                packageCase = Chunks[ 15 ];
+                //==================
+                //ArraysAndSignalsTranformerInfo Params
+                coilNumber = Integer.parseInt( Chunks[ 16 ]);
+                parallelInductance = Chunks[ 17 ];
+                seriesInductance = Chunks[ 18 ];
+                parallelCurrentRating = Chunks[ 19 ];
+                seriesCurrentRating = Chunks[ 20 ];
+                parallelCurrentSaturation = Chunks[ 21 ];
+                seriesCurrentSaturation = Chunks[ 22 ];
+                parallelDCResistance = Chunks[ 23 ];
+                seriesDCResistance = Chunks[ 24 ];
+                operatingTemp = Chunks[ 25 ];
+                shielding = ArrayInductorShielding.valueOf( Chunks[ 26 ] );
+                rating = InductorRating.valueOf( Chunks[ 27 ] );
+                height = Chunks[ 28 ];
+                size = Chunks[ 29 ];
+                
+                arraysAndSignalTransformer = new ArraysAndSignalTransformerInfo(coilNumber, parallelInductance, seriesInductance,
+                        parallelCurrentRating, seriesCurrentRating, parallelCurrentSaturation, seriesCurrentSaturation,
+                        parallelDCResistance, seriesDCResistance, operatingTemp, shielding, rating,
+                        height, size, tolerance, mount, packageCase, id, name, description, id, mfgPartNum, series, qtyAvailable, price);
+            }
+        }
+        
+        return( arraysAndSignalTransformer );
+    }
+    
+    public static ArraysAndSignalTransformerInfo fromCustom( String input ) throws Exception {
+        ArraysAndSignalTransformerInfo arraysAndSignalTransformer = new ArraysAndSignalTransformerInfo();
+        String[] Chunks;
+        String[] Lines;
+        String line;
+        String chunk;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //InductorCoilAndChoke
+        String tolerance = "";
+        InductorMountingType mount;
+        String packageCase = "";
+        //ArraysAndSignalTransformer
+        int coilNumber;
+        String parallelInductance;
+        String seriesInductance;
+        String parallelCurrentRating;
+        String seriesCurrentRating;
+        String parallelCurrentSaturation;
+        String seriesCurrentSaturation;
+        String parallelDCResistance;
+        String seriesDCResistance;
+        String operatingTemp;
+        ArrayInductorShielding shielding;
+        InductorRating rating;
+        String height;
+        String size;
+        
+        
+        if ( input == null ){
+            throw new Exception("Error: Null input passed!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string passed!");
+        } else {
+            //Splitting the input into line segments
+            Lines = input.split("\\n");
+            for ( int index = 0; index < Lines.length; index++ ){
+                //Getting a singlular line segment
+                line = Lines[ index ];
+                //Getting the parts of each segment
+                Chunks = line.split(": ");
+                if ( Chunks[ 1 ].length() == 0 ){
+                    System.out.println("Error: Zero length value was provided!");
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Item Id") == true ){
+                    id = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Name") == true ){
+                    name = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Description") == true ){
+                    description = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer") == true ){
+                    manufacturer = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer Part Number") == true ){
+                    mfgPartNum = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Series") == true ){
+                    series = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Availability") == true ){
+                    stock = StockOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Product Status") == true ){
+                    status = ProductStatus.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Media") == true ){
+                    media = MediaOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Environmental Options") == true ){
+                    hazard = EnvironmentalOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Packaging") == true ){
+                    packageCase = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Quantity") == true ){
+                    qtyAvailable = Integer.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Price") == true ){
+                    price = Double.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Tolerance") == true ){
+                    tolerance = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Mount") == true ){
+                    mount = InductorMountingType.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Package Case") == true ){
+                    packageCase = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Coil Number") == true ){
+                    coilNumber = Integer.parseInt( Chunks[ 1 ]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Parallel Inductance") == true ){
+                    parallelInductance = Chunks[ 1 ];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Series Inductance") == true ){
+                    seriesInductance = Chunks[ 1 ];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Parallel Current Rating") == true ){
+                    parallelCurrentRating = Chunks[ 1 ];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Series Current Rating") == true ){
+                    seriesCurrentRating = Chunks[ 1 ];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Parallel Current Saturation") == true ){
+                    parallelCurrentSaturation = Chunks[ 1 ];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Series Current Saturation") == true ){
+                    seriesCurrentSaturation = Chunks[ 1 ];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Parallel DC Resistance") == true ){
+                    parallelDCResistance = Chunks[ 1 ];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Series DC Resistance") == true ){
+                    seriesDCResistance = Chunks[ 1 ];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Operating Temp") == true ){
+                    operatingTemp = Chunks[ 1 ];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Shielding") == true ){
+                    shielding = ArrayInductorShielding.valueOf( Chunks[ 1 ]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Rating") == true ){
+                    rating = InductorRating.valueOf( Chunks[ 1 ]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Height") == true ){
+                    height = Chunks[ 1 ];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Size") == true ){
+                    size = Chunks[ 1 ];
+                } else {
+                    System.out.println("Error: Invalid field passed!");
+                }
+            }
+        }
+                    
+        return( arraysAndSignalTransformer );
+    }
+    
     /**
      * @return the coilNumber
      */
@@ -876,7 +1093,6 @@ final class FixedInductorInfo extends InductorCoilAndChokesInfo {
         String tolerance = "";
         InductorMountingType mount = InductorMountingType.Unknown;
         String packageCase = "";
-        String operationTemp = "";
         //FixedInductor
         String coreMaterial = "";
         String inductance = "";
