@@ -1,5 +1,7 @@
 package PMS.V2;
 
+import java.util.regex.Pattern;
+
 /* 
  * File: CapacitorInfo
  * Copy: Copyright (c) 2023 Samuel W. Messer
@@ -110,17 +112,16 @@ public abstract class CapacitorInfo extends ProductInfo{
         String output = "";
         
         output += super.toXML(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-        output += "<CapacitorInfo>\n";
-        output += "     <capacitance>" + this.getCapacitance() + "</capacitance>\n";
-        output += "     <tolerance>" + this.getTolerance() + "</tolerance>\n";
-        output += "     <voltageRating>" + this.getVoltageRating() + "</voltageRating>\n";
-        output += "     <operationTemp>" + this.getOperationTemp() + "</operationTemp>\n";
-        output += "     <size>" + this.getSize() + "</size>\n";
-        output += "     <dielectricMat>" + this.getDielectricMat() + "</dielectricMat>\n";
-        output += "     <mount>" + this.getMount() + "</mount>\n";
-        output += "     <packageCase>" + this.getPackageCase() + "</packageCase>\n";
-        output += "     <seatedHeight>" + this.getSeatedHeight() + "</seatedHeight>\n";
-        output += "</CapacitorInfo>\n";
+        output += "     <CapacitorInfo>\n";
+        output += "         <capacitance>" + this.getCapacitance() + "</capacitance>\n";
+        output += "         <tolerance>" + this.getTolerance() + "</tolerance>\n";
+        output += "         <voltageRating>" + this.getVoltageRating() + "</voltageRating>\n";
+        output += "         <operationTemp>" + this.getOperationTemp() + "</operationTemp>\n";
+        output += "         <size>" + this.getSize() + "</size>\n";
+        output += "         <dielectricMat>" + this.getDielectricMat() + "</dielectricMat>\n";
+        output += "         <mount>" + this.getMount() + "</mount>\n";
+        output += "         <packageCase>" + this.getPackageCase() + "</packageCase>\n";
+        output += "         <seatedHeight>" + this.getSeatedHeight() + "</seatedHeight>\n";
         
         
         return( output );
@@ -325,12 +326,14 @@ final class EDLCAndSupercapactiorInfo extends CapacitorInfo{
         String output = "";
         
         output += super.toXML(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-        output += "<EDLCAndSupercapacitorInfo>\n";
-        output += "     <equivalentSeriesResistance>" + this.getEquivalentSeriesResistance() + "</equivalentSeriesResistance>\n";
-        output += "     <lifetimeAtTemp>" + this.getLifetimeAtTemp() + "</lifetimeAtTemp>\n";
-        output += "     <termination>" + this.getTermination() + "</termination>\n";
-        output += "     <leadSpacing>" + this.getLeadSpacing() + "</leadSpacing>\n";
-        output += "</EDLCAndSupercapacitorInfo>\n";
+        output += "         <EDLCAndSupercapacitorInfo>\n";
+        output += "             <equivalentSeriesResistance>" + this.getEquivalentSeriesResistance() + "</equivalentSeriesResistance>\n";
+        output += "             <lifetimeAtTemp>" + this.getLifetimeAtTemp() + "</lifetimeAtTemp>\n";
+        output += "             <termination>" + this.getTermination() + "</termination>\n";
+        output += "             <leadSpacing>" + this.getLeadSpacing() + "</leadSpacing>\n";
+        output += "         </EDLCAndSupercapacitorInfo>\n";
+        output += "     </CapacitorInfo>\n";
+        output += "</ProductInfo>\n";
         
         return(output);
     }
@@ -377,7 +380,7 @@ final class EDLCAndSupercapactiorInfo extends CapacitorInfo{
         } else {
             //Split line based on comma
             Chunks = input.split(",");
-            if ( Chunks.length == 24 ){
+            if ( Chunks.length == 26 ){
                 //Assign all parameters
                 //ProductInfo Params
                 id = Chunks[ 0 ];
@@ -414,8 +417,331 @@ final class EDLCAndSupercapactiorInfo extends CapacitorInfo{
                 //Param validation -> constructor
                 edlcAndSupercapacitor = new EDLCAndSupercapactiorInfo(equivalentSeriesResistance, lifetimeAtTemp, termination, 
                         leadSpacing, capacitance, tolerance, voltageRating, operationTemp, size, dielectricMat, mount, packageCase,
-                        seatedHeight, id, name, description, id, mfgPartNum, series, qtyAvailable, price);
+                        seatedHeight, id, name, description, manufacturer, mfgPartNum, series, qtyAvailable, price);
                 
+            }
+            
+        }
+        
+        return( edlcAndSupercapacitor );
+    }
+    
+    public static EDLCAndSupercapactiorInfo fromCustom( String input ) throws Exception {
+        EDLCAndSupercapactiorInfo edlcAndSupercapacitor = new EDLCAndSupercapactiorInfo();
+        String[] Chunks;
+        String[] Lines;
+        String line;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //Capacitor
+        String capacitance = "";
+        String tolerance = "";
+        String voltageRating = "";
+        String operationTemp = "";
+        String size = "";
+        String dielectricMat = "";
+        CapacitorMountingType mount = CapacitorMountingType.Unknown;
+        String packageCase = "";
+        String seatedHeight = "";
+        //EDLCAndSupercapacitor
+        String equivalentSeriesResistance = "";
+        String lifetimeAtTemp = "";
+        String termination = "";
+        String leadSpacing = "";
+        
+        if ( input == null ){
+            throw new Exception("Error: Null input passed!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string passed!");
+        } else {
+            //Splitting the input into line segments
+            Lines = input.split("\\n");
+            for ( int index = 0; index < Lines.length; index++ ){
+                //Getting a singlular line segment
+                line = Lines[ index ];
+                //Getting the parts of each segment
+                Chunks = line.split(": ");
+                if ( Chunks[ 1 ].length() == 0 ){
+                    System.out.println("Error: Zero length value was provided!");
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Item Id") == true ){
+                    id = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Name") == true ){
+                    name = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Description") == true ){
+                    description = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer") == true ){
+                    manufacturer = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer Part Number") == true ){
+                    mfgPartNum = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Series") == true ){
+                    series = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Availability") == true ){
+                    stock = StockOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Product Status") == true ){
+                    status = ProductStatus.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Media") == true ){
+                    media = MediaOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Environmental Options") == true ){
+                    hazard = EnvironmentalOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Packaging") == true ){
+                    packageCase = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Quantity") == true ){
+                    qtyAvailable = Integer.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Price") == true ){
+                    price = Double.parseDouble( Chunks[1]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Capacitance") == true ){
+                    capacitance = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Tolerance") == true ){
+                    tolerance = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Voltage Rating") == true ){
+                    voltageRating = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Operating Temperature") == true ){
+                    operationTemp = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Size") == true ){
+                    size = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Dielectric Material") == true ){
+                    dielectricMat = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Mount") == true ){
+                    mount = CapacitorMountingType.valueOf(Chunks[1]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Package Case") == true ){
+                    packageCase = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Seated Height") == true ){
+                    seatedHeight = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Equivalent Series Resistance") == true ){
+                    equivalentSeriesResistance = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Lifetime at Temp") == true ){
+                    lifetimeAtTemp = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Termination") == true ){
+                    termination = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Lead Spacing") == true ){
+                    leadSpacing = Chunks[1];
+                } else {
+                    System.out.println("Error: Invalid field passed!");
+                }
+            }
+            edlcAndSupercapacitor = new EDLCAndSupercapactiorInfo(equivalentSeriesResistance, lifetimeAtTemp, termination,
+                    leadSpacing, capacitance, tolerance, voltageRating, operationTemp, size, dielectricMat,
+                    mount, packageCase, seatedHeight, id, name, description, manufacturer, mfgPartNum, series, qtyAvailable, price);
+            
+        }
+        
+        return( edlcAndSupercapacitor );
+    }
+    
+    public static EDLCAndSupercapactiorInfo fromXML( String input ) throws Exception {
+        EDLCAndSupercapactiorInfo edlcAndSupercapacitor = new EDLCAndSupercapactiorInfo();
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //Capacitor
+        String capacitance = "";
+        String tolerance = "";
+        String voltageRating = "";
+        String operationTemp = "";
+        String size = "";
+        String dielectricMat = "";
+        CapacitorMountingType mount = CapacitorMountingType.Unknown;
+        String packageCase = "";
+        String seatedHeight = "";
+        //EDLCAndSupercapacitor
+        String equivalentSeriesResistance = "";
+        String lifetimeAtTemp = "";
+        String termination = "";
+        String leadSpacing = "";
+        
+        //Parsing input using regex
+        java.util.regex.Pattern regex = java.util.regex.Pattern.compile("<ProductInfo>(.*)</ProductInfo>");
+        //Matching the Pattern
+        java.util.regex.Matcher matcher = regex.matcher( input );
+        
+        //Looping through the groups captured using pattern matching
+        for ( int index = 0; index < matcher.groupCount(); index++){
+            //Testing to find match
+            if ( matcher.find() == true ){
+                //Pattern match for each of the fields in the Object
+                regex = Pattern.compile("<itemId>(.*)</itemId>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    id = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<name>(.*)</name>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    name = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<description>(.*)</description>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    description = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<manufacturer>(.*)</manufacturer>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    manufacturer = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mfgPartNumber>(.*)</mfgPartNumber>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mfgPartNum = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<series>(.*)</series>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    series = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<availability>(.*)</availability>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    stock = StockOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<status>(.*)</status>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    status = ProductStatus.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<media>(.*)</media>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    media = MediaOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<hazards>(.*)</hazards>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    hazard = EnvironmentalOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<shippingPackage>(.*)</shippingPackage>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    shippingBox = PackageOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<qtyAvailabile>(.*)</qtyAvailable>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    qtyAvailable = Integer.parseInt(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<price>(.*)</price>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    price = Double.parseDouble(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<capacitance>(.*)</capacitance>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    capacitance = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<tolerance>(.*)</tolerance>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    tolerance = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<voltageRating>(.*)</voltageRating>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    voltageRating = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<operationTemp>(.*)</operationTemp>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    operationTemp = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<size>(.*)</size>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    size = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<dielectricMat>(.*)</dielectricMat>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    dielectricMat = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mount>(.*)</mount>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mount = CapacitorMountingType.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<packageCase>(.*)</packageCase>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    packageCase = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<seatedHeight>(.*)</seatedHeight>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    seatedHeight = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<equivalentSeriesResistance>(.*)</equivalentSeriesResistance>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    equivalentSeriesResistance = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<lifetimeAtTemp>(.*)</lifetimeAtTemp>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    lifetimeAtTemp = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<termination>(.*)</termination>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    termination = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<leadSpacing>(.*)</leadSpacing>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    leadSpacing = matcher.group(1);
+                }
+                
+                edlcAndSupercapacitor = new EDLCAndSupercapactiorInfo(equivalentSeriesResistance,
+                        lifetimeAtTemp, termination, leadSpacing, capacitance, tolerance,
+                        voltageRating, operationTemp, size, dielectricMat, mount, packageCase,
+                        seatedHeight, id, name, manufacturer, id, mfgPartNum, series, qtyAvailable, price);
             }
         }
         
@@ -533,10 +859,12 @@ final class MicaAndPTFEInfo extends CapacitorInfo{
         String output = "";
         
         output += super.toXML(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-        output += "<MicaAndPTFEInfo>\n";
-        output += "     <leadSpacing>" + this.getLeadSpacing() + "</leadSpacing>\n";
-        output += "     <features>" + this.getFeatures() + "</features>\n";
-        output += "</MicaAndPTFEInfo>\n";
+        output += "         <MicaAndPTFEInfo>\n";
+        output += "             <leadSpacing>" + this.getLeadSpacing() + "</leadSpacing>\n";
+        output += "             <features>" + this.getFeatures() + "</features>\n";
+        output += "         </MicaAndPTFEInfo>\n";
+        output += "     </CapacitorInfo>\n";
+        output += "</ProductInfo>\n";
         
         return(output);
     }
@@ -570,8 +898,8 @@ final class MicaAndPTFEInfo extends CapacitorInfo{
         String packageCase = "";
         String seatedHeight = "";
         //MicaAndPTFE
-        String leadSpacing;
-        String features;
+        String leadSpacing = "";
+        String features = "";
         
         //Validate input 
         if ( input == null ){
@@ -616,9 +944,312 @@ final class MicaAndPTFEInfo extends CapacitorInfo{
                 //Param Validation -> constructor
                 micaAndPTFE = new MicaAndPTFEInfo(leadSpacing, features, capacitance, tolerance, voltageRating,
                         operationTemp, size, dielectricMat, mount, packageCase, seatedHeight, 
-                        id, name, description, id, mfgPartNum, series, qtyAvailable, price);
+                        id, name, description, manufacturer, mfgPartNum, series, qtyAvailable, price);
             }
             
+        }
+        
+        return( micaAndPTFE );
+    }
+    
+    public static MicaAndPTFEInfo fromCustom( String input ) throws Exception {
+        MicaAndPTFEInfo micaAndPTFE = new MicaAndPTFEInfo();
+        String[] Chunks;
+        String[] Lines;
+        String line;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //Capacitor
+        String capacitance = "";
+        String tolerance = "";
+        String voltageRating = "";
+        String operationTemp = "";
+        String size = "";
+        String dielectricMat = "";
+        CapacitorMountingType mount = CapacitorMountingType.Unknown;
+        String packageCase = "";
+        String seatedHeight = "";
+        //MicaAndPTFE
+        String leadSpacing = "";
+        String features = "";
+        
+        if ( input == null ){
+            throw new Exception("Error: Null input passed!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string passed!");
+        } else {
+            //Splitting the input into line segments
+            Lines = input.split("\\n");
+            for ( int index = 0; index < Lines.length; index++ ){
+                //Getting a singlular line segment
+                line = Lines[ index ];
+                //Getting the parts of each segment
+                Chunks = line.split(": ");
+                if ( Chunks[ 1 ].length() == 0 ){
+                    System.out.println("Error: Zero length value was provided!");
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Item Id") == true ){
+                    id = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Name") == true ){
+                    name = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Description") == true ){
+                    description = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer") == true ){
+                    manufacturer = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer Part Number") == true ){
+                    mfgPartNum = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Series") == true ){
+                    series = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Availability") == true ){
+                    stock = StockOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Product Status") == true ){
+                    status = ProductStatus.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Media") == true ){
+                    media = MediaOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Environmental Options") == true ){
+                    hazard = EnvironmentalOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Packaging") == true ){
+                    packageCase = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Quantity") == true ){
+                    qtyAvailable = Integer.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Price") == true ){
+                    price = Double.parseDouble( Chunks[1]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Capacitance") == true ){
+                    capacitance = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Tolerance") == true ){
+                    tolerance = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Voltage Rating") == true ){
+                    voltageRating = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Operating Temperature") == true ){
+                    operationTemp = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Size") == true ){
+                    size = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Dielectric Material") == true ){
+                    dielectricMat = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Mount") == true ){
+                    mount = CapacitorMountingType.valueOf(Chunks[1]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Package Case") == true ){
+                    packageCase = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Seated Height") == true ){
+                    seatedHeight = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Lead Spacing") == true ){
+                    leadSpacing = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Features") == true ){
+                    features = Chunks[1];
+                } else {
+                    System.out.println("Error: Invalid field provided");
+                }
+                
+            }
+            
+            micaAndPTFE = new MicaAndPTFEInfo(leadSpacing, features, capacitance, tolerance,
+                    voltageRating, operationTemp, size, dielectricMat, mount, packageCase,
+                    seatedHeight, id, name, description, manufacturer, mfgPartNum, series, qtyAvailable, price);
+            
+        }
+        
+        return( micaAndPTFE );
+    }
+    
+    public static MicaAndPTFEInfo fromXML( String input ) throws Exception{
+        MicaAndPTFEInfo micaAndPTFE = new MicaAndPTFEInfo();
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //Capacitor
+        String capacitance = "";
+        String tolerance = "";
+        String voltageRating = "";
+        String operationTemp = "";
+        String size = "";
+        String dielectricMat = "";
+        CapacitorMountingType mount = CapacitorMountingType.Unknown;
+        String packageCase = "";
+        String seatedHeight = "";
+        //MicaAndPTFE
+        String leadSpacing = "";
+        String features = "";
+        
+        //Parsing input using regex
+        java.util.regex.Pattern regex = java.util.regex.Pattern.compile("<ProductInfo>(.*)</ProductInfo>");
+        //Matching the Pattern
+        java.util.regex.Matcher matcher = regex.matcher( input );
+        
+        //Looping through the groups captured using pattern matching
+        for ( int index = 0; index < matcher.groupCount(); index++){
+            //Testing to find match
+            if ( matcher.find() == true ){
+                //Pattern match for each of the fields in the Object
+                regex = Pattern.compile("<itemId>(.*)</itemId>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    id = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<name>(.*)</name>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    name = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<description>(.*)</description>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    description = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<manufacturer>(.*)</manufacturer>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    manufacturer = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mfgPartNumber>(.*)</mfgPartNumber>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mfgPartNum = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<series>(.*)</series>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    series = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<availability>(.*)</availability>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    stock = StockOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<status>(.*)</status>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    status = ProductStatus.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<media>(.*)</media>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    media = MediaOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<hazards>(.*)</hazards>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    hazard = EnvironmentalOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<shippingPackage>(.*)</shippingPackage>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    shippingBox = PackageOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<qtyAvailabile>(.*)</qtyAvailable>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    qtyAvailable = Integer.parseInt(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<price>(.*)</price>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    price = Double.parseDouble(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<capacitance>(.*)</capacitance>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    capacitance = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<tolerance>(.*)</tolerance>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    tolerance = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<voltageRating>(.*)</voltageRating>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    voltageRating = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<operationTemp>(.*)</operationTemp>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    operationTemp = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<size>(.*)</size>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    size = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<dielectricMat>(.*)</dielectricMat>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    dielectricMat = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mount>(.*)</mount>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mount = CapacitorMountingType.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<packageCase>(.*)</packageCase>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    packageCase = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<seatedHeight>(.*)</seatedHeight>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    seatedHeight = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<leadSpacing>(.*)</leadSpacing>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    leadSpacing = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<features>(.*)</features>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    features = matcher.group(1);
+                }
+                
+                micaAndPTFE = new MicaAndPTFEInfo(leadSpacing, series, capacitance, tolerance,
+                        voltageRating, operationTemp, size, dielectricMat, mount, packageCase,
+                        seatedHeight, id, name, description, manufacturer, mfgPartNum, series, qtyAvailable, price);
+            }
         }
         
         return( micaAndPTFE );
@@ -722,13 +1353,15 @@ final class NetworksAndArraysInfo extends CapacitorInfo{
         String output = "";
         
         output += super.toXML(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-        output += "<NetworksAndArraysInfo>\n";
-        output += "     <capacitorCount>" + this.getCapacitorCount() + "</capacitorCount>\n";
-        output += "     <tempCoefficient>" + this.getTempCoefficient() + "</tempCoefficient>\n";
-        output += "     <supplierDevicePackage>" + this.getSupplierDevicePackage() + "</supplierDevicePackage>\n";
-        output += "     <rating>" + this.getRating() + "</rating>\n";
-        output += "     <circuit>" + this.getCircuit() + "</circuit>\n";
-        output += "</NetworksAndArraysInfo>\n";
+        output += "         <NetworksAndArraysInfo>\n";
+        output += "             <capacitorCount>" + this.getCapacitorCount() + "</capacitorCount>\n";
+        output += "             <tempCoefficient>" + this.getTempCoefficient() + "</tempCoefficient>\n";
+        output += "             <supplierDevicePackage>" + this.getSupplierDevicePackage() + "</supplierDevicePackage>\n";
+        output += "             <rating>" + this.getRating() + "</rating>\n";
+        output += "             <circuit>" + this.getCircuit() + "</circuit>\n";
+        output += "         </NetworksAndArraysInfo>\n";
+        output += "     </CapacitorInfo>\n";
+        output += "</ProductInfo>\n";
         
         
         return(output);
@@ -814,7 +1447,7 @@ final class NetworksAndArraysInfo extends CapacitorInfo{
                 //Param Validation -> constructor
                 networkAndArray = new NetworksAndArraysInfo(capacitorCount, tempCoefficient, supplierDevicePackage,
                         rating, circuit, capacitance, tolerance, voltageRating, operationTemp, size, dielectricMat,
-                        mount, packageCase, seatedHeight, id, name, description, id, mfgPartNum, series,
+                        mount, packageCase, seatedHeight, id, name, description, manufacturer, mfgPartNum, series,
                         qtyAvailable, price);
             }
         }
@@ -822,6 +1455,341 @@ final class NetworksAndArraysInfo extends CapacitorInfo{
         return( networkAndArray );
     }
 
+    public static NetworksAndArraysInfo fromCustom( String input ) throws Exception {
+        NetworksAndArraysInfo networkAndArray = new NetworksAndArraysInfo();
+        String[] Chunks;
+        String[] Lines;
+        String line;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //Capacitor
+        String capacitance = "";
+        String tolerance = "";
+        String voltageRating = "";
+        String operationTemp = "";
+        String size = "";
+        String dielectricMat = "";
+        CapacitorMountingType mount = CapacitorMountingType.Unknown;
+        String packageCase = "";
+        String seatedHeight = "";
+        //NetworkAndArray
+        int capacitorCount = 0;
+        String tempCoefficient = "";
+        String supplierDevicePackage = "";
+        CapacitorRatings rating = CapacitorRatings.Unknown;
+        CapacitorCircuitType circuit = CapacitorCircuitType.Unknown;
+        
+        if ( input == null ){
+            throw new Exception("Error: Null input passed!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string passed!");
+        } else {
+            //Splitting the input into line segments
+            Lines = input.split("\\n");
+            for ( int index = 0; index < Lines.length; index++ ){
+                //Getting a singlular line segment
+                line = Lines[ index ];
+                //Getting the parts of each segment
+                Chunks = line.split(": ");
+                if ( Chunks[ 1 ].length() == 0 ){
+                    System.out.println("Error: Zero length value was provided!");
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Item Id") == true ){
+                    id = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Name") == true ){
+                    name = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Description") == true ){
+                    description = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer") == true ){
+                    manufacturer = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer Part Number") == true ){
+                    mfgPartNum = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Series") == true ){
+                    series = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Availability") == true ){
+                    stock = StockOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Product Status") == true ){
+                    status = ProductStatus.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Media") == true ){
+                    media = MediaOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Environmental Options") == true ){
+                    hazard = EnvironmentalOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Packaging") == true ){
+                    packageCase = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Quantity") == true ){
+                    qtyAvailable = Integer.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Price") == true ){
+                    price = Double.parseDouble( Chunks[1]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Capacitance") == true ){
+                    capacitance = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Tolerance") == true ){
+                    tolerance = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Voltage Rating") == true ){
+                    voltageRating = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Operating Temperature") == true ){
+                    operationTemp = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Size") == true ){
+                    size = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Dielectric Material") == true ){
+                    dielectricMat = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Mount") == true ){
+                    mount = CapacitorMountingType.valueOf(Chunks[1]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Package Case") == true ){
+                    packageCase = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Seated Height") == true ){
+                    seatedHeight = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Capacitor Count") == true ){
+                    capacitorCount = Integer.parseInt( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Temperature Coefficient") == true ){
+                    tempCoefficient = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Supplier Device Package") == true ){
+                    supplierDevicePackage = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Rating") == true ){
+                    rating = CapacitorRatings.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Circuit") == true ){
+                    circuit = CapacitorCircuitType.valueOf( Chunks[1] );
+                } else {
+                    System.out.println("Error: Invalid field passed!");
+                }
+            }
+
+            networkAndArray = new NetworksAndArraysInfo(capacitorCount, tempCoefficient, supplierDevicePackage,
+                    rating, circuit, capacitance, tolerance, voltageRating,
+                    operationTemp, size, dielectricMat, mount, packageCase,
+                    seatedHeight, id, name, description, manufacturer, mfgPartNum, series, qtyAvailable, price);
+        }                     
+                
+        return( networkAndArray );
+    }
+    
+    public static NetworksAndArraysInfo fromXML( String input ) throws Exception {
+        NetworksAndArraysInfo networkAndArray = new NetworksAndArraysInfo();
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //Capacitor
+        String capacitance = "";
+        String tolerance = "";
+        String voltageRating = "";
+        String operationTemp = "";
+        String size = "";
+        String dielectricMat = "";
+        CapacitorMountingType mount = CapacitorMountingType.Unknown;
+        String packageCase = "";
+        String seatedHeight = "";
+        //NetworkAndArray
+        int capacitorCount = 0;
+        String tempCoefficient = "";
+        String supplierDevicePackage = "";
+        CapacitorRatings rating = CapacitorRatings.Unknown;
+        CapacitorCircuitType circuit = CapacitorCircuitType.Unknown;
+        
+        //Parsing input using regex
+        java.util.regex.Pattern regex = java.util.regex.Pattern.compile("<ProductInfo>(.*)</ProductInfo>");
+        //Matching the Pattern
+        java.util.regex.Matcher matcher = regex.matcher( input );
+        
+        //Looping through the groups captured using pattern matching
+        for ( int index = 0; index < matcher.groupCount(); index++){
+            //Testing to find match
+            if ( matcher.find() == true ){
+                //Pattern match for each of the fields in the Object
+                regex = Pattern.compile("<itemId>(.*)</itemId>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    id = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<name>(.*)</name>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    name = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<description>(.*)</description>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    description = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<manufacturer>(.*)</manufacturer>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    manufacturer = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mfgPartNumber>(.*)</mfgPartNumber>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mfgPartNum = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<series>(.*)</series>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    series = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<availability>(.*)</availability>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    stock = StockOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<status>(.*)</status>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    status = ProductStatus.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<media>(.*)</media>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    media = MediaOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<hazards>(.*)</hazards>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    hazard = EnvironmentalOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<shippingPackage>(.*)</shippingPackage>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    shippingBox = PackageOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<qtyAvailabile>(.*)</qtyAvailable>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    qtyAvailable = Integer.parseInt(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<price>(.*)</price>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    price = Double.parseDouble(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<capacitance>(.*)</capacitance>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    capacitance = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<tolerance>(.*)</tolerance>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    tolerance = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<voltageRating>(.*)</voltageRating>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    voltageRating = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<operationTemp>(.*)</operationTemp>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    operationTemp = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<size>(.*)</size>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    size = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<dielectricMat>(.*)</dielectricMat>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    dielectricMat = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mount>(.*)</mount>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mount = CapacitorMountingType.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<packageCase>(.*)</packageCase>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    packageCase = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<seatedHeight>(.*)</seatedHeight>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    seatedHeight = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<capacitorCount>(.*)</capacitorCount>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    capacitorCount = Integer.parseInt(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<tempCoefficient>(.*)</tempCoefficient>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    tempCoefficient = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<supplierDevicePackage>(.*)</supplierDevicePackage>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    supplierDevicePackage = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<rating>(.*)</rating>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    rating = CapacitorRatings.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<circuit>(.*)</circuit>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    circuit = CapacitorCircuitType.valueOf(matcher.group(1));
+                }
+                
+                networkAndArray = new NetworksAndArraysInfo(capacitorCount, tempCoefficient,
+                        supplierDevicePackage, rating, circuit, capacitance, tolerance,
+                        voltageRating, operationTemp, size, dielectricMat, mount, packageCase,
+                        seatedHeight, id, name, description, manufacturer, mfgPartNum, series, qtyAvailable,
+                        price);
+                
+            }
+        }
+        
+        return( networkAndArray );
+    }
+    
     /**
      * @return the capacitorCount
      */
@@ -959,12 +1927,14 @@ final class TrimmerAndVariableInfo extends CapacitorInfo{
         String output = "";
         
         output += super.toXML(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-        output += "<TrimmerAndVariableInfo>\n";
-        output += "     <capacitanceRange>" + this.getCapacitanceRange() + "</capacitanceRange>\n";
-        output += "     <adjustmentType>" + this.getAdjustmentType() + "</adjustmentType>\n";
-        output += "     <qAtFreq>" + this.getqAtFreq() + "</qAtFreq>\n";
-        output += "     <features>" + this.getFeatures() + "</features>\n";
-        output += "</TrimmerAndVariableInfo>\n";
+        output += "         <TrimmerAndVariableInfo>\n";
+        output += "             <capacitanceRange>" + this.getCapacitanceRange() + "</capacitanceRange>\n";
+        output += "             <adjustmentType>" + this.getAdjustmentType() + "</adjustmentType>\n";
+        output += "             <qAtFreq>" + this.getqAtFreq() + "</qAtFreq>\n";
+        output += "             <features>" + this.getFeatures() + "</features>\n";
+        output += "         </TrimmerAndVariableInfo>\n";
+        output += "     </CapacitorInfo>\n";
+        output += "</ProductInfo>\n";
         
         return(output);
     }
@@ -1048,7 +2018,7 @@ final class TrimmerAndVariableInfo extends CapacitorInfo{
                 trimmerAndVariableInfo = new TrimmerAndVariableInfo(capacitanceRange, adjustmentType, qAtFreq,
                         features, capacitance, tolerance, voltageRating, operationTemp, 
                         size, dielectricMat, mount, packageCase, seatedHeight, id, name, 
-                        description, id, mfgPartNum, series, qtyAvailable, price);
+                        description, manufacturer, mfgPartNum, series, qtyAvailable, price);
                 
             }
         }
@@ -1056,12 +2026,331 @@ final class TrimmerAndVariableInfo extends CapacitorInfo{
         return( trimmerAndVariableInfo );
     }
     
-    public TrimmerAndVariableInfo fromCustom( String input ){
+    public TrimmerAndVariableInfo fromCustom( String input ) throws Exception {
         TrimmerAndVariableInfo trimmerAndVariable = new TrimmerAndVariableInfo();
+        String[] Chunks;
+        String[] Lines;
+        String line;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //Capacitor
+        String capacitance = "";
+        String tolerance = "";
+        String voltageRating = "";
+        String operationTemp = "";
+        String size = "";
+        String dielectricMat = "";
+        CapacitorMountingType mount = CapacitorMountingType.Unknown;
+        String packageCase = "";
+        String seatedHeight = "";
+        //TrimmerAndVariableInfo
+        String capacitanceRange = "";
+        String adjustmentType = "";
+        String qAtFreq = "";
+        String features = "";
         
+        if ( input == null ){
+            throw new Exception("Error: Null input passed!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string passed!");
+        } else {
+            //Splitting the input into line segments
+            Lines = input.split("\\n");
+            for ( int index = 0; index < Lines.length; index++ ){
+                //Getting a singlular line segment
+                line = Lines[ index ];
+                //Getting the parts of each segment
+                Chunks = line.split(": ");
+                if ( Chunks[ 1 ].length() == 0 ){
+                    System.out.println("Error: Zero length value was provided!");
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Item Id") == true ){
+                    id = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Name") == true ){
+                    name = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Description") == true ){
+                    description = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer") == true ){
+                    manufacturer = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer Part Number") == true ){
+                    mfgPartNum = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Series") == true ){
+                    series = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Availability") == true ){
+                    stock = StockOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Product Status") == true ){
+                    status = ProductStatus.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Media") == true ){
+                    media = MediaOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Environmental Options") == true ){
+                    hazard = EnvironmentalOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Packaging") == true ){
+                    packageCase = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Quantity") == true ){
+                    qtyAvailable = Integer.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Price") == true ){
+                    price = Double.parseDouble( Chunks[1]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Capacitance") == true ){
+                    capacitance = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Tolerance") == true ){
+                    tolerance = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Voltage Rating") == true ){
+                    voltageRating = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Operating Temperature") == true ){
+                    operationTemp = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Size") == true ){
+                    size = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Dielectric Material") == true ){
+                    dielectricMat = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Mount") == true ){
+                    mount = CapacitorMountingType.valueOf(Chunks[1]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Package Vase") == true ){
+                    packageCase = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Seated Height") == true ){
+                    seatedHeight = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Capacitance Range") == true ){
+                    capacitanceRange = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Adjustment Type") == true ){
+                    adjustmentType = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Q at Frequency") == true ){
+                    qAtFreq = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Features") == true ){
+                    features = Chunks[1];
+                } else {
+                    System.out.println("Error: Invalid field passed!");
+                }
+                
+            }
+            trimmerAndVariable = new TrimmerAndVariableInfo(capacitanceRange, adjustmentType, qAtFreq,
+                        features, capacitance, tolerance, voltageRating, operationTemp, size,
+                        dielectricMat, mount, packageCase, seatedHeight, id, name,
+                        description, manufacturer, mfgPartNum, series, qtyAvailable, price);
+        }
+                
         return( trimmerAndVariable );
     }
 
+    public static TrimmerAndVariableInfo fromXML( String input ) throws Exception {
+        TrimmerAndVariableInfo trimmerAndVariable = new TrimmerAndVariableInfo();
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //Capacitor
+        String capacitance = "";
+        String tolerance = "";
+        String voltageRating = "";
+        String operationTemp = "";
+        String size = "";
+        String dielectricMat = "";
+        CapacitorMountingType mount = CapacitorMountingType.Unknown;
+        String packageCase = "";
+        String seatedHeight = "";
+        //TrimmerAndVariableInfo
+        String capacitanceRange = "";
+        String adjustmentType = "";
+        String qAtFreq = "";
+        String features = "";
+        
+        
+        //Parsing input using regex
+        java.util.regex.Pattern regex = java.util.regex.Pattern.compile("<ProductInfo>(.*)</ProductInfo>");
+        //Matching the Pattern
+        java.util.regex.Matcher matcher = regex.matcher( input );
+        
+        //Looping through the groups captured using pattern matching
+        for ( int index = 0; index < matcher.groupCount(); index++){
+            //Testing to find match
+            if ( matcher.find() == true ){
+                //Pattern match for each of the fields in the Object
+                regex = Pattern.compile("<itemId>(.*)</itemId>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    id = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<name>(.*)</name>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    name = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<description>(.*)</description>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    description = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<manufacturer>(.*)</manufacturer>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    manufacturer = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mfgPartNumber>(.*)</mfgPartNumber>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mfgPartNum = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<series>(.*)</series>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    series = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<availability>(.*)</availability>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    stock = StockOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<status>(.*)</status>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    status = ProductStatus.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<media>(.*)</media>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    media = MediaOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<hazards>(.*)</hazards>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    hazard = EnvironmentalOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<shippingPackage>(.*)</shippingPackage>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    shippingBox = PackageOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<qtyAvailabile>(.*)</qtyAvailable>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    qtyAvailable = Integer.parseInt(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<price>(.*)</price>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    price = Double.parseDouble(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<capacitance>(.*)</capacitance>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    capacitance = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<tolerance>(.*)</tolerance>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    tolerance = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<voltageRating>(.*)</voltageRating>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    voltageRating = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<operationTemp>(.*)</operationTemp>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    operationTemp = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<size>(.*)</size>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    size = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<dielectricMat>(.*)</dielectricMat>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    dielectricMat = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mount>(.*)</mount>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mount = CapacitorMountingType.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<packageCase>(.*)</packageCase>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    packageCase = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<seatedHeight>(.*)</seatedHeight>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    seatedHeight = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<capacitanceRange>(.*)</capacitanceRange>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    capacitanceRange = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<adjustmentType>(.*)</adjustmentType>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    adjustmentType = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<qAtFreq>(.*)</qAtFreq>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    qAtFreq = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<features>(.*)</features>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    features = matcher.group(1);
+                }
+                
+                trimmerAndVariable = new TrimmerAndVariableInfo(capacitanceRange, adjustmentType,
+                        qAtFreq, features, capacitance, tolerance, voltageRating, operationTemp,
+                        size, dielectricMat, mount, packageCase, seatedHeight, id, name,
+                        description, manufacturer, mfgPartNum, series, qtyAvailable, price);
+                
+            }
+        }
+        
+        return( trimmerAndVariable );
+    }
+    
     /**
      * @return the capacitanceRange
      */

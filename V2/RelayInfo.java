@@ -1,5 +1,7 @@
 package PMS.V2;
 
+import java.util.regex.Pattern;
+
 /* 
  * File: RelayInfo
  * Copy: Copyright (c) 2023 Samuel W. Messer
@@ -91,18 +93,18 @@ public abstract class RelayInfo extends ProductInfo {
         String output = "";
         
         output += super.toXML(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-        output += "<RelayInfo>\n";
-        output += "     <contactCurrentRating>" + this.getContactCurrentRating() + "</contactCurrentRating>\n";
-        output += "     <mustOperateVolt>" + this.getMustOperateVolt() + "</mustOperateVolt>\n";
-        output += "     <mustReleaseVolt>" + this.getMustReleaseVolt() + "</mustReleaseVolt>\n";
-        output += "     <operateTime>" + this.getOperateTime() + "</operateTime>\n";
-        output += "     <releaseTime>" + this.getReleaseTime() + "</releaseTime>\n";
-        output += "     <features>" + this.getFeatures() + "</features>\n";
-        output += "     <terminationStyle>" + this.getTerminationStyle() + "</terminationStyle>\n";
-        output += "     <operationTemp>" + this.getOperationTemp() + "</operationTemp>\n";
-        output += "     <coilVoltage>" + this.getCoilVoltage() + "</coilVoltage>\n";
-        output += "     <mount>" + this.getMount() + "</mount>\n";
-        output += "</RelayInfo>\n";
+        output += "     <RelayInfo>\n";
+        output += "         <contactCurrentRating>" + this.getContactCurrentRating() + "</contactCurrentRating>\n";
+        output += "         <mustOperateVolt>" + this.getMustOperateVolt() + "</mustOperateVolt>\n";
+        output += "         <mustReleaseVolt>" + this.getMustReleaseVolt() + "</mustReleaseVolt>\n";
+        output += "         <operateTime>" + this.getOperateTime() + "</operateTime>\n";
+        output += "         <releaseTime>" + this.getReleaseTime() + "</releaseTime>\n";
+        output += "         <features>" + this.getFeatures() + "</features>\n";
+        output += "         <terminationStyle>" + this.getTerminationStyle() + "</terminationStyle>\n";
+        output += "         <operationTemp>" + this.getOperationTemp() + "</operationTemp>\n";
+        output += "         <coilVoltage>" + this.getCoilVoltage() + "</coilVoltage>\n";
+        output += "         <mount>" + this.getMount() + "</mount>\n";
+        
         
         return(output);
     }
@@ -293,12 +295,126 @@ final class HighFrequencyRelayInfo extends RelayInfo{
         String output = "";
         
         output += super.toXML(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-        output += "<HighFrequencyRelayInfo>\n";
-        output += "     <contactForm>" + this.getContactForm() + "</contactForm>\n";
-        output += "     <coil>" + this.getCoil() + "</coil>\n";
-        output += "</HighFrequencyRelayInfo>\n";
+        output += "         <HighFrequencyRelayInfo>\n";
+        output += "             <contactForm>" + this.getContactForm() + "</contactForm>\n";
+        output += "             <coil>" + this.getCoil() + "</coil>\n";
+        output += "         </HighFrequencyRelayInfo>\n";
+        output += "     </RelayInfo>\n";
+        output += "</ProductInfo>\n";
         
         return(output);
+    }
+    
+    public static HighFrequencyRelayInfo fromCustom( String input ) throws Exception {
+        HighFrequencyRelayInfo highFreqRelay = new HighFrequencyRelayInfo();
+        String[] Chunks;
+        String[] Lines;
+        String line;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //Relay
+        String contactCurrentRating = "";
+        String mustOperateVolt = "";
+        String mustReleaseVolt = "";
+        String operateTime = "";
+        String releaseTime = "";
+        String features = "";
+        String terminationStyle = "";
+        String operationTemp = "";
+        String coilVoltage = "";
+        RelayMountingType mount = RelayMountingType.Unknown;
+        //HighFrequencyRelay
+        String contactForm = "";
+        RelayCoilType coil = RelayCoilType.Unknown;
+        
+        
+        if ( input == null ){
+            throw new Exception("Error: Null input passed!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string passed!");
+        } else {
+            //Splitting the input into line segments
+            Lines = input.split("\\n");
+            for ( int index = 0; index < Lines.length; index++ ){
+                //Getting a singlular line segment
+                line = Lines[ index ];
+                //Getting the parts of each segment
+                Chunks = line.split(": ");
+                if ( Chunks[ 1 ].length() == 0 ){
+                    System.out.println("Error: Zero length value was provided!");
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Item Id") == true ){
+                    id = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Name") == true ){
+                    name = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Description") == true ){
+                    description = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer") == true ){
+                    manufacturer = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer Part Number") == true ){
+                    mfgPartNum = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Series") == true ){
+                    series = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Availability") == true ){
+                    stock = StockOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Product Status") == true ){
+                    status = ProductStatus.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Media") == true ){
+                    media = MediaOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Environmental Options") == true ){
+                    hazard = EnvironmentalOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Packaging") == true ){
+                    shippingBox = PackageOption.valueOf(Chunks[1]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Quantity") == true ){
+                    qtyAvailable = Integer.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Price") == true ){
+                    price = Double.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Contact Current Rating") == true ){
+                    contactCurrentRating =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Must Operate Volt") == true ){
+                    mustOperateVolt =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Must Release Volt") == true ){
+                    mustReleaseVolt =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Operate Time") == true ){
+                    operateTime =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Release Time") == true ){
+                    releaseTime =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Features") == true ){
+                    features =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Termination Style") == true ){
+                    terminationStyle =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Operation Temp") == true ){
+                    operationTemp =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Coil Voltage") == true ){
+                    coilVoltage =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Mount") == true ){
+                    mount =  RelayMountingType.valueOf(Chunks[1]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Contact Form") == true ){
+                    contactForm =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Coil") == true ){
+                    coil =  RelayCoilType.valueOf(Chunks[1]);
+                } else {
+                    System.out.println("Error: Invalid field passed!");
+                }
+            }
+            highFreqRelay = new HighFrequencyRelayInfo(contactForm, coil, contactCurrentRating,
+                    mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, features, terminationStyle,
+                    operationTemp, coilVoltage, mount, id, name, description, manufacturer, mfgPartNum, series, qtyAvailable, price);
+        }
+        
+        
+        return (highFreqRelay);
     }
     
     public static HighFrequencyRelayInfo fromCSV( String input ) throws Exception {
@@ -379,9 +495,210 @@ final class HighFrequencyRelayInfo extends RelayInfo{
                 highFreqRelay = new HighFrequencyRelayInfo(contactForm, coil, contactCurrentRating,
                         mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, 
                         features, terminationStyle, operationTemp, coilVoltage, mount,
-                        id, name, description, id, mfgPartNum, series, qtyAvailable, price);
+                        id, name, description, manufacturer, mfgPartNum, series, qtyAvailable, price);
             }
         }
+        return( highFreqRelay );
+    }
+    
+    public static HighFrequencyRelayInfo fromXML( String input ) throws Exception {
+        HighFrequencyRelayInfo highFreqRelay = new HighFrequencyRelayInfo();
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //Relay
+        String contactCurrentRating = "";
+        String mustOperateVolt = "";
+        String mustReleaseVolt = "";
+        String operateTime = "";
+        String releaseTime = "";
+        String features = "";
+        String terminationStyle = "";
+        String operationTemp = "";
+        String coilVoltage = "";
+        RelayMountingType mount = RelayMountingType.Unknown;
+        //HighFrequencyRelay
+        String contactForm = "";
+        RelayCoilType coil = RelayCoilType.Unknown;
+        
+        
+        
+        //Parsing input using regex
+        java.util.regex.Pattern regex = java.util.regex.Pattern.compile("<ProductInfo>(.*)</ProductInfo>");
+        //Matching the Pattern
+        java.util.regex.Matcher matcher = regex.matcher( input );
+        
+        //Looping through the groups captured using pattern matching
+        for ( int index = 0; index < matcher.groupCount(); index++){
+            //Testing to find match
+            if ( matcher.find() == true ){
+                //Pattern match for each of the fields in the Object
+                regex = Pattern.compile("<itemId>(.*)</itemId>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    id = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<name>(.*)</name>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    name = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<description>(.*)</description>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    description = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<manufacturer>(.*)</manufacturer>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    manufacturer = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mfgPartNumber>(.*)</mfgPartNumber>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mfgPartNum = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<series>(.*)</series>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    series = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<availability>(.*)</availability>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    stock = StockOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<status>(.*)</status>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    status = ProductStatus.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<media>(.*)</media>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    media = MediaOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<hazards>(.*)</hazards>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    hazard = EnvironmentalOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<shippingPackage>(.*)</shippingPackage>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    shippingBox = PackageOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<qtyAvailabile>(.*)</qtyAvailable>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    qtyAvailable = Integer.parseInt(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<price>(.*)</price>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    price = Double.parseDouble(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<contactCurrentRating>(.*)</contactCurrentRating>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    contactCurrentRating = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mustOperateVolt>(.*)</mustOperateVolt>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mustOperateVolt = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mustReleaseVolt>(.*)</mustReleaseVolt>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mustReleaseVolt = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<operateTime>(.*)</operateTime>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    operateTime = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<releaseTime>(.*)</releaseTime>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    releaseTime = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<features>(.*)</featuresd>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    features = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<terminationStyle>(.*)</terminationStyle>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    terminationStyle = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<operationTemp>(.*)</operationTemp>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    operationTemp = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<coilVoltage>(.*)</coilVoltage>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    coilVoltage = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mount>(.*)</mount>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mount = RelayMountingType.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<contactForm>(.*)</contactForm>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    contactForm = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<coil>(.*)</coil>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    coil = RelayCoilType.valueOf(matcher.group(1));
+                }
+            }
+        }
+        highFreqRelay = new HighFrequencyRelayInfo(contactForm, coil, contactCurrentRating,
+                mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, features, terminationStyle,
+                operationTemp, coilVoltage, mount, id, name, description, manufacturer, mfgPartNum, series, qtyAvailable, price);
+        
         return( highFreqRelay );
     }
 
@@ -460,12 +777,126 @@ final class AutomotiveRelayInfo extends RelayInfo{
         String output = "";
         
         output += super.toXML(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-        output += "<AutomotiveRelayInfo>\n";
-        output += "     <coilCurrent>" + this.getCoilCurrent() + "</coilCurrent>\n";
-        output += "     <coil>" + this.getCoil() + "</coil>\n";
-        output += "</AutomotiveRelayInfo>\n";
+        output += "         <AutomotiveRelayInfo>\n";
+        output += "             <coilCurrent>" + this.getCoilCurrent() + "</coilCurrent>\n";
+        output += "             <coil>" + this.getCoil() + "</coil>\n";
+        output += "         </AutomotiveRelayInfo>\n";
+        output += "     </RelayInfo>\n";
+        output += "</ProductInfo>\n";
         
         return(output);
+    }
+    
+    public static AutomotiveRelayInfo fromCustom( String input ) throws Exception {
+        AutomotiveRelayInfo automotiveRelay = new AutomotiveRelayInfo();
+        String[] Chunks;
+        String[] Lines;
+        String line;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //Relay
+        String contactCurrentRating = "";
+        String mustOperateVolt = "";
+        String mustReleaseVolt = "";
+        String operateTime = "";
+        String releaseTime = "";
+        String features = "";
+        String terminationStyle = "";
+        String operationTemp = "";
+        String coilVoltage = "";
+        RelayMountingType mount = RelayMountingType.Unknown;
+        //AutomotiveRelay
+        String coilCurrent = "";
+        RelayCoilType coil = RelayCoilType.Unknown;
+        
+        
+        if ( input == null ){
+            throw new Exception("Error: Null input passed!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string passed!");
+        } else {
+            //Splitting the input into line segments
+            Lines = input.split("\\n");
+            for ( int index = 0; index < Lines.length; index++ ){
+                //Getting a singlular line segment
+                line = Lines[ index ];
+                //Getting the parts of each segment
+                Chunks = line.split(": ");
+                if ( Chunks[ 1 ].length() == 0 ){
+                    System.out.println("Error: Zero length value was provided!");
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Item Id") == true ){
+                    id = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Name") == true ){
+                    name = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Description") == true ){
+                    description = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer") == true ){
+                    manufacturer = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer Part Number") == true ){
+                    mfgPartNum = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Series") == true ){
+                    series = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Availability") == true ){
+                    stock = StockOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Product Status") == true ){
+                    status = ProductStatus.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Media") == true ){
+                    media = MediaOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Environmental Options") == true ){
+                    hazard = EnvironmentalOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Packaging") == true ){
+                    shippingBox = PackageOption.valueOf(Chunks[1]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Quantity") == true ){
+                    qtyAvailable = Integer.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Price") == true ){
+                    price = Double.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Contact Current Rating") == true ){
+                    contactCurrentRating =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Must Operate Volt") == true ){
+                    mustOperateVolt =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Must Release Volt") == true ){
+                    mustReleaseVolt =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Operate Time") == true ){
+                    operateTime =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Release Time") == true ){
+                    releaseTime =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Features") == true ){
+                    features =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Termination Style") == true ){
+                    terminationStyle =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Operation Temp") == true ){
+                    operationTemp =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Coil Voltage") == true ){
+                    coilVoltage =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Mount") == true ){
+                    mount =  RelayMountingType.valueOf(Chunks[1]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Coil Current") == true ){
+                    coilCurrent =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Coil") == true ){
+                    coil =  RelayCoilType.valueOf(Chunks[1]);
+                } else {
+                    System.out.println("Error: Invalid field passed!");
+                }
+            }
+            automotiveRelay = new AutomotiveRelayInfo(coilCurrent, coil, contactCurrentRating,
+                    mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, features, terminationStyle,
+                    operationTemp, coilVoltage, mount, id, name, description, manufacturer, mfgPartNum, series, qtyAvailable, price);
+        }
+        
+        
+        return( automotiveRelay );
     }
     
     public static AutomotiveRelayInfo fromCSV( String input ) throws Exception{
@@ -546,9 +977,210 @@ final class AutomotiveRelayInfo extends RelayInfo{
                 automotiveRelay = new AutomotiveRelayInfo(coilCurrent, coil, contactCurrentRating,
                         mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, features,
                         terminationStyle, operationTemp, coilVoltage, mount, id, name,
-                        description, id, mfgPartNum, series, qtyAvailable, price);
+                        description, manufacturer, mfgPartNum, series, qtyAvailable, price);
             }
         }
+        return( automotiveRelay );
+    }
+    
+    public static AutomotiveRelayInfo fromXML( String input ) throws Exception{
+        AutomotiveRelayInfo automotiveRelay = new AutomotiveRelayInfo();
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //Relay
+        String contactCurrentRating = "";
+        String mustOperateVolt = "";
+        String mustReleaseVolt = "";
+        String operateTime = "";
+        String releaseTime = "";
+        String features = "";
+        String terminationStyle = "";
+        String operationTemp = "";
+        String coilVoltage = "";
+        RelayMountingType mount = RelayMountingType.Unknown;
+        //AutomotiveRelay
+        String coilCurrent = "";
+        RelayCoilType coil = RelayCoilType.Unknown;
+        
+        
+        //Parsing input using regex
+        java.util.regex.Pattern regex = java.util.regex.Pattern.compile("<ProductInfo>(.*)</ProductInfo>");
+        //Matching the Pattern
+        java.util.regex.Matcher matcher = regex.matcher( input );
+        
+        //Looping through the groups captured using pattern matching
+        for ( int index = 0; index < matcher.groupCount(); index++){
+            //Testing to find match
+            if ( matcher.find() == true ){
+                //Pattern match for each of the fields in the Object
+                regex = Pattern.compile("<itemId>(.*)</itemId>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    id = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<name>(.*)</name>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    name = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<description>(.*)</description>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    description = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<manufacturer>(.*)</manufacturer>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    manufacturer = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mfgPartNumber>(.*)</mfgPartNumber>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mfgPartNum = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<series>(.*)</series>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    series = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<availability>(.*)</availability>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    stock = StockOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<status>(.*)</status>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    status = ProductStatus.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<media>(.*)</media>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    media = MediaOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<hazards>(.*)</hazards>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    hazard = EnvironmentalOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<shippingPackage>(.*)</shippingPackage>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    shippingBox = PackageOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<qtyAvailabile>(.*)</qtyAvailable>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    qtyAvailable = Integer.parseInt(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<price>(.*)</price>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    price = Double.parseDouble(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<contactCurrentRating>(.*)</contactCurrentRating>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    contactCurrentRating = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mustOperateVolt>(.*)</mustOperateVolt>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mustOperateVolt = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mustReleaseVolt>(.*)</mustReleaseVolt>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mustReleaseVolt = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<operateTime>(.*)</operateTime>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    operateTime = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<releaseTime>(.*)</releaseTime>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    releaseTime = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<features>(.*)</featuresd>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    features = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<terminationStyle>(.*)</terminationStyle>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    terminationStyle = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<operationTemp>(.*)</operationTemp>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    operationTemp = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<coilVoltage>(.*)</coilVoltage>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    coilVoltage = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mount>(.*)</mount>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mount = RelayMountingType.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<coilCurrent>(.*)</coilCurrent>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    coilCurrent = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<coil>(.*)</coil>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    coil = RelayCoilType.valueOf(matcher.group(1));
+                }
+                
+            }
+        }
+        automotiveRelay = new AutomotiveRelayInfo(coilCurrent, coil, contactCurrentRating,
+                mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, features, terminationStyle,
+                operationTemp, coilVoltage, mount, id, name, description, id, mfgPartNum, series, qtyAvailable, price);
+        
         return( automotiveRelay );
     }
 
@@ -626,14 +1258,129 @@ final class SafetyRelayInfo extends RelayInfo{
         String output = "";
         
         output += super.toXML(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-        output += "<SafetyRelayInfo>\n";
-        output += "     <contactForm>" + this.getContactForm() + "</contactForm>\n";
-        output += "     <contactMaterial>" + this.getContactMaterial() + "</contactMaterial>\n";
-        output += "</SafetyRelayInfo>\n";
+        output += "         <SafetyRelayInfo>\n";
+        output += "             <contactForm>" + this.getContactForm() + "</contactForm>\n";
+        output += "             <contactMaterial>" + this.getContactMaterial() + "</contactMaterial>\n";
+        output += "         </SafetyRelayInfo>\n";
+        output += "     </RelayInfo>\n";
+        output += "</ProductInfo>\n";
         
         return(output);
     }
 
+    public static SafetyRelayInfo fromCustom( String input ) throws Exception {
+        SafetyRelayInfo safetyRelay = new SafetyRelayInfo();
+        String[] Chunks;
+        String[] Lines;
+        String line;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //Relay
+        String contactCurrentRating = "";
+        String mustOperateVolt = "";
+        String mustReleaseVolt = "";
+        String operateTime = "";
+        String releaseTime = "";
+        String features = "";
+        String terminationStyle = "";
+        String operationTemp = "";
+        String coilVoltage = "";
+        RelayMountingType mount = RelayMountingType.Unknown;
+        //Safety Relay
+        String contactForm = "";
+        String contactMaterial = "";
+        
+        
+        if ( input == null ){
+            throw new Exception("Error: Null input passed!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string passed!");
+        } else {
+            //Splitting the input into line segments
+            Lines = input.split("\\n");
+            for ( int index = 0; index < Lines.length; index++ ){
+                //Getting a singlular line segment
+                line = Lines[ index ];
+                //Getting the parts of each segment
+                Chunks = line.split(": ");
+                if ( Chunks[ 1 ].length() == 0 ){
+                    System.out.println("Error: Zero length value was provided!");
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Item Id") == true ){
+                    id = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Name") == true ){
+                    name = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Description") == true ){
+                    description = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer") == true ){
+                    manufacturer = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer Part Number") == true ){
+                    mfgPartNum = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Series") == true ){
+                    series = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Availability") == true ){
+                    stock = StockOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Product Status") == true ){
+                    status = ProductStatus.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Media") == true ){
+                    media = MediaOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Environmental Options") == true ){
+                    hazard = EnvironmentalOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Packaging") == true ){
+                    shippingBox = PackageOption.valueOf(Chunks[1]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Quantity") == true ){
+                    qtyAvailable = Integer.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Price") == true ){
+                    price = Double.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Contact Current Rating") == true ){
+                    contactCurrentRating =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Must Operate Volt") == true ){
+                    mustOperateVolt =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Must Release Volt") == true ){
+                    mustReleaseVolt =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Operate Time") == true ){
+                    operateTime =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Release Time") == true ){
+                    releaseTime =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Features") == true ){
+                    features =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Termination Style") == true ){
+                    terminationStyle =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Operation Temp") == true ){
+                    operationTemp =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Coil Voltage") == true ){
+                    coilVoltage =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Mount") == true ){
+                    mount =  RelayMountingType.valueOf(Chunks[1]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Contact Form") == true ){
+                    contactForm =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Contact Material") == true ){
+                    contactMaterial =  Chunks[1];
+                } else {
+                    System.out.println("Error: Invalid field passed!");
+                }
+            }
+            
+            safetyRelay = new SafetyRelayInfo(contactForm, contactMaterial, contactCurrentRating,
+                    mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, features, terminationStyle,
+                    operationTemp, coilVoltage, mount, id, name, description, manufacturer, mfgPartNum, series, qtyAvailable, price);
+        }
+        
+        
+        return( safetyRelay );
+    }
+    
     public static SafetyRelayInfo fromCSV( String input ) throws Exception{
         SafetyRelayInfo safetyRelay = new SafetyRelayInfo();
         String[] Chunks;
@@ -711,9 +1458,210 @@ final class SafetyRelayInfo extends RelayInfo{
                 safetyRelay = new SafetyRelayInfo(contactForm, contactMaterial, contactCurrentRating,
                         mustOperateVolt, mustReleaseVolt, operateTime, releaseTime,
                         features, terminationStyle, operationTemp, coilVoltage, mount,
-                        id, name, description, id, mfgPartNum, series, qtyAvailable, price);
+                        id, name, description, manufacturer, mfgPartNum, series, qtyAvailable, price);
             }
         }
+        return( safetyRelay );
+    }
+    
+    public static SafetyRelayInfo fromXML( String input ) throws Exception{
+        SafetyRelayInfo safetyRelay = new SafetyRelayInfo();
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //Relay
+        String contactCurrentRating = "";
+        String mustOperateVolt = "";
+        String mustReleaseVolt = "";
+        String operateTime = "";
+        String releaseTime = "";
+        String features = "";
+        String terminationStyle = "";
+        String operationTemp = "";
+        String coilVoltage = "";
+        RelayMountingType mount = RelayMountingType.Unknown;
+        //SafetyRelay
+        String contactForm = "";
+        String contactMaterial = "";
+        
+        
+        //Parsing input using regex
+        java.util.regex.Pattern regex = java.util.regex.Pattern.compile("<ProductInfo>(.*)</ProductInfo>");
+        //Matching the Pattern
+        java.util.regex.Matcher matcher = regex.matcher( input );
+        
+        //Looping through the groups captured using pattern matching
+        for ( int index = 0; index < matcher.groupCount(); index++){
+            //Testing to find match
+            if ( matcher.find() == true ){
+                //Pattern match for each of the fields in the Object
+                regex = Pattern.compile("<itemId>(.*)</itemId>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    id = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<name>(.*)</name>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    name = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<description>(.*)</description>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    description = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<manufacturer>(.*)</manufacturer>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    manufacturer = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mfgPartNumber>(.*)</mfgPartNumber>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mfgPartNum = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<series>(.*)</series>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    series = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<availability>(.*)</availability>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    stock = StockOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<status>(.*)</status>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    status = ProductStatus.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<media>(.*)</media>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    media = MediaOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<hazards>(.*)</hazards>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    hazard = EnvironmentalOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<shippingPackage>(.*)</shippingPackage>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    shippingBox = PackageOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<qtyAvailabile>(.*)</qtyAvailable>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    qtyAvailable = Integer.parseInt(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<price>(.*)</price>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    price = Double.parseDouble(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<contactCurrentRating>(.*)</contactCurrentRating>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    contactCurrentRating = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mustOperateVolt>(.*)</mustOperateVolt>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mustOperateVolt = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mustReleaseVolt>(.*)</mustReleaseVolt>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mustReleaseVolt = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<operateTime>(.*)</operateTime>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    operateTime = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<releaseTime>(.*)</releaseTime>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    releaseTime = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<features>(.*)</featuresd>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    features = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<terminationStyle>(.*)</terminationStyle>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    terminationStyle = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<operationTemp>(.*)</operationTemp>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    operationTemp = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<coilVoltage>(.*)</coilVoltage>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    coilVoltage = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mount>(.*)</mount>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mount = RelayMountingType.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<contactForm>(.*)</contactForm>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    contactForm = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<contactMaterial>(.*)</contactMaterial>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    contactMaterial = matcher.group(1);
+                }
+                
+            }
+        }
+        safetyRelay = new SafetyRelayInfo(contactForm, contactMaterial, contactCurrentRating,
+                mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, features, terminationStyle,
+                operationTemp, coilVoltage, mount, id, name, description, manufacturer, mfgPartNum, series, qtyAvailable, price);
+        
         return( safetyRelay );
     }
     
@@ -807,17 +1755,142 @@ final class SignalRelayInfo extends RelayInfo{
         String output = "";
         
         output += super.toXML(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-        output += "<SignalRelayInfo>\n";
-        output += "     <contactForm>" + this.getContactForm() + "</contactForm>\n";
-        output += "     <sealRating>" + this.getSealRating() + "</sealRating>\n";
-        output += "     <coilInsulation>" + this.getCoilInsulation() + "</coilInsulation>\n";
-        output += "     <contactMaterial>" + this.getContactMaterial() + "</contactMaterial>\n";
-        output += "     <relayType>" + this.getRelayType() + "</relayType>\n";
-        output += "</SignalRelayInfo>\n";
+        output += "         <SignalRelayInfo>\n";
+        output += "             <contactForm>" + this.getContactForm() + "</contactForm>\n";
+        output += "             <sealRating>" + this.getSealRating() + "</sealRating>\n";
+        output += "             <coilInsulation>" + this.getCoilInsulation() + "</coilInsulation>\n";
+        output += "             <contactMaterial>" + this.getContactMaterial() + "</contactMaterial>\n";
+        output += "             <relayType>" + this.getRelayType() + "</relayType>\n";
+        output += "         </SignalRelayInfo>\n";
+        output += "     </RelayInfo>\n";
+        output += "</ProductInfo>\n";
         
         return(output);
     }
 
+    public static SignalRelayInfo fromCustom( String input ) throws Exception {
+        SignalRelayInfo signalRelay = new SignalRelayInfo();
+        String[] Chunks;
+        String[] Lines;
+        String line;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //Relay
+        String contactCurrentRating = "";
+        String mustOperateVolt = "";
+        String mustReleaseVolt = "";
+        String operateTime = "";
+        String releaseTime = "";
+        String features = "";
+        String terminationStyle = "";
+        String operationTemp = "";
+        String coilVoltage = "";
+        RelayMountingType mount = RelayMountingType.Unknown;
+        //SignalRelay
+        String contactForm = "";
+        String sealRating = "";
+        String coilInsulation = "";
+        String contactMaterial = "";
+        String relayType = "";
+        
+        
+        if ( input == null ){
+            throw new Exception("Error: Null input passed!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string passed!");
+        } else {
+            //Splitting the input into line segments
+            Lines = input.split("\\n");
+            for ( int index = 0; index < Lines.length; index++ ){
+                //Getting a singlular line segment
+                line = Lines[ index ];
+                //Getting the parts of each segment
+                Chunks = line.split(": ");
+                if ( Chunks[ 1 ].length() == 0 ){
+                    System.out.println("Error: Zero length value was provided!");
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Item Id") == true ){
+                    id = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Name") == true ){
+                    name = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Description") == true ){
+                    description = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer") == true ){
+                    manufacturer = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer Part Number") == true ){
+                    mfgPartNum = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Series") == true ){
+                    series = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Availability") == true ){
+                    stock = StockOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Product Status") == true ){
+                    status = ProductStatus.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Media") == true ){
+                    media = MediaOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Environmental Options") == true ){
+                    hazard = EnvironmentalOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Packaging") == true ){
+                    shippingBox = PackageOption.valueOf(Chunks[1]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Quantity") == true ){
+                    qtyAvailable = Integer.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Price") == true ){
+                    price = Double.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Contact Current Rating") == true ){
+                    contactCurrentRating =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Must Operate Volt") == true ){
+                    mustOperateVolt =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Must Release Volt") == true ){
+                    mustReleaseVolt =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Operate Time") == true ){
+                    operateTime =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Release Time") == true ){
+                    releaseTime =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Features") == true ){
+                    features =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Termination Style") == true ){
+                    terminationStyle =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Operation Temp") == true ){
+                    operationTemp =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Coil Voltage") == true ){
+                    coilVoltage =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Mount") == true ){
+                    mount =  RelayMountingType.valueOf(Chunks[1]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Contact Form") == true ){
+                    contactForm =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Seal Rating") == true ){
+                    sealRating =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Coil Insulation") == true ){
+                    coilInsulation =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Contact Material") == true ){
+                    contactMaterial =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Relay Type") == true ){
+                    relayType =  Chunks[1];
+                } else {
+                    System.out.println("Error: Invalid field passed!");
+                }
+            }
+            signalRelay = new SignalRelayInfo(contactForm, sealRating, coilInsulation,
+                    contactMaterial, relayType, contactCurrentRating, mustOperateVolt,
+                    mustReleaseVolt, operateTime, releaseTime, features, terminationStyle,
+                    operationTemp, coilVoltage, mount, id, name, description, manufacturer, mfgPartNum,
+                    series, qtyAvailable, price);
+        }
+        
+        
+        return( signalRelay );
+    }
+    
     public static SignalRelayInfo fromCSV( String input ) throws Exception {
         SignalRelayInfo signalRelay = new SignalRelayInfo();
         String[] Chunks;
@@ -901,11 +1974,235 @@ final class SignalRelayInfo extends RelayInfo{
                 signalRelay = new SignalRelayInfo(contactForm, sealRating, coilInsulation, 
                         contactMaterial, relayType, contactCurrentRating, mustOperateVolt, 
                         mustReleaseVolt, operateTime, releaseTime, features, terminationStyle, 
-                        operationTemp, coilVoltage, mount, id, name, description, id, 
+                        operationTemp, coilVoltage, mount, id, name, description, manufacturer, 
                         mfgPartNum, series, qtyAvailable, price);
                 
             }
         }
+        
+        return( signalRelay );
+    }
+    
+    public static SignalRelayInfo fromXML( String input ) throws Exception {
+        SignalRelayInfo signalRelay = new SignalRelayInfo();
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //Relay
+        String contactCurrentRating = "";
+        String mustOperateVolt = "";
+        String mustReleaseVolt = "";
+        String operateTime = "";
+        String releaseTime = "";
+        String features = "";
+        String terminationStyle = "";
+        String operationTemp = "";
+        String coilVoltage = "";
+        RelayMountingType mount = RelayMountingType.Unknown;
+        //SignalRelay
+        String contactForm = "";
+        String sealRating = "";
+        String coilInsulation = "";
+        String contactMaterial = "";
+        String relayType = "";
+        
+        //Parsing input using regex
+        java.util.regex.Pattern regex = java.util.regex.Pattern.compile("<ProductInfo>(.*)</ProductInfo>");
+        //Matching the Pattern
+        java.util.regex.Matcher matcher = regex.matcher( input );
+        
+        //Looping through the groups captured using pattern matching
+        for ( int index = 0; index < matcher.groupCount(); index++){
+            //Testing to find match
+            if ( matcher.find() == true ){
+                //Pattern match for each of the fields in the Object
+                regex = Pattern.compile("<itemId>(.*)</itemId>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    id = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<name>(.*)</name>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    name = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<description>(.*)</description>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    description = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<manufacturer>(.*)</manufacturer>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    manufacturer = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mfgPartNumber>(.*)</mfgPartNumber>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mfgPartNum = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<series>(.*)</series>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    series = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<availability>(.*)</availability>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    stock = StockOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<status>(.*)</status>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    status = ProductStatus.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<media>(.*)</media>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    media = MediaOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<hazards>(.*)</hazards>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    hazard = EnvironmentalOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<shippingPackage>(.*)</shippingPackage>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    shippingBox = PackageOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<qtyAvailabile>(.*)</qtyAvailable>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    qtyAvailable = Integer.parseInt(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<price>(.*)</price>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    price = Double.parseDouble(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<contactCurrentRating>(.*)</contactCurrentRating>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    contactCurrentRating = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mustOperateVolt>(.*)</mustOperateVolt>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mustOperateVolt = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mustReleaseVolt>(.*)</mustReleaseVolt>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mustReleaseVolt = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<operateTime>(.*)</operateTime>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    operateTime = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<releaseTime>(.*)</releaseTime>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    releaseTime = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<features>(.*)</featuresd>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    features = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<terminationStyle>(.*)</terminationStyle>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    terminationStyle = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<operationTemp>(.*)</operationTemp>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    operationTemp = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<coilVoltage>(.*)</coilVoltage>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    coilVoltage = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mount>(.*)</mount>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mount = RelayMountingType.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<contactForm>(.*)</contactForm>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    contactForm = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<sealRating>(.*)</sealRating>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    sealRating = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<coilInsulation>(.*)</coilInsulation>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    coilInsulation = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<contactMaterial>(.*)</contactMaterial>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    contactMaterial = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<relayType>(.*)</relayType>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    relayType = matcher.group(1);
+                }
+                
+            }
+        }
+        
+        signalRelay = new SignalRelayInfo(contactForm, sealRating, coilInsulation,
+                contactMaterial, relayType, contactCurrentRating, mustOperateVolt,
+                mustReleaseVolt, operateTime, releaseTime, features, terminationStyle,
+                operationTemp, coilVoltage, mount, id, name, description, manufacturer, mfgPartNum,
+                series, qtyAvailable, price);
         
         return( signalRelay );
     }
@@ -1056,15 +2353,17 @@ final class PowerRelayInfo extends RelayInfo{
         String output = "";
         
         output += super.toXML(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-        output += "<PowerRelayInfo>\n";
-        output += "     <contactForm>" + this.getContactForm() + "</contactForm>\n";
-        output += "     <coilCurrent>" + this.getCoilCurrent() + "</coilCurrent>\n";
-        output += "     <coil>" + this.getCoil() + "</coil>\n";
-        output += "     <sealRating>" + this.getSealRating() + "</sealRating>\n";
-        output += "     <coilInsulation>" + this.getCoilInsulation() + "</coilInsulation>\n";
-        output += "     <contactMaterial>" + this.getContactMaterial() + "</contactMaterial>\n";
-        output += "     <relayType>" + this.getRelayType() + "</relayType>\n";
-        output += "</PowerRelayInfo>\n";
+        output += "         <PowerRelayInfo>\n";
+        output += "             <contactForm>" + this.getContactForm() + "</contactForm>\n";
+        output += "             <coilCurrent>" + this.getCoilCurrent() + "</coilCurrent>\n";
+        output += "             <coil>" + this.getCoil() + "</coil>\n";
+        output += "             <sealRating>" + this.getSealRating() + "</sealRating>\n";
+        output += "             <coilInsulation>" + this.getCoilInsulation() + "</coilInsulation>\n";
+        output += "             <contactMaterial>" + this.getContactMaterial() + "</contactMaterial>\n";
+        output += "             <relayType>" + this.getRelayType() + "</relayType>\n";
+        output += "         </PowerRelayInfo>\n";
+        output += "     </RelayInfo>\n";
+        output += "</ProductInfo>\n";
         
         return(output);
     }
@@ -1088,24 +2387,24 @@ final class PowerRelayInfo extends RelayInfo{
         PackageOption shippingBox;
         ProductStatus status;
         //Relay
-        String contactCurrentRating;
-        String mustOperateVolt;
-        String mustReleaseVolt;
-        String operateTime;
-        String releaseTime;
-        String features;
-        String terminationStyle;
-        String operationTemp;
-        String coilVoltage;
-        RelayMountingType mount;
+        String contactCurrentRating = "";
+        String mustOperateVolt = "";
+        String mustReleaseVolt = "";
+        String operateTime = "";
+        String releaseTime = "";
+        String features = "";
+        String terminationStyle = "";
+        String operationTemp = "";
+        String coilVoltage = "";
+        RelayMountingType mount = RelayMountingType.Unknown;
         //PowerRelay
-        String contactForm;
-        String coilCurrent;
-        RelayCoilType coil;
-        String sealRating;
-        String coilInsulation;
-        String contactMaterial;
-        String relayType;
+        String contactForm = "";
+        String coilCurrent = "";
+        RelayCoilType coil = RelayCoilType.Unknown;
+        String sealRating = "";
+        String coilInsulation = "";
+        String contactMaterial = "";
+        String relayType = "";
         
         //Validate input 
         if ( input == null ){
@@ -1158,12 +2457,379 @@ final class PowerRelayInfo extends RelayInfo{
                 powerRelay = new PowerRelayInfo(contactForm, coilCurrent, coil, sealRating, 
                         coilInsulation, contactMaterial, relayType, contactCurrentRating, mustOperateVolt, 
                         mustReleaseVolt, operateTime, releaseTime, features, terminationStyle, operationTemp, 
-                        coilVoltage, mount, id, name, description, id, mfgPartNum, series, qtyAvailable, price);
+                        coilVoltage, mount, id, name, description, manufacturer, mfgPartNum, series, qtyAvailable, price);
                 
             }
         }
         
         return(powerRelay);
+    }
+    
+    public static PowerRelayInfo fromCustom( String input ) throws Exception {
+        PowerRelayInfo powerRelay = new PowerRelayInfo();
+        String[] Chunks;
+        String[] Lines;
+        String line;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //Relay
+        String contactCurrentRating = "";
+        String mustOperateVolt = "";
+        String mustReleaseVolt = "";
+        String operateTime = "";
+        String releaseTime = "";
+        String features = "";
+        String terminationStyle = "";
+        String operationTemp = "";
+        String coilVoltage = "";
+        RelayMountingType mount = RelayMountingType.Unknown;
+        //PowerRelay
+        String contactForm = "";
+        String coilCurrent = "";
+        RelayCoilType coil = RelayCoilType.Unknown;
+        String sealRating = "";
+        String coilInsulation = "";
+        String contactMaterial = "";
+        String relayType = "";
+        
+        if ( input == null ){
+            throw new Exception("Error: Null input passed!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string passed!");
+        } else {
+            //Splitting the input into line segments
+            Lines = input.split("\\n");
+            for ( int index = 0; index < Lines.length; index++ ){
+                //Getting a singlular line segment
+                line = Lines[ index ];
+                //Getting the parts of each segment
+                Chunks = line.split(": ");
+                if ( Chunks[ 1 ].length() == 0 ){
+                    System.out.println("Error: Zero length value was provided!");
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Item Id") == true ){
+                    id = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Name") == true ){
+                    name = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Description") == true ){
+                    description = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer") == true ){
+                    manufacturer = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer Part Number") == true ){
+                    mfgPartNum = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Series") == true ){
+                    series = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Availability") == true ){
+                    stock = StockOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Product Status") == true ){
+                    status = ProductStatus.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Media") == true ){
+                    media = MediaOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Environmental Options") == true ){
+                    hazard = EnvironmentalOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Packaging") == true ){
+                    shippingBox = PackageOption.valueOf(Chunks[1]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Quantity") == true ){
+                    qtyAvailable = Integer.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Price") == true ){
+                    price = Double.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Contact Current Rating") == true ){
+                    contactCurrentRating =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Must Operate Volt") == true ){
+                    mustOperateVolt =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Must Release Volt") == true ){
+                    mustReleaseVolt =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Operate Time") == true ){
+                    operateTime =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Release Time") == true ){
+                    releaseTime =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Features") == true ){
+                    features =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Termination Style") == true ){
+                    terminationStyle =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Operation Temp") == true ){
+                    operationTemp =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Coil Voltage") == true ){
+                    coilVoltage =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Mount") == true ){
+                    mount =  RelayMountingType.valueOf(Chunks[1]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Contact Form") == true ){
+                    contactForm =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Coil Current") == true ){
+                    coilCurrent =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Coil") == true ){
+                    coil =  RelayCoilType.valueOf(Chunks[1]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Seal Rating") == true ){
+                    sealRating =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Coil Insulation") == true ){
+                    coilInsulation =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Contact Material") == true ){
+                    contactMaterial =  Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Relay Type") == true ){
+                    relayType =  Chunks[1];
+                } else {
+                    System.out.println("Error: Invalid field passed!");
+                }
+            }
+            powerRelay = new PowerRelayInfo(contactForm, coilCurrent, coil, sealRating,
+                    coilInsulation, contactMaterial, relayType, contactCurrentRating,
+                    mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, features,
+                    terminationStyle, operationTemp, coilVoltage, mount, id, name, description,
+                    manufacturer, mfgPartNum, series, qtyAvailable, price);
+        }
+                    
+        
+        return( powerRelay );
+    }
+    
+    public static PowerRelayInfo fromXML( String input ) throws Exception {
+        PowerRelayInfo powerRelay = new PowerRelayInfo();
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //Relay
+        String contactCurrentRating = "";
+        String mustOperateVolt = "";
+        String mustReleaseVolt = "";
+        String operateTime = "";
+        String releaseTime = "";
+        String features = "";
+        String terminationStyle = "";
+        String operationTemp = "";
+        String coilVoltage = "";
+        RelayMountingType mount = RelayMountingType.Unknown;
+        //PowerRelay
+        String contactForm = "";
+        String coilCurrent = "";
+        RelayCoilType coil = RelayCoilType.Unknown;
+        String sealRating = "";
+        String coilInsulation = "";
+        String contactMaterial = "";
+        String relayType = "";
+        
+        
+        //Parsing input using regex
+        java.util.regex.Pattern regex = java.util.regex.Pattern.compile("<ProductInfo>(.*)</ProductInfo>");
+        //Matching the Pattern
+        java.util.regex.Matcher matcher = regex.matcher( input );
+        
+        //Looping through the groups captured using pattern matching
+        for ( int index = 0; index < matcher.groupCount(); index++){
+            //Testing to find match
+            if ( matcher.find() == true ){
+                //Pattern match for each of the fields in the Object
+                regex = Pattern.compile("<itemId>(.*)</itemId>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    id = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<name>(.*)</name>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    name = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<description>(.*)</description>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    description = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<manufacturer>(.*)</manufacturer>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    manufacturer = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mfgPartNumber>(.*)</mfgPartNumber>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mfgPartNum = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<series>(.*)</series>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    series = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<availability>(.*)</availability>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    stock = StockOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<status>(.*)</status>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    status = ProductStatus.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<media>(.*)</media>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    media = MediaOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<hazards>(.*)</hazards>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    hazard = EnvironmentalOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<shippingPackage>(.*)</shippingPackage>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    shippingBox = PackageOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<qtyAvailabile>(.*)</qtyAvailable>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    qtyAvailable = Integer.parseInt(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<price>(.*)</price>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    price = Double.parseDouble(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<contactCurrentRating>(.*)</contactCurrentRating>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    contactCurrentRating = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mustOperateVolt>(.*)</mustOperateVolt>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mustOperateVolt = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mustReleaseVolt>(.*)</mustReleaseVolt>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mustReleaseVolt = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<operateTime>(.*)</operateTime>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    operateTime = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<releaseTime>(.*)</releaseTime>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    releaseTime = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<features>(.*)</featuresd>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    features = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<terminationStyle>(.*)</terminationStyle>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    terminationStyle = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<operationTemp>(.*)</operationTemp>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    operationTemp = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<coilVoltage>(.*)</coilVoltage>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    coilVoltage = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mount>(.*)</mount>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mount = RelayMountingType.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<contactForm>(.*)</contactForm>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    contactForm = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<coilCurrent>(.*)</coilCurrent>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    coilCurrent = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<coil>(.*)</coil>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    coil = RelayCoilType.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<sealRating>(.*)</sealRating>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    sealRating = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<coilInsulation>(.*)</coilInsulation>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    coilInsulation = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<contactMaterial>(.*)</contactMaterial>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    contactMaterial = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<relayType>(.*)</relayType>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    relayType = matcher.group(1);
+                }
+                
+            }
+        }
+        
+        powerRelay = new PowerRelayInfo(contactForm, coilCurrent, coil, sealRating,
+                coilInsulation, contactMaterial, relayType, contactCurrentRating,
+                mustOperateVolt, mustReleaseVolt, operateTime, releaseTime, features,
+                terminationStyle, operationTemp, coilVoltage, mount, id, name, description,
+                manufacturer, mfgPartNum, series, qtyAvailable, price);
+        
+        return( powerRelay );
     }
 
     /**

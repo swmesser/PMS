@@ -1,5 +1,7 @@
 package PMS.V2;
 
+import java.util.regex.Pattern;
+
 /* 
  * File: InductorCoilAndChokesInfo
  * Copy: Copyright (c) 2023 Samuel W. Messer
@@ -63,11 +65,10 @@ public abstract class InductorCoilAndChokesInfo extends ProductInfo{
         String output = "";
         
         output += super.toXML(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-        output += "<InductorCoilAndChokesInfo>\n";
-        output += "     <tolerance>" + this.getTolerance() + "</tolerance>\n";
-        output += "     <mount>" + this.getMount() + "</mount>\n";
-        output += "     <packageCase>" + this.getPackageCase() + "</packageCase>\n";
-        output += "</InductorCoilAndChokesInfo>\n";
+        output += "     <InductorCoilAndChokesInfo>\n";
+        output += "         <tolerance>" + this.getTolerance() + "</tolerance>\n";
+        output += "         <mount>" + this.getMount() + "</mount>\n";
+        output += "         <packageCase>" + this.getPackageCase() + "</packageCase>\n";
         
         return(output);
     }
@@ -171,16 +172,351 @@ final class AdjustableInductors extends InductorCoilAndChokesInfo {
         String output = "";
         
         output += super.toXML(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-        output += "<AdjustableInductors>\n";
-        output += "     <inductance>" + this.getInductance() + "</inductance>\n";
-        output += "     <qAtFreq>" + this.getqAtFreq() + "</qAtFreq>\n";
-        output += "     <height>" + this.getHeight() + "</height>\n";
-        output += "     <size>" + this.getSize() + "</size>\n";
-        output += "</AdjustableInductors>\n";
+        output += "         <AdjustableInductors>\n";
+        output += "             <inductance>" + this.getInductance() + "</inductance>\n";
+        output += "             <qAtFreq>" + this.getqAtFreq() + "</qAtFreq>\n";
+        output += "             <height>" + this.getHeight() + "</height>\n";
+        output += "             <size>" + this.getSize() + "</size>\n";
+        output += "         </AdjustableInductors>\n";
+        output += "     </InductorCoilAndChokesInfo>\n";
+        output += "</ProductInfo>\n";
         
         return(output);
     }
-
+    
+    public static AdjustableInductors fromCSV( String input ) throws Exception {
+        AdjustableInductors adjustableInductor = new AdjustableInductors();
+        String[] Chunks;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //InductorCoilAndChoke
+        String tolerance = "";
+        InductorMountingType mount = InductorMountingType.Unknown;
+        String packageCase = "";
+        //AdjustableInductors
+        String inductance;
+        String qAtFreq;
+        String height;
+        String size;
+        
+        //Validate input 
+        if ( input == null ){
+            throw new Exception("Error: Null input for parsing!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string provided!");
+        } else {
+            //Split line based on comma
+            Chunks = input.split(",");
+            if ( Chunks.length == 20 ){
+                //Assign all parameters
+                //ProductInfo Params
+                id = Chunks[ 0 ];
+                name = Chunks[ 1 ];
+                description = Chunks[ 2 ];
+                manufacturer = Chunks[ 3 ];
+                mfgPartNum = Chunks[ 4 ];
+                series = Chunks[ 5 ];
+                stock = StockOption.valueOf( Chunks[ 6 ]);
+                hazard = EnvironmentalOption.valueOf( Chunks[ 7 ]);
+                media = MediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = PackageOption.valueOf( Chunks[ 9 ]);
+                status = ProductStatus.valueOf( Chunks[ 10 ]);
+                qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
+                price = Double.valueOf( Chunks[ 12 ]);
+                //==================
+                //InductorCoilAndChokeInfo Params
+                tolerance = Chunks[ 13 ];
+                mount = InductorMountingType.valueOf( Chunks[ 14 ]);
+                packageCase = Chunks[ 15 ];
+                //==================
+                //AdjustableInductorsInfo Params
+                inductance = Chunks[ 16 ];
+                qAtFreq = Chunks[ 17 ];
+                height = Chunks[ 18 ];
+                size = Chunks[ 19 ];
+                
+                adjustableInductor = new AdjustableInductors(inductance, qAtFreq, height, size, 
+                        tolerance, mount, packageCase, id, name, description, manufacturer, mfgPartNum,
+                        series, qtyAvailable, price);
+            }
+        }
+        
+        return ( adjustableInductor );
+    }
+    
+    public static AdjustableInductors fromCustom( String input ) throws Exception {
+        AdjustableInductors adjustableInductor = new AdjustableInductors();
+        String[] Chunks;
+        String[] Lines;
+        String line;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //InductorCoilAndChoke
+        String tolerance = "";
+        InductorMountingType mount = InductorMountingType.Unknown;
+        String packageCase = "";
+        //AdjustableInductors
+        String inductance = "";
+        String qAtFreq = "";
+        String height = "";
+        String size = "";
+        
+        if ( input == null ){
+            throw new Exception("Error: Null input passed!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string passed!");
+        } else {
+            //Splitting the input into line segments
+            Lines = input.split("\\n");
+            for ( int index = 0; index < Lines.length; index++ ){
+                //Getting a singlular line segment
+                line = Lines[ index ];
+                //Getting the parts of each segment
+                Chunks = line.split(": ");
+                if ( Chunks[ 1 ].length() == 0 ){
+                    System.out.println("Error: Zero length value was provided!");
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Item Id") == true ){
+                    id = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Name") == true ){
+                    name = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Description") == true ){
+                    description = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer") == true ){
+                    manufacturer = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer Part Number") == true ){
+                    mfgPartNum = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Series") == true ){
+                    series = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Availability") == true ){
+                    stock = StockOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Product Status") == true ){
+                    status = ProductStatus.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Media") == true ){
+                    media = MediaOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Environmental Options") == true ){
+                    hazard = EnvironmentalOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Packaging") == true ){
+                    packageCase = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Quantity") == true ){
+                    qtyAvailable = Integer.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Price") == true ){
+                    price = Double.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Tolerance") == true ){
+                    tolerance = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Mount") == true ){
+                    mount = InductorMountingType.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Package Case") == true ){
+                    packageCase = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Inductance") == true ){
+                    inductance = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Q At Frequency") == true ){
+                    qAtFreq = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Height") == true ){
+                    height = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Size") == true ){
+                    size = Chunks[1];
+                }
+            }
+            
+            adjustableInductor = new AdjustableInductors(inductance, qAtFreq, height,
+                    size, tolerance, mount, packageCase, id, name, description,
+                    manufacturer, mfgPartNum, series, qtyAvailable, price);
+        }
+        
+        return ( adjustableInductor );
+    }
+    
+    public static AdjustableInductors fromXML( String input ) throws Exception {
+        AdjustableInductors adjustableInductor = new AdjustableInductors();
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //InductorCoilAndChokes
+        String tolerance = "";
+        InductorMountingType mount = InductorMountingType.Unknown;
+        String packageCase = "";
+        //AdjustableInductors
+        String inductance = "";
+        String qAtFreq = "";
+        String height = "";
+        String size = "";
+        
+        
+        //Parsing input using regex
+        java.util.regex.Pattern regex = java.util.regex.Pattern.compile("<ProductInfo>(.*)</ProductInfo>");
+        //Matching the Pattern
+        java.util.regex.Matcher matcher = regex.matcher( input );
+        
+        //Looping through the groups captured using pattern matching
+        for ( int index = 0; index < matcher.groupCount(); index++){
+            //Testing to find match
+            if ( matcher.find() == true ){
+                //Pattern match for each of the fields in the Object
+                regex = Pattern.compile("<itemId>(.*)</itemId>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    id = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<name>(.*)</name>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    name = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<description>(.*)</description>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    description = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<manufacturer>(.*)</manufacturer>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    manufacturer = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mfgPartNumber>(.*)</mfgPartNumber>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mfgPartNum = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<series>(.*)</series>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    series = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<availability>(.*)</availability>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    stock = StockOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<status>(.*)</status>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    status = ProductStatus.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<media>(.*)</media>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    media = MediaOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<hazards>(.*)</hazards>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    hazard = EnvironmentalOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<shippingPackage>(.*)</shippingPackage>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    shippingBox = PackageOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<qtyAvailabile>(.*)</qtyAvailable>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    qtyAvailable = Integer.parseInt(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<price>(.*)</price>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    price = Double.parseDouble(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<tolerance>(.*)</tolerance>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    tolerance = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mount>(.*)</mount>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mount = InductorMountingType.valueOf( matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<packageCase>(.*)</packageCase>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    packageCase = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<inductance>(.*)</inductance>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    inductance = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<qAtFreq>(.*)</qAtFreq>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    qAtFreq = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<height>(.*)</height>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    height = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<size>(.*)</size>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    size = matcher.group(1);
+                }
+            }
+        }
+        
+        adjustableInductor = new AdjustableInductors(inductance, qAtFreq, height,
+                size, tolerance, mount, packageCase, id, name, description, manufacturer,
+                mfgPartNum, series, qtyAvailable, price);
+        
+        return ( adjustableInductor );
+    }
+    
+    
     /**
      * @return the inductance
      */
@@ -368,26 +704,489 @@ final class ArraysAndSignalTransformerInfo extends InductorCoilAndChokesInfo {
         String output = "";
         
         output += super.toXML(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-        output += "<ArraysAndSignalTransformerInfo>\n";
-        output += "     <coilNumber>" + this.getCoilNumber() + "</coilNumber>\n";
-        output += "     <parallelInductance>" + this.getParallelInductance() + "</parallelInductance>\n";
-        output += "     <seriesInductance>" + this.getSeriesInductance() + "</seriesInductance>\n";
-        output += "     <parallelCurrentRating>" + this.getParallelCurrentRating() + "</parallelCurrentRating>\n";
-        output += "     <seriesCurrentRating>" + this.getSeriesCurrentRating() + "</seriesCurrentRating>\n";
-        output += "     <parallelCurrentSaturation>" + this.getParallelCurrentSaturation() + "</parallelCurrentSaturation>\n";
-        output += "     <seriesCurrentSaturation>" + this.getSeriesCurrentSaturation() + "</seriesCurrentSaturation>\n";
-        output += "     <parallelDCResistance>" + this.getParallelDCResistance() + "</parallelDCResistance>\n";
-        output += "     <seriesDCResistance>" + this.getSeriesDCResistance() + "</seriesDCResistance>\n";
-        output += "     <operatingTemp>" + this.getOperatingTemp() + "</operatingTemp>\n";
-        output += "     <shielding>" + this.getShielding() + "</shielding>\n";
-        output += "     <rating>" + this.getRating() + "</rating>\n";
-        output += "     <height>" + this.getHeight() + "</height>\n";
-        output += "     <size>" + this.getSize() + "</size>\n";
-        output += "</ArraysAndSignalTransformerInfo>\n";
+        output += "         <ArraysAndSignalTransformerInfo>\n";
+        output += "             <coilNumber>" + this.getCoilNumber() + "</coilNumber>\n";
+        output += "             <parallelInductance>" + this.getParallelInductance() + "</parallelInductance>\n";
+        output += "             <seriesInductance>" + this.getSeriesInductance() + "</seriesInductance>\n";
+        output += "             <parallelCurrentRating>" + this.getParallelCurrentRating() + "</parallelCurrentRating>\n";
+        output += "             <seriesCurrentRating>" + this.getSeriesCurrentRating() + "</seriesCurrentRating>\n";
+        output += "             <parallelCurrentSaturation>" + this.getParallelCurrentSaturation() + "</parallelCurrentSaturation>\n";
+        output += "             <seriesCurrentSaturation>" + this.getSeriesCurrentSaturation() + "</seriesCurrentSaturation>\n";
+        output += "             <parallelDCResistance>" + this.getParallelDCResistance() + "</parallelDCResistance>\n";
+        output += "             <seriesDCResistance>" + this.getSeriesDCResistance() + "</seriesDCResistance>\n";
+        output += "             <operatingTemp>" + this.getOperatingTemp() + "</operatingTemp>\n";
+        output += "             <shielding>" + this.getShielding() + "</shielding>\n";
+        output += "             <rating>" + this.getRating() + "</rating>\n";
+        output += "             <height>" + this.getHeight() + "</height>\n";
+        output += "             <size>" + this.getSize() + "</size>\n";
+        output += "         </ArraysAndSignalTransformerInfo>\n";
+        output += "     </InductorCoilAndChokesInfo>\n";
+        output += "</ProductInfo>\n";
         
         return(output);
     }
 
+    public static ArraysAndSignalTransformerInfo fromCSV( String input ) throws Exception {
+        ArraysAndSignalTransformerInfo arraysAndSignalTransformer = new ArraysAndSignalTransformerInfo();
+        String[] Chunks;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //InductorCoilAndChoke
+        String tolerance = "";
+        InductorMountingType mount;
+        String packageCase = "";
+        //ArraysAndSignalTransformer
+        int coilNumber;
+        String parallelInductance;
+        String seriesInductance;
+        String parallelCurrentRating;
+        String seriesCurrentRating;
+        String parallelCurrentSaturation;
+        String seriesCurrentSaturation;
+        String parallelDCResistance;
+        String seriesDCResistance;
+        String operatingTemp;
+        ArrayInductorShielding shielding;
+        InductorRating rating;
+        String height;
+        String size;
+        
+        //Validate input 
+        if ( input == null ){
+            throw new Exception("Error: Null input for parsing!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string provided!");
+        } else {
+            //Split line based on comma
+            Chunks = input.split(",");
+            if ( Chunks.length == 30 ){
+                //Assign all parameters
+                //ProductInfo Params
+                id = Chunks[ 0 ];
+                name = Chunks[ 1 ];
+                description = Chunks[ 2 ];
+                manufacturer = Chunks[ 3 ];
+                mfgPartNum = Chunks[ 4 ];
+                series = Chunks[ 5 ];
+                stock = StockOption.valueOf( Chunks[ 6 ]);
+                hazard = EnvironmentalOption.valueOf( Chunks[ 7 ]);
+                media = MediaOption.valueOf( Chunks[ 8 ]);
+                shippingBox = PackageOption.valueOf( Chunks[ 9 ]);
+                status = ProductStatus.valueOf( Chunks[ 10 ]);
+                qtyAvailable = Integer.valueOf(Chunks[ 11 ]);
+                price = Double.valueOf( Chunks[ 12 ]);
+                //==================
+                //InductorCoilAndChokeInfo Params
+                tolerance = Chunks[ 13 ];
+                mount = InductorMountingType.valueOf( Chunks[ 14 ]);
+                packageCase = Chunks[ 15 ];
+                //==================
+                //ArraysAndSignalsTranformerInfo Params
+                coilNumber = Integer.parseInt( Chunks[ 16 ]);
+                parallelInductance = Chunks[ 17 ];
+                seriesInductance = Chunks[ 18 ];
+                parallelCurrentRating = Chunks[ 19 ];
+                seriesCurrentRating = Chunks[ 20 ];
+                parallelCurrentSaturation = Chunks[ 21 ];
+                seriesCurrentSaturation = Chunks[ 22 ];
+                parallelDCResistance = Chunks[ 23 ];
+                seriesDCResistance = Chunks[ 24 ];
+                operatingTemp = Chunks[ 25 ];
+                shielding = ArrayInductorShielding.valueOf( Chunks[ 26 ] );
+                rating = InductorRating.valueOf( Chunks[ 27 ] );
+                height = Chunks[ 28 ];
+                size = Chunks[ 29 ];
+                
+                arraysAndSignalTransformer = new ArraysAndSignalTransformerInfo(coilNumber, parallelInductance, seriesInductance,
+                        parallelCurrentRating, seriesCurrentRating, parallelCurrentSaturation, seriesCurrentSaturation,
+                        parallelDCResistance, seriesDCResistance, operatingTemp, shielding, rating,
+                        height, size, tolerance, mount, packageCase, id, name, description,
+                        manufacturer, mfgPartNum, series, qtyAvailable, price);
+            }
+        }
+        
+        return( arraysAndSignalTransformer );
+    }
+    
+    public static ArraysAndSignalTransformerInfo fromCustom( String input ) throws Exception {
+        ArraysAndSignalTransformerInfo arraysAndSignalTransformer = new ArraysAndSignalTransformerInfo();
+        String[] Chunks;
+        String[] Lines;
+        String line;
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //InductorCoilAndChoke
+        String tolerance = "";
+        InductorMountingType mount = InductorMountingType.Unknown;
+        String packageCase = "";
+        //ArraysAndSignalTransformer
+        int coilNumber = 0;
+        String parallelInductance = "";
+        String seriesInductance = "";
+        String parallelCurrentRating = "";
+        String seriesCurrentRating = "";
+        String parallelCurrentSaturation = "";
+        String seriesCurrentSaturation = "";
+        String parallelDCResistance = "";
+        String seriesDCResistance = "";
+        String operatingTemp = "";
+        ArrayInductorShielding shielding = ArrayInductorShielding.Unknown;
+        InductorRating rating = InductorRating.Unknown;
+        String height = "";
+        String size = "";
+        
+        
+        if ( input == null ){
+            throw new Exception("Error: Null input passed!");
+        } else if ( input.length() == 0 ){
+            throw new Exception("Error: Zero length string passed!");
+        } else {
+            //Splitting the input into line segments
+            Lines = input.split("\\n");
+            for ( int index = 0; index < Lines.length; index++ ){
+                //Getting a singlular line segment
+                line = Lines[ index ];
+                //Getting the parts of each segment
+                Chunks = line.split(": ");
+                if ( Chunks[ 1 ].length() == 0 ){
+                    System.out.println("Error: Zero length value was provided!");
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Item Id") == true ){
+                    id = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Name") == true ){
+                    name = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Description") == true ){
+                    description = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer") == true ){
+                    manufacturer = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Manufacturer Part Number") == true ){
+                    mfgPartNum = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Series") == true ){
+                    series = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Availability") == true ){
+                    stock = StockOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Product Status") == true ){
+                    status = ProductStatus.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Media") == true ){
+                    media = MediaOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Environmental Options") == true ){
+                    hazard = EnvironmentalOption.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Packaging") == true ){
+                    packageCase = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Quantity") == true ){
+                    qtyAvailable = Integer.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Price") == true ){
+                    price = Double.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Tolerance") == true ){
+                    tolerance = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Mount") == true ){
+                    mount = InductorMountingType.valueOf( Chunks[1] );
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Package Case") == true ){
+                    packageCase = Chunks[1];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Coil Number") == true ){
+                    coilNumber = Integer.parseInt( Chunks[ 1 ]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Parallel Inductance") == true ){
+                    parallelInductance = Chunks[ 1 ];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Series Inductance") == true ){
+                    seriesInductance = Chunks[ 1 ];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Parallel Current Rating") == true ){
+                    parallelCurrentRating = Chunks[ 1 ];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Series Current Rating") == true ){
+                    seriesCurrentRating = Chunks[ 1 ];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Parallel Current Saturation") == true ){
+                    parallelCurrentSaturation = Chunks[ 1 ];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Series Current Saturation") == true ){
+                    seriesCurrentSaturation = Chunks[ 1 ];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Parallel DC Resistance") == true ){
+                    parallelDCResistance = Chunks[ 1 ];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Series DC Resistance") == true ){
+                    seriesDCResistance = Chunks[ 1 ];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Operating Temp") == true ){
+                    operatingTemp = Chunks[ 1 ];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Shielding") == true ){
+                    shielding = ArrayInductorShielding.valueOf( Chunks[ 1 ]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Rating") == true ){
+                    rating = InductorRating.valueOf( Chunks[ 1 ]);
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Height") == true ){
+                    height = Chunks[ 1 ];
+                } else if ( Chunks[ 0 ].equalsIgnoreCase("Size") == true ){
+                    size = Chunks[ 1 ];
+                } else {
+                    System.out.println("Error: Invalid field passed!");
+                }
+            }
+            arraysAndSignalTransformer = new ArraysAndSignalTransformerInfo(coilNumber, parallelInductance,
+                    seriesInductance, parallelCurrentRating, seriesCurrentRating, parallelCurrentSaturation,
+                    seriesCurrentSaturation, parallelDCResistance, seriesDCResistance, operatingTemp,
+                    shielding, rating, height, size, tolerance, mount, packageCase, id, name, description,
+                    manufacturer, mfgPartNum, series, qtyAvailable, price);
+        }
+                    
+        return( arraysAndSignalTransformer );
+    }
+    
+    public static ArraysAndSignalTransformerInfo fromXML( String input ) throws Exception {
+        ArraysAndSignalTransformerInfo arraysAndSignalTransformer = new ArraysAndSignalTransformerInfo();
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //InductorCoilAndChokes
+        String tolerance = "";
+        InductorMountingType mount = InductorMountingType.Unknown;
+        String packageCase = "";
+        //ArraysAndSignalTransformer
+        int coilNumber = 0;
+        String parallelInductance = "";
+        String seriesInductance = "";
+        String parallelCurrentRating = "";
+        String seriesCurrentRating = "";
+        String parallelCurrentSaturation = "";
+        String seriesCurrentSaturation = "";
+        String parallelDCResistance = "";
+        String seriesDCResistance = "";
+        String operatingTemp = "";
+        ArrayInductorShielding shielding = ArrayInductorShielding.Unknown;
+        InductorRating rating = InductorRating.Unknown;
+        String height = "";
+        String size = "";
+        
+        
+        //Parsing input using regex
+        java.util.regex.Pattern regex = java.util.regex.Pattern.compile("<ProductInfo>(.*)</ProductInfo>");
+        //Matching the Pattern
+        java.util.regex.Matcher matcher = regex.matcher( input );
+        
+        //Looping through the groups captured using pattern matching
+        for ( int index = 0; index < matcher.groupCount(); index++){
+            //Testing to find match
+            if ( matcher.find() == true ){
+                //Pattern match for each of the fields in the Object
+                regex = Pattern.compile("<itemId>(.*)</itemId>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    id = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<name>(.*)</name>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    name = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<description>(.*)</description>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    description = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<manufacturer>(.*)</manufacturer>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    manufacturer = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mfgPartNumber>(.*)</mfgPartNumber>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mfgPartNum = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<series>(.*)</series>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    series = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<availability>(.*)</availability>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    stock = StockOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<status>(.*)</status>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    status = ProductStatus.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<media>(.*)</media>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    media = MediaOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<hazards>(.*)</hazards>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    hazard = EnvironmentalOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<shippingPackage>(.*)</shippingPackage>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    shippingBox = PackageOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<qtyAvailabile>(.*)</qtyAvailable>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    qtyAvailable = Integer.parseInt(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<price>(.*)</price>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    price = Double.parseDouble(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<tolerance>(.*)</tolerance>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    tolerance = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mount>(.*)</mount>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mount = InductorMountingType.valueOf( matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<packageCase>(.*)</packageCase>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    packageCase = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<coilNumber>(.*)</coilNumber>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    coilNumber = Integer.parseInt( matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<parallelInductance>(.*)</parallelInductance>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    parallelInductance = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<seriesInductance>(.*)</seriesInductance>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    seriesInductance = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<parallelCurrentRating>(.*)</parallelCurrentRating>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    parallelCurrentRating = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<seriesCurrentRating>(.*)</seriesCurrentRating>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    seriesCurrentRating = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<parallelCurrentSaturation>(.*)</parallelCurrentSaturation>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    parallelCurrentSaturation = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<seriesCurrentSaturation>(.*)</seriesCurrentSaturation>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    seriesCurrentSaturation = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<parallelDCResistance>(.*)</parallelDCResistance>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    parallelDCResistance = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<seriesDCResistance>(.*)</seriesDCResistance>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    seriesDCResistance = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<operatingTemp>(.*)</operatingTemp>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    operatingTemp = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<shielding>(.*)</shielding>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    shielding = ArrayInductorShielding.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<rating>(.*)</rating>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    rating = InductorRating.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<height>(.*)</height>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    height = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<size>(.*)</size>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    size = matcher.group(1);
+                }
+                
+                arraysAndSignalTransformer = new ArraysAndSignalTransformerInfo(coilNumber,
+                        parallelInductance, seriesInductance, parallelCurrentRating, seriesCurrentRating,
+                        parallelCurrentSaturation, seriesCurrentSaturation, parallelDCResistance, 
+                        seriesDCResistance, operatingTemp, shielding, rating, height, size, tolerance, 
+                        mount, packageCase, id, name, description, manufacturer, mfgPartNum, series, qtyAvailable, price);
+                
+            }
+        }
+        
+        return (arraysAndSignalTransformer);
+    }
+    
     /**
      * @return the coilNumber
      */
@@ -730,24 +1529,26 @@ final class FixedInductorInfo extends InductorCoilAndChokesInfo {
         String output = "";
         
         output += super.toXML(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-        output += "<FixedInductorInfo>\n";
-        output += "     <coreMaterial>" + this.getCoreMaterial() + "</coreMaterial>\n";
-        output += "     <inductance>" + this.getInductance() + "</inductance>\n";
-        output += "     <currentRating>" + this.getCurrentRating() + "</currentRating>\n";
-        output += "     <currentSaturation>" + this.getCurrentSaturation() + "</currentSaturation>\n";
-        output += "     <inductorType>" + this.getInductorType() + "</inductorType>\n";
-        output += "     <shielding>" + this.getShielding() + "</shielding>\n";
-        output += "     <dcResistance>" + this.getDcResistance() + "</dcResistance>\n";
-        output += "     <qAtFreq>" + this.getqAtFreq() + "</qAtFreq>\n";
-        output += "     <selfResonantFreq>" + this.getSelfResonantFreq() + "</selfResonantFreq>\n";
-        output += "     <rating>" + this.getRating() + "</rating>\n";
-        output += "     <operatingTemp>" + this.getOperatingTemp() + "</operatingTemp>\n";
-        output += "     <inductanceFreqTest>" + this.getInductanceFreqTest() + "</inductanceFreqTest>\n";
-        output += "     <features>" + this.getFeatures() + "</features>\n";
-        output += "     <supplierDevicePackage>" + this.getSupplierDevicePackage() + "</supplierDevicePackage>\n";
-        output += "     <size>" + this.getSize() + "</size>\n";
-        output += "     <seatedHeight>" + this.getSeatedHeight() + "</seatedHeight>\n";
-        output += "</FixedInductorInfo>\n";
+        output += "         <FixedInductorInfo>\n";
+        output += "             <coreMaterial>" + this.getCoreMaterial() + "</coreMaterial>\n";
+        output += "             <inductance>" + this.getInductance() + "</inductance>\n";
+        output += "             <currentRating>" + this.getCurrentRating() + "</currentRating>\n";
+        output += "             <currentSaturation>" + this.getCurrentSaturation() + "</currentSaturation>\n";
+        output += "             <inductorType>" + this.getInductorType() + "</inductorType>\n";
+        output += "             <shielding>" + this.getShielding() + "</shielding>\n";
+        output += "             <dcResistance>" + this.getDcResistance() + "</dcResistance>\n";
+        output += "             <qAtFreq>" + this.getqAtFreq() + "</qAtFreq>\n";
+        output += "             <selfResonantFreq>" + this.getSelfResonantFreq() + "</selfResonantFreq>\n";
+        output += "             <rating>" + this.getRating() + "</rating>\n";
+        output += "             <operatingTemp>" + this.getOperatingTemp() + "</operatingTemp>\n";
+        output += "             <inductanceFreqTest>" + this.getInductanceFreqTest() + "</inductanceFreqTest>\n";
+        output += "             <features>" + this.getFeatures() + "</features>\n";
+        output += "             <supplierDevicePackage>" + this.getSupplierDevicePackage() + "</supplierDevicePackage>\n";
+        output += "             <size>" + this.getSize() + "</size>\n";
+        output += "             <seatedHeight>" + this.getSeatedHeight() + "</seatedHeight>\n";
+        output += "         </FixedInductorInfo>\n";
+        output += "     </InductorCoilAndChokesInfo>\n";
+        output += "</ProductInfo>\n";
         
         return(output);
     }
@@ -830,7 +1631,7 @@ final class FixedInductorInfo extends InductorCoilAndChokesInfo {
                 currentRating = Chunks[ 19 ];
                 currentSaturation = Chunks[ 20 ];
                 inductorType = Chunks[ 21 ];
-                shielding =FixedInductorShielding.valueOf( Chunks[ 22 ]);
+                shielding = FixedInductorShielding.valueOf( Chunks[ 22 ]);
                 dcResistance = Chunks[ 23 ];
                 qAtFreq = Chunks[ 24 ];
                 selfResonantFreq = Chunks[ 25 ];
@@ -846,7 +1647,7 @@ final class FixedInductorInfo extends InductorCoilAndChokesInfo {
                         currentSaturation, inductorType, shielding, dcResistance, qAtFreq, 
                         selfResonantFreq, rating, operatingTemp, inductanceFreqTest, features,
                         supplierDevicePackage, size, seatedHeight, tolerance, mount,
-                        packageCase, id, name, description, id, mfgPartNum, series, qtyAvailable, price);
+                        packageCase, id, name, description, manufacturer, mfgPartNum, series, qtyAvailable, price);
             }
         }
         return( fixedInductor );
@@ -876,7 +1677,6 @@ final class FixedInductorInfo extends InductorCoilAndChokesInfo {
         String tolerance = "";
         InductorMountingType mount = InductorMountingType.Unknown;
         String packageCase = "";
-        String operationTemp = "";
         //FixedInductor
         String coreMaterial = "";
         String inductance = "";
@@ -984,12 +1784,264 @@ final class FixedInductorInfo extends InductorCoilAndChokesInfo {
                             currentSaturation, inductorType, shielding, dcResistance, qAtFreq, 
                             selfResonantFreq, rating, operatingTemp, inductanceFreqTest, features,
                             supplierDevicePackage, size, seatedHeight, tolerance, mount,
-                            packageCase, id, name, description, id, mfgPartNum, series, index, price);
+                            packageCase, id, name, description, manufacturer, mfgPartNum, series, qtyAvailable, price);
                 }
             }
         }
         
         return( fixedInductor );
+    }
+    
+    public static FixedInductorInfo fromXML( String input ) throws Exception {
+        FixedInductorInfo fixedInductor = new FixedInductorInfo();
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock;
+        EnvironmentalOption hazard;
+        MediaOption media;
+        PackageOption shippingBox;
+        ProductStatus status;
+        //InductorCoilAndChokes
+        String tolerance = "";
+        InductorMountingType mount = InductorMountingType.Unknown;
+        String packageCase = "";
+        //FixedInductor
+        String coreMaterial = "";
+        String inductance = "";
+        String currentRating = "";
+        String currentSaturation = "";
+        String inductorType = "";
+        FixedInductorShielding shielding = FixedInductorShielding.Unknown;
+        String dcResistance = "";
+        String qAtFreq = "";
+        String selfResonantFreq = "";
+        InductorRating rating = InductorRating.Unknown;
+        String operatingTemp = "";
+        String inductanceFreqTest = "";
+        String features = "";
+        String supplierDevicePackage = "";
+        String size = "";
+        String seatedHeight = "";
+        
+        
+        //Parsing input using regex
+        java.util.regex.Pattern regex = java.util.regex.Pattern.compile("<ProductInfo>(.*)</ProductInfo>");
+        //Matching the Pattern
+        java.util.regex.Matcher matcher = regex.matcher( input );
+        
+        //Looping through the groups captured using pattern matching
+        for ( int index = 0; index < matcher.groupCount(); index++){
+            //Testing to find match
+            if ( matcher.find() == true ){
+                //Pattern match for each of the fields in the Object
+                regex = Pattern.compile("<itemId>(.*)</itemId>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    id = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<name>(.*)</name>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    name = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<description>(.*)</description>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    description = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<manufacturer>(.*)</manufacturer>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    manufacturer = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mfgPartNumber>(.*)</mfgPartNumber>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mfgPartNum = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<series>(.*)</series>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    series = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<availability>(.*)</availability>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    stock = StockOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<status>(.*)</status>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    status = ProductStatus.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<media>(.*)</media>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    media = MediaOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<hazards>(.*)</hazards>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    hazard = EnvironmentalOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<shippingPackage>(.*)</shippingPackage>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    shippingBox = PackageOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<qtyAvailabile>(.*)</qtyAvailable>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    qtyAvailable = Integer.parseInt(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<price>(.*)</price>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    price = Double.parseDouble(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<tolerance>(.*)</tolerance>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    tolerance = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mount>(.*)</mount>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mount = InductorMountingType.valueOf( matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<packageCase>(.*)</packageCase>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    packageCase = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<coreMaterial>(.*)</coreMaterial>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    coreMaterial = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<inductance>(.*)</inductance>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    inductance = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<currentRating>(.*)</currentRating>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    currentRating = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<currentSaturation>(.*)</currentSaturation>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    currentSaturation = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<inductorType>(.*)</inductorType>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    inductorType = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<shielding>(.*)</shielding>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    shielding = FixedInductorShielding.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<dcResistance>(.*)</dcResistance>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    dcResistance = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<qAtFreq>(.*)</qAtFreq>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    qAtFreq = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<selfResonantFreq>(.*)</selfResonantFreq>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    selfResonantFreq = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<rating>(.*)</rating>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    rating = InductorRating.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<operatingTemp>(.*)</operatingTemp>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    packageCase = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<inductanceFreqTest>(.*)</inductanceFreqTest>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    inductanceFreqTest = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<features>(.*)</features>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    features = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<supplierDevicePackage>(.*)</supplierDevicePackage>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    supplierDevicePackage = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<size>(.*)</size>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    size = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<seatedHeight>(.*)</seatedHeight>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    seatedHeight = matcher.group(1);
+                }
+                
+                fixedInductor = new FixedInductorInfo(coreMaterial, inductance, currentRating,
+                        currentSaturation, inductorType, shielding, dcResistance, qAtFreq,
+                        selfResonantFreq, rating, operatingTemp, inductanceFreqTest, features,
+                        supplierDevicePackage, size, seatedHeight, tolerance, mount,
+                        packageCase, id, name, description, manufacturer, mfgPartNum, series, qtyAvailable, price);
+            }
+        }
+        
+        return (fixedInductor);
     }
     
     /**
@@ -1305,15 +2357,18 @@ final class WirelessChargingCoilInfo extends InductorCoilAndChokesInfo {
         String output = "";
         
         output += super.toXML(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-        output += "<WirelessCharingCoilInfo>\n";
-        output += "     <inductance>" + this.getInductance() + "</inductance>\n";
-        output += "     <function>" + this.getFunction() + "</function>\n";
-        output += "     <type>" + this.getType() + "</type>\n";
-        output += "     <qAtFreq>" + this.getqAtFreq() + "</qAtFreq>\n";
-        output += "     <selfResonantFreq>" + this.getSelfResonantFreq() + "</selfResonantFreq>\n";
-        output += "     <operatingTemp>" + this.getOperatingTemp() + "</operatingTemp>\n";
-        output += "     <size>" + this.getSize() + "</size>\n";
-        output += "</WirelessChargingCoilInfo>\n";
+        output += "         <WirelessCharingCoilInfo>\n";
+        output += "             <inductance>" + this.getInductance() + "</inductance>\n";
+        output += "             <function>" + this.getFunction() + "</function>\n";
+        output += "             <type>" + this.getType() + "</type>\n";
+        output += "             <qAtFreq>" + this.getqAtFreq() + "</qAtFreq>\n";
+        output += "             <currentRating>" + this.getCurrentRating()+ "</currentRating>\n";
+        output += "             <selfResonantFreq>" + this.getSelfResonantFreq() + "</selfResonantFreq>\n";
+        output += "             <operatingTemp>" + this.getOperatingTemp() + "</operatingTemp>\n";
+        output += "             <size>" + this.getSize() + "</size>\n";
+        output += "         </WirelessChargingCoilInfo>\n";
+        output += "     </InductorCoilAndChokesInfo>\n";
+        output += "</ProductInfo>\n";
         
         return(output);
     }
@@ -1339,7 +2394,6 @@ final class WirelessChargingCoilInfo extends InductorCoilAndChokesInfo {
         String tolerance = "";
         InductorMountingType mount;
         String packageCase = "";
-        String operationTemp = "";
         //WirelessChargingCoil
         String inductance;
         WirelessCoilFunction function;
@@ -1380,22 +2434,21 @@ final class WirelessChargingCoilInfo extends InductorCoilAndChokesInfo {
                 tolerance = Chunks[ 13 ];
                 mount = InductorMountingType.valueOf( Chunks[ 14 ]);
                 packageCase = Chunks[ 15 ];
-                operationTemp = Chunks[ 16 ];
                 //==================
                 //WirelessChargingCoilInfo Params
-                inductance = Chunks[ 17 ];
-                function = WirelessCoilFunction.valueOf( Chunks[ 18 ]);
-                type = Chunks[ 19 ];
-                qAtFreq = Chunks[ 20 ];
-                currentRating = Chunks[ 21 ];
-                selfResonantFreq = Chunks[ 22 ];
-                operatingTemp = Chunks[ 23 ];
-                size = Chunks[ 24 ];
+                inductance = Chunks[ 16 ];
+                function = WirelessCoilFunction.valueOf( Chunks[ 17 ]);
+                type = Chunks[ 18 ];
+                qAtFreq = Chunks[ 19 ];
+                currentRating = Chunks[ 20 ];
+                selfResonantFreq = Chunks[ 21 ];
+                operatingTemp = Chunks[ 22 ];
+                size = Chunks[ 23 ];
                 
                 //Param validation -> constructor
                 wirelessCoil = new WirelessChargingCoilInfo(inductance, function, type, qAtFreq,
                         currentRating, selfResonantFreq, operatingTemp, size, tolerance, 
-                        mount, packageCase, id, name, description, id, 
+                        mount, packageCase, id, name, description, manufacturer, 
                         mfgPartNum, series, qtyAvailable, price);
             }
         }
@@ -1425,18 +2478,17 @@ final class WirelessChargingCoilInfo extends InductorCoilAndChokesInfo {
         ProductStatus status;
         //InductorCoilAndChoke
         String tolerance = "";
-        InductorMountingType mount;
+        InductorMountingType mount = InductorMountingType.Unknown;
         String packageCase = "";
-        String operationTemp = "";
         //WirelessChargingCoil
-        String inductance;
-        WirelessCoilFunction function;
-        String type;
-        String qAtFreq;
-        String currentRating;
-        String selfResonantFreq;
-        String operatingTemp;
-        String size;
+        String inductance = "";
+        WirelessCoilFunction function = WirelessCoilFunction.Unknown;
+        String type = "";
+        String qAtFreq = "";
+        String currentRating = "";
+        String selfResonantFreq = "";
+        String operatingTemp = "";
+        String size = "";
         
         if ( input == null ){
             throw new Exception("Error: Null input passed!");
@@ -1473,7 +2525,7 @@ final class WirelessChargingCoilInfo extends InductorCoilAndChokesInfo {
                 } else if ( Chunks[ 0 ].equalsIgnoreCase("Environmental Options") == true ){
                     hazard = EnvironmentalOption.valueOf( Chunks[1] );
                 } else if ( Chunks[ 0 ].equalsIgnoreCase("Packaging") == true ){
-                    packageCase = Chunks[1];
+                    shippingBox = PackageOption.valueOf(Chunks[1]);
                 } else if ( Chunks[ 0 ].equalsIgnoreCase("Quantity") == true ){
                     qtyAvailable = Integer.valueOf( Chunks[1] );
                 } else if ( Chunks[ 0 ].equalsIgnoreCase("Price") == true ){
@@ -1500,13 +2552,211 @@ final class WirelessChargingCoilInfo extends InductorCoilAndChokesInfo {
                     operatingTemp = Chunks[1];
                 } else if ( Chunks[ 0 ].equalsIgnoreCase("Size") == true ){
                     size = Chunks[1];
+                }   
+                
+            }
+            wirelessCoil = new WirelessChargingCoilInfo(inductance, function, type,
+                    qAtFreq, currentRating, selfResonantFreq, operatingTemp, size,
+                    tolerance, mount, packageCase, id, name, description, manufacturer, mfgPartNum,
+                    series, qtyAvailable, price);
+        }
+        
+        return(wirelessCoil);
+    }
+    
+    public static WirelessChargingCoilInfo fromXML( String input ) throws Exception{
+        WirelessChargingCoilInfo wirelessCoil = new WirelessChargingCoilInfo();
+        //Product
+        String id = "";
+        String name = "";
+        String description = "";
+        String series = "";
+        String manufacturer = "";
+        String mfgPartNum = "";
+        int qtyAvailable = 0;
+        double price = 0.0;
+        StockOption stock = StockOption.unknown;
+        EnvironmentalOption hazard = EnvironmentalOption.unknown;
+        MediaOption media = MediaOption.unknown;
+        PackageOption shippingBox = PackageOption.unknown;
+        ProductStatus status = ProductStatus.unknown;
+        //InductorCoilAndChokes
+        String tolerance = "";
+        InductorMountingType mount = InductorMountingType.Unknown;
+        String packageCase = "";
+        //WirelessChargingCoil
+        String inductance = "";
+        WirelessCoilFunction function = WirelessCoilFunction.Unknown;
+        String type = "";
+        String qAtFreq = "";
+        String currentRating = "";
+        String selfResonantFreq = "";
+        String operatingTemp = "";
+        String size = "";
+        
+        //Parsing input using regex
+        java.util.regex.Pattern regex = java.util.regex.Pattern.compile("<ProductInfo>(.*)</ProductInfo>");
+        //Matching the Pattern
+        java.util.regex.Matcher matcher = regex.matcher( input );
+        
+        //Looping through the groups captured using pattern matching
+        for ( int index = 0; index < matcher.groupCount(); index++){
+            //Testing to find match
+            if ( matcher.find() == true ){
+                //Pattern match for each of the fields in the Object
+                regex = Pattern.compile("<itemId>(.*)</itemId>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    id = matcher.group(1);
                 }
-                    
+                
+                regex = Pattern.compile("<name>(.*)</name>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    name = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<description>(.*)</description>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    description = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<manufacturer>(.*)</manufacturer>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    manufacturer = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mfgPartNumber>(.*)</mfgPartNumber>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mfgPartNum = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<series>(.*)</series>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    series = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<availability>(.*)</availability>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    stock = StockOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<status>(.*)</status>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    status = ProductStatus.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<media>(.*)</media>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    media = MediaOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<hazards>(.*)</hazards>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    hazard = EnvironmentalOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<shippingPackage>(.*)</shippingPackage>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    shippingBox = PackageOption.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<qtyAvailabile>(.*)</qtyAvailable>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    qtyAvailable = Integer.parseInt(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<price>(.*)</price>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    price = Double.parseDouble(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<tolerance>(.*)</tolerance>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    tolerance = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<mount>(.*)</mount>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    mount = InductorMountingType.valueOf( matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<packageCase>(.*)</packageCase>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    packageCase = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<inductance>(.*)</inductance>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    inductance = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<function>(.*)</function>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    function = WirelessCoilFunction.valueOf(matcher.group(1));
+                }
+                
+                regex = Pattern.compile("<type>(.*)</type>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    type = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<qAtFreq>(.*)</qAtFreq>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    qAtFreq = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<selfResonantFreq>(.*)</selfResonantFreq>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    selfResonantFreq = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<operatingTemp>(.*)</operatingTemp>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    operatingTemp = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<size>(.*)</size>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    packageCase = matcher.group(1);
+                }
+                
+                regex = Pattern.compile("<currentRating>(.*)</currentRating>");
+                matcher = regex.matcher(input);
+                if ( matcher.find() == true ){
+                    currentRating = matcher.group(1);
+                }  
                 
             }
         }
         
-        return(wirelessCoil);
+        wirelessCoil = new WirelessChargingCoilInfo(inductance, function, type, qAtFreq,
+                currentRating, selfResonantFreq, operatingTemp, size, tolerance, mount,
+                packageCase, id, name, description, manufacturer, mfgPartNum, series, qtyAvailable,
+                price);
+        
+        return( wirelessCoil );
     }
 
     /**
@@ -1655,4 +2905,3 @@ enum InductorRating{
     AEC_Q200,
     Unknown
 }
-
